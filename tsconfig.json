@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "jsx": "react",
+    "lib": [
+      "dom",
+      "es6",
+      "dom.iterable",
+      "scripthost"
+    ],
+    "types": [],
+    "strict": true,
+    "skipLibCheck": true,
+    "declaration": true,
+    "alwaysStrict": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "preserveConstEnums": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "sourceMap": true,
+    "outDir": "dist"
+  },
+  "include": [
+    "./**/*.ts",
+    "./**/*.tsx",
+    "node_modules/@types/**/*.d.ts"
+  ],
+  "exclude": [
+    "dist"
+  ]
+}
