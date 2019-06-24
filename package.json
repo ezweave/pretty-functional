@@ -1,0 +1,25 @@
+{
+  "name": "pretty-functional",
+  "version": "0.0.1",
+  "description": "A book with examples on making more functional js",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ezweave/pretty-functional.git"
+  },
+  "keywords": [
+    "functional",
+    "programming",
+    "javascript",
+    "typescript"
+  ],
+  "author": "Matt Weaver <ezweave@gmail.com> (https://github.com/ezweave)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ezweave/pretty-functional/issues"
+  },
+  "homepage": "https://github.com/ezweave/pretty-functional#readme"
+}
