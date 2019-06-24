@@ -2,7 +2,7 @@
 
 ![pretty-functional](/static/images/pretty_functional.png)
 
-`pretty-functional` is a collection of chapters an exercises designed to help you become more proficient in functional programming (FP) in JavaScript/TypeScript.  It is _not_ an authoritative guide on FP practices or theory, though we do have to introduce enough of those ideas so that your progression makes sense.
+`pretty-functional` is a collection of chapters and exercises designed to help you become more proficient in functional programming (FP) in JavaScript/TypeScript.  It is _not_ an authoritative guide on FP practices or theory, though we do have to introduce enough of those ideas so that your progression makes sense.
 
 ## Table of Contents
 
