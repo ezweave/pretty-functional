@@ -18,19 +18,17 @@
 
 The year is 1999 and when not reinforcing my Y2K bunker, you could find me either riding mountain bikes or staring off into the void just beyond the corner of my monitor trying to turn myself into a decent programmer.
 
-In those halycon days, the University of Colorado at Colorado Springs' College of Engineering had just moved the early level Computer Science (CS) courses over to Java from [Pascal](https://en.wikipedia.org/wiki/Pascal_(programming_language))(was it [Turbo Pascal], you might ask, and I don't actually know... I do recall my father having a few books on that subject at his desk when he taught CS during a few scant years when he was a Bell Labs in Morris County, New Jersey).  Over the course of my undergraduate work, I would learn many languages: MIPS assembly, Bash scripting, Python, C, C++, a wee bit of PHP, Javascript (who would use _this scoping disaster_ language for anything, right), and, as mentioned, Java.
+In those halycon days, the University of Colorado at Colorado Springs' College of Engineering had just moved the early level Computer Science (CS) courses over to Java from [Pascal](https://en.wikipedia.org/wiki/Pascal_(programming_language))(was it [Turbo Pascal](https://en.wikipedia.org/wiki/Turbo_Pascal), you might ask, and I don't actually know... I do recall my father having a few books on that subject at his desk when he taught CS and I was a wee lad).  Over the course of my undergraduate work, I would learn many languages: MIPS assembly, Bash scripting, Python, C, C++, a wee bit of PHP, Javascript (who would use _this scoping disaster_ language for anything, right), and, as mentioned, Java.
 
-_Most_ of these languages share some bits of C in their DNA.  Even if it's soley _syntax_, Java, C++, Objective-C, C#, even Javascript, all share some concepts from C.  Of course, they are _very_ different languages,
+_Most_ of these languages share some bits of C in their DNA.  Even if it's soley _syntax_, Java, C++, Objective-C, C#, even Javascript, all share some concepts from C.  Of course, they are _very_ different languages, I'm not unaware.  This is more about the "look and feel" of the actual syntax than runtime and all that rot.
 
-When I was working on my undergraduate degree in Computer Science, the college of Engineering at my university had just switched their cirriculum over from using Pascal as the _de facto_ programming language for introductory CS classes to Java.  This was at the tail end of the nineties and Java had yet to hit 1.2.  There were lots of things missing from the Java ecosystem in those days from Integrated Development Environments (IDEs) to SDK bits and bobs to a real clear idea of where Java would go (we had to write build scripts in bash).  In the ensuing years of my Bachelor's I would learn C++ (which I already knew a bit of), MIPS assembly, JavaScript, and all manner of extensions and libraries to use in conjuction with them (OpenGL, et cetera).  JavaScript, at the time, wasn't considered much of a serious language (my how things have changed).
-
-Most of this education, when not writing low level instructions or embedded or operating system level code, was focused on _Object Oriented Programming_ (OOP).  It was such a prevailing concept, that you almost learned it as a matter of course... in fact, the first class solely focused on OOP was a 300 level C++ programming class.  All other classes were more about data structures, discrete mathematics, algorithms, and the like and utilized Java.
+Most of my early education, when not writing low level instructions or embedded or operating system level code, was focused on _Object Oriented Programming_ (OOP).  It was such a prevailing concept, that you almost learned it as a matter of course... in fact, the first class solely focused on OOP was a 300 level C++ programming class.  All other classes were more about data structures, discrete mathematics, algorithms, and the like and utilized Java.
 
 Until I took [_Concepts of Programming Languages_](https://www.amazon.com/Concepts-Programming-Languages-Robert-Sebesta/dp/013394302X), which was taught by the author, Dr Robert W Sebesta.
 
-If you're familiar with the class, it is one of those insidiously deceptive titles.  Much like _Linear Algebra_.  As a barely post-pubescent little scamp (who thought he knew everything, of course) I thought to myself "I know how to code, dumb ass."  
+If you're familiar with the book and that class (which is a requirement for [ABET](https://en.wikipedia.org/wiki/ABET) accredited programs), it is one of those insidiously deceptive titles.  Much like _Linear Algebra_.  As a barely post-pubescent little scamp (who thought he knew everything, of course) I thought to myself "I know how to code, dumb ass."  
 
-But I was wrong.  _Concepts_ was at the same time much more high level and abstract as it was just _different_.  This was chiefly because all of our homework was in a little language called [Scheme](https://en.wikipedia.org/wiki/Scheme_(programming_language)).  _Scheme_ was like reading some odd alien script.  It looked nothing like all of the higher level languages I _had_ been using, which really all get their rough syntax and structure from C (this includes: C++, Objective-C, Java, JavaScript, even C#).
+But I was wrong.  _Concepts_ was both abstract and exact and it was just _different_.  This was partly because all of our homework was in a little language called [Scheme](https://en.wikipedia.org/wiki/Scheme_(programming_language)).  _Scheme_ was like reading some odd alien script.  It looked nothing like all of the higher level languages I _had_ been using, which really all get their rough syntax and structure from C (this includes: C++, Objective-C, Java, JavaScript, even C#).
 
 Of course, I was learning Python and a few other things by that point, but Scheme was wholly different.  
 
@@ -52,17 +50,17 @@ As an example, this is what a fibonacci implementation looks like in Scheme:
     )
 ```
 
-Scheme is a dialect of [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) and is high on _minimalism_ and lots and lots of parens.
+Kind of confusing if you come from the C-syntax languages, eh?  Scheme is a dialect of [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) and is high on _minimalism_ and lots and lots of parens.
 
 ![xkcd](https://imgs.xkcd.com/comics/lisp_cycles.png)
 
-This, of course, isn't about Scheme or Lisp (AKA 'Lost In Stupid Parentheses'), but about _functional programming_ and Scheme was my introduction to the idea, only I didn't quite _grok_ that yet...
+This, of course, isn't about Scheme or Lisp (AKA 'Lost In Stupid Parentheses'), but about _functional programming_. Scheme was my introduction to the idea, only I didn't quite _grok_ that yet...
 
 There was a moment, amidst that semester, when something clicked in my brain.  At first, Scheme's simple operators (`car` and `cdr`) and its endless rebuilding of arrays of primitives was grating.  Solving problems in it seemed inscrutable.  The only IDE we had to use, other than simple running it from the command line, was a fickle, crude thing called "Dr Scheme" (which has evolved into the much more refined [Racket](https://racket-lang.org/)).  Now, I wasn't unaware of the concept of "primitive debugging" (which is not referring to a datatype, but was slang we used to describe priting output to the console in lieu of using `gdb` or a full on IDE like Visual Studio), but it didn't even help that much in the Scheme world.
 
 So it took a lot of thinking, diagrams, and really contemplating what we were doing to even think of how to approach building solutions to the homework assignments.  They were all such trivial things, in other languages, and more than one student asked Dr Sebesta if they could "just do it in C."  
 
-It was amidst these conditions that I locked myself in the computer lab and just tried to break my brain's way of thinking.
+It was amidst these conditions that I locked myself in the computer lab and just tried to break my brain, rewiring it to change how I had thought about programming.
 
 Truthfully, OOP, as we know it, really just enforces [_imperitive programming practices_](https://en.wikipedia.org/wiki/Imperative_programming).  Sure it gives you some better ways to organize your data and some handy tools to operate on it (polymorphism, shadowing, composition, the whole IS-A and HAS-A thing), but it often just leads to... bloat.
 
@@ -80,9 +78,9 @@ What JavaScript does have going for it, is that you are really dealing with [JSO
 - Primitives
 - Arrays of the latter
 
-JSON is _ideal_ for functional programming.  It is divorced from function implementation, it is just data.  Data, that we can operate over in _deterministic_ ways.
+JSON is _ideal_ for functional programming.  It is divorced from function implementation, it is just data.  Data, that we can operate over in _deterministic_ ways (mostly).
 
-I don't expect all of that to fully make sense, yet.  But I wrote this because while there are some quality guides and quite a few libraries that provide you with the sorts of _monads_ you will find yourself using, nothing fully ties them together.  I will wager that I won't either.  But while I can't solve all of those issues, and no one really can, I can at least give you better insight into _why_ and _how_ one can solve problems in JavaScript in a functional way.
+I don't expect all of that to fully make sense, yet.  But I wrote this because while there are some quality guides and quite a few libraries that provide you with the sorts of _monads_ and operators you will find yourself using, nothing fully ties them together.  I will wager that I won't either.  But while I can't solve all of those issues, and no one really can, I can at least give you better insight into _why_ and _how_ one can solve problems in JavaScript in a functional way.
 
 It's really about "breaking your brain" and re-learning how to solve a problem and, as you will see, it greatly benefits _stable_ and reliable code.  E.g. it will cost you and your company less to maintain.
 
@@ -96,7 +94,7 @@ Functional Programming will solve all of your problems.  When you've finished th
 
 Functional Programming is no different.  By itself, it won't do anything (especially at first) aside from frustrate and alienate you.  There are a few reasons that I think it's a worthwhile paradigm, regardless:
 - It forces you to consider _data_ over behavior, which is something OO languages often obfuscate.
-- It encourages you to break apart problems into _many_ functions and to write tests against those functions to make sure your solutions are robust... in fact, with tools like `lodash`, `ramda`, `rx`, and `monet` you will start doing it all the time because you might not know _exactly_ how that one monad works.
+- It encourages you to break apart problems into _many_ functions and to write tests against those functions to make sure your solutions are robust... in fact, with tools like `lodash`, `ramda`, `rx`, and `monet` you will start doing it all the time because you might not know _exactly_ how that one monad or operator works (don't worry, this will all be explained).
 - It teaches you all kinds of silly new terminology you can flaunt at developer meet ups, so... that's good, right?
 - By doing all of the above, you end up with code that is much more predictable and you can write tests around the things that aren't.
 - Learning the core concepts will open you up to other FP languages: Scala, Haskel, Erlang, Lisp, Clojure and the like.  And those jobs [often pay more than imperitve or OO dev jobs](https://www.quora.com/Why-is-the-salary-of-Haskell-Lisp-and-Clojure-programmers-lower-than-others).
@@ -139,10 +137,11 @@ I'll go over this more in the first chapter, but to go through this book, you wi
 To work through this book, I would suggest:
 * Forking this repo.
 * Run `npm i`
-* Each chapter has a `jest` file that can be run by typing `jest name_of_file.spec.ts` which will at least, check your output.
+* Test your new skills by running `jest name_of_file.spec.ts` for each set of exercises. It won't evaluate your solution, but it will tell you if it at least works.
 * Submitting a Pull Request (P.R.) from your fork, if you want me to look at your answers.  I cannot promise I will look at them all, but for now, have at it!
 
 If you find any mistakes or want to make a correction, also feel free to submit a P.R.  I will handily ignore it, unless you can procure for me a bottle of Sazerac 18.  Then we can talk.
 
 [Chapter 1](/chapters/one/one.md)
+
 [Table of Contents](#table-of-contents)
