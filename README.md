@@ -7,11 +7,20 @@
 ## Table of Contents
 
 - [Introduction](#introduction)
+  - [Why Functional?](#why-functional)
 - [Caveat Emptor](#caveat-emptor)
+- [Who Are You?](#whoami)
+- [How To Use This Book](#this-is-how-we-do-it)
 - [Chapter 1](/chapters/one/one.md)
 
 
 ## Introduction
+
+The year is 1999 and when not reinforcing my Y2K bunker, you could find me either riding mountain bikes or staring off into the void just beyond the corner of my monitor trying to turn myself into a decent programmer.
+
+In those halycon days, the University of Colorado at Colorado Springs' College of Engineering had just moved the early level Computer Science (CS) courses over to Java from [Pascal](https://en.wikipedia.org/wiki/Pascal_(programming_language))(was it [Turbo Pascal], you might ask, and I don't actually know... I do recall my father having a few books on that subject at his desk when he taught CS during a few scant years when he was a Bell Labs in Morris County, New Jersey).  Over the course of my undergraduate work, I would learn many languages: MIPS assembly, Bash scripting, Python, C, C++, a wee bit of PHP, Javascript (who would use _this scoping disaster_ language for anything, right), and, as mentioned, Java.
+
+_Most_ of these languages share some bits of C in their DNA.  Even if it's soley _syntax_, Java, C++, Objective-C, C#, even Javascript, all share some concepts from C.  Of course, they are _very_ different languages,
 
 When I was working on my undergraduate degree in Computer Science, the college of Engineering at my university had just switched their cirriculum over from using Pascal as the _de facto_ programming language for introductory CS classes to Java.  This was at the tail end of the nineties and Java had yet to hit 1.2.  There were lots of things missing from the Java ecosystem in those days from Integrated Development Environments (IDEs) to SDK bits and bobs to a real clear idea of where Java would go (we had to write build scripts in bash).  In the ensuing years of my Bachelor's I would learn C++ (which I already knew a bit of), MIPS assembly, JavaScript, and all manner of extensions and libraries to use in conjuction with them (OpenGL, et cetera).  JavaScript, at the time, wasn't considered much of a serious language (my how things have changed).
 
@@ -96,4 +105,44 @@ In some ways, the approach I have found to be most practical for Functional Prog
 
 And, lastly, if nothing else, learning a new paradigm like FP will open new pathways in your brain and change how you approach problem solving.  In some very real, but rather esoteric ways, it will "expand your mind."
 
+[Table of Contents](#table-of-contents)
+
+# whoami 
+
+This is meant as a bit of _rhetoric_, but let's introduce ourselves before we go much further.
+
+__Your humble(ish) author__: my name is Matt Weaver (long called "ezweave" on "teh webz") and I'm a software engineer by trade, but a programmer for purposes of our one-sided discourse.  I was born in the early 80s (making me either an "in-betweener" or "the oldest Millenial") and started programming around 1989-90 when my father (an engineer at Bell Labs, at the time) forced me to learn QBASIC, of all things (`GOTO another_programming_language`).  I come from a wee bit of an academic background (with a Bachelor's and Master's of Science in Computer Science and some now expired credits towards a PhD in the same), somewhat due to my aforementioned father... but also because I was a solitary child, whose best friends were books and Lego bricks.  I like the music of Converge, short walks on the beach (I hate sand in my shoes), racing bicycles, and generally making an ass out of myself.  You'll find this book rife with odd humor that I blame on being Candian-American (and the added twist of having spent much of my youth in a mix of the American Southeast, rural Alberta, and the 'burbs of Chicago), but I'll try to keep it light.  I'm familiar enough with the writing of the likes of [Andrew Tanenebaum](https://en.wikipedia.org/wiki/Andrew_S._Tanenbaum) and [Donald Knuth](https://en.wikipedia.org/wiki/Donald_Knuth) to know that humor in Computer Science can sometimes be either too dry or not present at all.  I'd like to make your experience with this volume as entertaining and educational as possible, so there you go.
+
+__You, Dear Reader__: you're a programmer. Okay, let's move on... no, no.  That won't do.  I'm going to do a bit of projection here, to get you into the right _frame of mind_.  To set the mood.  You're either curious or someone forced you to read this.  You're either self-driven or lazy, but I suspect not so much the latter and more so the former.  By nature, we often get quite comfortable with the knowledge and skillset we have.  If you're anything like I was/am/was, you're ever earnest to be _uncomfortable_, but perhaps not.  I say "uncomfortable" because I often suspect, that when things are _going too well_ I am somehow "bollocksing up."  What am I not doing, right now?  None other than perhaps the greatest American Cyclist, Mr Greg LeMond put it best:
+
+> It never gets easier, you just go faster.
+
+It's an apt aphorism for life.  You either seek out as much comfort as possible, or you push yourself every day (or most days... okay, _some_ days).  You might be coming into this with a fair bit of experience in Functional Programming, JavaScript, or some combination of the two.  Even if you are a seasoned FP wrangler, I'd ask that you give this book a bit of a taste, as it may just be fun, and at the very least, it's short.  If nothing else, you can point out my mistakes, and lord your superiority over me.
+
+If you're _not_ familiar with Functional Programming, then I hope you find this both entertaining and educational (and that is the _last_ time I will use that phrase).  As mentioned before, even if you _don't_ end up using many of these concepts and approaches we're going to work through, I hope it opens you up to new ideas and adds a new dimension to your own problem solving.
+
+A few things to consider:
+* As Knuth has always pointed out (in his long running, yet to be complete series [_The Art of Computer Programming_](https://en.wikipedia.org/wiki/The_Art_of_Computer_Programming)), Computer Science is really equal parts science, art, and hackery.  There will be some math in this volume.  There will be some art.  And there will be a lot of hackery.  
+* As a youth, I often felt that Computer Science was akin to some weird Alchemy.  Some mystical, though not fantastical, art that the lay person would never understand.  But darkness cannot live where light penetrates (I say that to myself in an Ian McCellan as Gandalf voice), and I hope this book sheds some light on an oft banted topic that might seem inscrutable.
+* You will learn enough to be dangerous.  Do I consider myself an expert in _any_ discipline of Computer Science?  To be blunt, hell no.  Writing this has been a good refresher for your author and it should be good for you, but it is far from complete.  There is no such thing as "complete" in any remotely scientific discipline.  There is only the earnest need to improve and expand.
+
+[Table of Contents](#table-of-contents)
+
+# This Is How We Do It
+
+I'll go over this more in the first chapter, but to go through this book, you will need:
+
+* A computer or some device so like a computer that you can install `git` and `nvm`.
+* A somewhat working knowledge of a shell... `bash` is fine, though I am quite fond of `zsh` via [`yadr`](https://github.com/skwp/dotfiles) as it let's me do such silly things as use `vim` commands in the interpreter.
+* Some sort of editor.  An IDE like [VSCode](https://code.visualstudio.com/) or [Idea](https://www.jetbrains.com/idea/), a text editor like [`vim`](https://www.vim.org/) (but no [`emacs`](https://www.gnu.org/software/emacs/), you keyboard chording animals) or [`ed`](https://en.wikipedia.org/wiki/Ed_(text_editor)).
+
+To work through this book, I would suggest:
+* Forking this repo.
+* Run `npm i`
+* Each chapter has a `jest` file that can be run by typing `jest name_of_file.spec.ts` which will at least, check your output.
+* Submitting a Pull Request (P.R.) from your fork, if you want me to look at your answers.  I cannot promise I will look at them all, but for now, have at it!
+
+If you find any mistakes or want to make a correction, also feel free to submit a P.R.  I will handily ignore it, unless you can procure for me a bottle of Sazerac 18.  Then we can talk.
+
+[Chapter 1](/chapters/one/one.md)
 [Table of Contents](#table-of-contents)
