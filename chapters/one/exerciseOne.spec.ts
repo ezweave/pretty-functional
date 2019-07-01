@@ -1,4 +1,10 @@
-import { fibonacciToN, fizzBuzz, replacer } from './exerciseOne'
+import {
+  fibonacciToN,
+  fizzBuzz,
+  replacer,
+  productAll,
+  capitalizeEveryNthWord
+} from './exerciseOne'
 
 describe('Excercise one tests', () => {
   describe('FizzBuzz tests', () => {
@@ -21,25 +27,25 @@ describe('Excercise one tests', () => {
         expect(
           fizzBuzz(20)
         ).toEqual([
-          1, 
-          2, 
-          'Fizz', 
-          4, 
-          'Buzz', 
-          'Fizz', 
-          7, 
-          8, 
-          'Fizz', 
-          'Buzz', 
-          11, 
-          'Fizz', 
-          13, 
-          14, 
-          'FizzBuzz', 
-          16, 
-          17, 
-          'Fizz', 
-          19, 
+          1,
+          2,
+          'Fizz',
+          4,
+          'Buzz',
+          'Fizz',
+          7,
+          8,
+          'Fizz',
+          'Buzz',
+          11,
+          'Fizz',
+          13,
+          14,
+          'FizzBuzz',
+          16,
+          17,
+          'Fizz',
+          19,
           'Buzz'
         ])
       })
@@ -47,6 +53,49 @@ describe('Excercise one tests', () => {
         expect(
           fizzBuzz(-1)
         ).toEqual([])
+      })
+    })
+  })
+  describe('ProductAll tests', () => {
+    describe('productAll', () => {
+      it('Should make a sensible array of products', () => {
+        expect(
+          productAll(
+            [1, 2, 3],
+            [4, 5, 6]
+          )
+        ).toEqual([4, 10, 18])
+      })
+      it('Should make a sensible array of products, ' +
+        'even with different sized arrays', () => {
+        expect(
+          productAll(
+            [2, 3],
+            [4, 5, 6]
+          )
+        ).toEqual([8, 15, 6])
+      })
+      it('Should make a sensible array of products, ' +
+        'even with different sized arrays', () => {
+        expect(
+          productAll(
+            [2, 3, 7],
+            [4, 5]
+          )
+        ).toEqual([8, 15, 7])
+      })
+    })
+  })
+  describe('Capitalize every nth word tests', () => {
+    describe('capitalizeEveryNthWord', () => {
+      it('Should capitalize every 3rd word', () => {
+        expect(
+          capitalizeEveryNthWord(3)(
+            'The quick brown fox jumped over the lazy dog.'
+            )
+        ).toEqual(
+          'The quick Brown fox jumped Over the lazy Dog.'
+        )
       })
     })
   })
@@ -64,16 +113,6 @@ describe('Excercise one tests', () => {
           fibonacciToN(-1)
         ).toEqual([])
       })
-    })
-  })
-  describe('ProductAll tests', () => {
-    describe('productAll', () => {
-
-    })
-  })
-  describe('Capitalize every nth word tests', () => {
-    describe('capitalizeEveryNthWord', () => {
-
     })
   })
 })

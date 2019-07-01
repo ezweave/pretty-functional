@@ -617,4 +617,29 @@ Some basic take aways:
 * Use `tap` to inspect data without manipulating it.
 * `partialRight` is _very_ handy in currying functions to expect the _data_ last.
 
+Things we _haven't_ dealt with yet:
+* Recusion
+* WTF is a _monad_?
+* Dealing with external, unpredictable endpoints
+* Alternative approaches using other libraries
+* Performance
+
+I hope you aren't sick of `FizzBuzz` quite yet... it's a stupidly simple problem, that we will be revisiting when we start talking about _monads_ in Chapter 2.
+
 # Exercises
+
+For your first assignment, I've already pulled in the `FizzBuzz` solution for you.  In the version of TypeScript that is bundled with this repo, there are more disagreements between `lodash` and TypeScript, so the code is a _wee_ bit different.
+
+Don't let that alienate you, because I didn't want to throw you into the fire with syntax that is slightly off.
+
+Other than having to wrap a call with `flow` (the `replacer`), which is unnecessary, the only other difference is that we are placing our flow/piped functions inside an array.  E.g. `flow([...])`.  It's two extra characters.
+
+As for the rest of the problems, the ones you will do yourself, _feel free_ to break up the problem into multiple little pieces.  Write tests against each one.  Dive into the [`lodash`]() documentation and start thinking about what you're doing.
+
+I can't really (or easily) analyze your code programmatically to see if it is functional.  
+
+To run the tests (from the root of the repo) simply type:
+
+```bash
+jest chapters/one/exerciseOne.spec.ts
+```
