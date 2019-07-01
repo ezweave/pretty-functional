@@ -338,7 +338,7 @@ What is bad about this implementation?
 
 Well, let's work backwards.
 
-We can make a wrapper that will do the printing for us, or we could simply put a `console.log` at the end of the `flow` call.  I'm not going to do that.  
+We can make a wrapper that will do the printing for us, or we could simply put a `console.log` at the end of the `flow` arguments.  I'm not going to do that.  
 
 Instead, let's make a new wrapper, so we can keep our logic seperate.  This will make it a more _pure function_ even though we are just moving that logic to _another function_.  I will explain why in a moment.
 
@@ -477,3 +477,14 @@ const { flow, tap, range, partialRight, map } = _
 ```
 
 In your code, you will use `import`.  I hope that's not confusing... it shouldn't be!
+
+Now, this code, our first _better_ solution is _pretty functional_.  I don't like the ternarys, but they are what they are.  I'd gladly accept a pull request or merge request (that's the GitLab version) of it, especially if you wrote a _shit ton_ of tests.  I'd say to myself "this isn't perfect, but it's pretty, pretty good." (Channeling Larry David, of course.)
+
+You're already starting "the dance."  This P.R. is from someone _thinking_ about functions.  They're thinking about how they can do things _functionally_.  It's _pretty damn functional_.
+
+But those ternarys...
+
+So let's break this.
+
+We're not going to introduce _monads_ just yet.  I want you, dear reader, to get into thinking about things functionally and working within limits.  Again, you've probably got `lodash` around already.  So let's do this a different way, via `lodash`:
+
