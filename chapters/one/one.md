@@ -488,3 +488,117 @@ So let's break this.
 
 We're not going to introduce _monads_ just yet.  I want you, dear reader, to get into thinking about things functionally and working within limits.  Again, you've probably got `lodash` around already.  So let's do this a different way, via `lodash`:
 
+```js
+const replacer = (
+ n: number,
+ replacement: string
+): (
+ numbers: (string|number)[]
+) => (string|number)[] => partialRight(
+ map,
+ i => i % n === 0 ? replacement : i
+) 
+
+const sassyReplacer = (
+ n: number,
+ replacement: string
+) => (
+ val: number | string
+) : number | string => val % n === 0 && replacement
+
+const fizzBuzzer: (
+ n: number
+) => string[] = flow(
+ n => range(1, n + 1),
+ partialRight(
+  map,
+  over(
+   sassyReplacer(15, 'FizzBuzz'),
+   sassyReplacer(3, 'Fizz'),
+   sassyReplacer(5, 'Buzz'),
+   i => i
+  )
+ ),
+ partialRight(
+  map,
+  i => find(i)
+ )
+)
+
+interface Printer {
+ (a: string[]): void
+}
+
+const fizzPrinter = (
+ printer: Printer
+) => flow(
+ fizzBuzzer,
+ printer
+)
+
+ const fizzLog = fizzPrinter(console.log)
+ const fizzWarn = fizzPrinter(console.warn)
+ const fizzError = fizzPrinter(console.error)
+ fizzLog(5)
+ fizzWarn(20)
+ fizzError(10)
+```
+
+This is a bit of an eyeful... and there _is_ a bug in the version of `lodash` I'm using, which I will point out, shortly. (Two, actually.)
+
+The _key_ difference in this implementation is the use of the `over` operator.  Instead of using ternarys, I am replacing them with a new, curried function:
+
+```js
+const sassyReplacer = (
+ n: number,
+ replacement: string
+) => (
+ val: number | string
+) : number | string => val % n === 0 && replacement
+```
+Using some short circuited boolean logic, this will either return the value I seek _or_ it will return `false`.
+
+Now, breaking these apart into our four sets of rules:
+
+```js
+partialRight(
+  map,
+  over(
+   sassyReplacer(15, 'FizzBuzz'),
+   sassyReplacer(3, 'Fizz'),
+   sassyReplacer(5, 'Buzz'),
+   i => i 
+  )
+ ),
+```
+Will give us an array with the results of all of those evaluations.  For the a value of 1, for example, I would get:
+
+```js
+[false, false, false, 1]
+```
+
+Now, the last rule, `i => i` should work with a call to `tap`, but herein may be some mischief within the TypeScript/Lodash transpilation.  Easily enough, we can just spit back the value we seek.
+
+Now, consider when our input number is `15`, the output over over would be:
+
+```js
+['FizzBuzz', 'Fizz', 'Buzz', 15]
+```
+
+This is why we also want to map over the array of arrays we feed into the next set of operators and use `find`:
+
+```js
+ partialRight(
+  map,
+  i => find(i)
+ )
+```
+Here, also, is our second bug.  We should just be able to pass in `find` without capturing the input, but again some kind of TypeScript/Lodash trickery is at work.  As we move to other libraries this will be less of an issue, but we are going to limp before we run.
+
+`find` takes _any_ collection (by which we mean an array or JSON) and returns the _first_ truthy value.  For the case of the number `15`, this will be `'FizzBuzz'`.
+
+Now, [this solution](https://codepen.io/ezweave/pen/qzoaYp) is a bit of a mess.  This is not nearly as elegant as the [last solution](https://codepen.io/ezweave/pen/wLyXGG), but there is a lesson to be learned here: _functions_ can do logical operations.
+
+This is an important concept as in the next chapter, when we start looking at _monads_, we will be doing the same thing only without any flow control.  It will make sense later on.
+
+For the purposes of introducing some of these concepts, the "Mark 2" solution is really best and what I would rather see.  The last solution is really just to demonstrate just how differently you can approach this problem.
