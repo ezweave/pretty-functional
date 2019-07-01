@@ -2,6 +2,11 @@
 
 - [Terminology](#terminology)
 - [Functional FizzBuzz](#functional-fizzbuzz)
+  - [The Imperitive Approach](#the-imperitive-approach)
+  - [Functionalish Approach](#functionalish-approach)
+  - [Another Functionalish Approach](#another-functionalish-approach)
+- [Summary](#summary)
+- [Exercises](#exercises)
 
 I won't lie to you, dear reader.  I love a good academic tome.  I love theory and abstract concepts.  Learning a few basic things about limits and building up to integrals, that sort of thing.  _However_, time has taught me that while this is fun within the confines of academia, it's a bit hard for some folks to _grok_.  
 
@@ -38,6 +43,8 @@ Let's write some code that introduces these concepts.  In fact, let's start with
 > Write a function that prints the numbers from 1 to n. But for multiples of three print "Fizz" instead of the number and for the multiples of five print "Buzz". For numbers which are multiples of both three and five print "FizzBuzz".
 
 There's a few ways to skin this cat.
+
+## The Imperitive Approach
 
 Here is a traditional, more _imperitive_ solution.  It's probably the _obvious_ solution to anyone who comes from the C-syntax world:
 
@@ -104,7 +111,9 @@ it's a _local_ variable."  Nyet.  A _pretty functional_ version would _omit_ loc
 
 So how would we change this?
 
-For our first go, we're going to utilize the more functional aspects of the widely available [`lodash`]() library.  It is far from a complete library for functional programming,
+## Functionalish Approach
+
+For our first go, we're going to utilize the more functional aspects of the widely available [`lodash`](https://lodash.com/) library.  It is far from a complete library for functional programming,
 but it has grown _a lot_ since it was forked from the underscore (`_`) library many moons ago.
 
 It has a lot of operators that you can use and since it's probably already in your project... there's no overhead added by using it in existing repos.
@@ -133,7 +142,7 @@ const fizzBuzzer: (
 
 Well that looks _more_ functional, but it's not really there... let's dissect what I did, before we add some polish.
 
-First off, you will notice that I have only _typed_ the arguments for this function.  Lodash has a `flow` operator (you will see it again in Ramda and rx under the name 'pipe),
+First off, you will notice that I have only _typed_ the arguments for this function.  Lodash has a [`flow`](https://lodash.com/docs/4.17.11#flow) operator (you will see it again in Ramda and rx under the name `pipe`),
 which basically allows you to curry the input and then pass the results of one function to the other.
 
 ```js
@@ -145,10 +154,10 @@ const fizzBuzzer: (
 `flow` returns a new function that takes in an argument.  We are telling the TypeScript transpiler that we will be passing this new function a number and that it will
 return an array of strings.  This is where __currying__ will come into play, as the problems become more complex.
 
-Everything in the chain is a _function_.  `range` is a Lodash utility to fill an array with numbers in ascending order.  So, it expects a `number` as an argument.
+Everything in the chain is a _function_.  [`range`](https://lodash.com/docs/4.17.11#range) is a Lodash utility to fill an array with numbers in ascending order.  So, it expects a `number` as an argument.
 
 But let's say you aren't quite sure... did it do what I wanted it to do?  This is a pretty normal reaction when using new operators.  All of the libraries we are 
-using also have a very handy function `tap`.  `tap` returns its input but lets you operate on it.
+using also have a very handy function [`tap`](https://lodash.com/docs/4.17.11#tap).  `tap` returns its input but lets you operate on it.
 
 So, we can add it right after the `range` call to see what we're working with:
 
@@ -192,7 +201,7 @@ const fizzBuzzer: (
 
  Now, you might be wondering what `partialRight` is doing in all of these.  Good question!
 
- `partialRight` curries a function for you, by letting you pass all the arguments to the _right_ of the primary argument for any function.  `partial` does the reverse.
+ [`partialRight`](https://lodash.com/docs/4.17.11#partialRight) curries a function for you, by letting you pass all the arguments to the _right_ of the primary argument for any function.  [`partial`](https://lodash.com/docs/4.17.11#partial) does the reverse.
 
  So, as an example this:
 
@@ -242,7 +251,7 @@ const fizzBuzzer: (
  )
  ```
 
-With the partials on `map` it becomes a little more... well, is _this_ __currying__?
+With the partials on [`map`](https://lodash.com/docs/4.17.11#map) it becomes a little more... well, is _this_ __currying__?
 
 Yes.
 
@@ -484,21 +493,13 @@ You're already starting "the dance."  This P.R. is from someone _thinking_ about
 
 But those ternarys...
 
+## Another Functionalish Approach
+
 So let's break this.
 
 We're not going to introduce _monads_ just yet.  I want you, dear reader, to get into thinking about things functionally and working within limits.  Again, you've probably got `lodash` around already.  So let's do this a different way, via `lodash`:
 
 ```js
-const replacer = (
- n: number,
- replacement: string
-): (
- numbers: (string|number)[]
-) => (string|number)[] => partialRight(
- map,
- i => i % n === 0 ? replacement : i
-) 
-
 const sassyReplacer = (
  n: number,
  replacement: string
@@ -536,17 +537,17 @@ const fizzPrinter = (
  printer
 )
 
- const fizzLog = fizzPrinter(console.log)
- const fizzWarn = fizzPrinter(console.warn)
- const fizzError = fizzPrinter(console.error)
- fizzLog(5)
- fizzWarn(20)
- fizzError(10)
+const fizzLog = fizzPrinter(console.log)
+const fizzWarn = fizzPrinter(console.warn)
+const fizzError = fizzPrinter(console.error)
+fizzLog(5)
+fizzWarn(20)
+fizzError(10)
 ```
 
 This is a bit of an eyeful... and there _is_ a bug in the version of `lodash` I'm using, which I will point out, shortly. (Two, actually.)
 
-The _key_ difference in this implementation is the use of the `over` operator.  Instead of using ternarys, I am replacing them with a new, curried function:
+The _key_ difference in this implementation is the use of the [`over`](https://lodash.com/docs/4.17.11#over) operator.  Instead of using ternarys, I am replacing them with a new, curried function:
 
 ```js
 const sassyReplacer = (
@@ -585,7 +586,7 @@ Now, consider when our input number is `15`, the output over over would be:
 ['FizzBuzz', 'Fizz', 'Buzz', 15]
 ```
 
-This is why we also want to map over the array of arrays we feed into the next set of operators and use `find`:
+This is why we also want to map over the array of arrays we feed into the next set of operators and use [`find`](https://lodash.com/docs/4.17.11#find):
 
 ```js
  partialRight(
@@ -602,3 +603,18 @@ Now, [this solution](https://codepen.io/ezweave/pen/qzoaYp) is a bit of a mess. 
 This is an important concept as in the next chapter, when we start looking at _monads_, we will be doing the same thing only without any flow control.  It will make sense later on.
 
 For the purposes of introducing some of these concepts, the "Mark 2" solution is really best and what I would rather see.  The last solution is really just to demonstrate just how differently you can approach this problem.
+
+# Summary
+
+So we've started to get _more_ functional.  We're eschewing the use of ES6 classes and operators (`Array.map`, for example) and using `lodash`s `flow` with functions that are not connected to any particular data type.  We're also starting to think about operating on collections, vs objects. Oh wait, are we?
+
+Remember that JSON is just a `map`.  It's really just another collection type, which is why many `lodash` operators work on arrays or maps.  Keep that in mind going forward.  When we start using `rxjs` and introduce the concept of a _stream_, this is an important thing to understand.  But we're limping before we're sprinting.  For our purposes, ES6 classes are _not_ particularly useful.  There is a difference, of course between JSON and an ES6 class.  I prefer the former, as it lends to a _more_ functional style.
+
+Some basic take aways:
+* Fat arrows are your friend.
+* Compose operations as a series of functions, each doing something _discrete_ to a data set.
+* Write tests around your functions.
+* Use `tap` to inspect data without manipulating it.
+* `partialRight` is _very_ handy in currying functions to expect the _data_ last.
+
+# Exercises
