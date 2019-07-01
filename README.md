@@ -7,7 +7,8 @@
 ## Table of Contents
 
 - [Introduction](#introduction)
-  - [Why Functional?](#why-functional)
+  - [Pretty Functional](#pretty-functional)
+  - [Lego All Over The Floor](#lego-all-over-the-floor)
 - [Caveat Emptor](#caveat-emptor)
 - [Who Are You?](#whoami)
 - [How To Use This Book](#this-is-how-we-do-it)
@@ -28,7 +29,9 @@ Most of this education, when not writing low level instructions or embedded or o
 
 Until I took [_Concepts of Programming Languages_](https://www.amazon.com/Concepts-Programming-Languages-Robert-Sebesta/dp/013394302X), which was taught by the author, Dr Robert W Sebesta.
 
-If you're familiar with the class, it is one of those insidiously deceptive titles.  Much like _Linear Algebra_.  As a barely post-pubescent little scamp (who thought he knew everything, of course) I thought to myself "I know how to code, dumb ass."  
+_NOTE: he literally looked like what we thought Gandalf would look like, before the Peter Jacson films.  I mean [seriously](http://cs.uccs.edu/~rsebesta/sebesta.gif).  We joked that "you shouldn't piss off Gandalf" all the time._
+
+If you're familiar with the class and/or the book, it is one of those insidiously deceptive titles.  Much like _Linear Algebra_.  As a barely post-pubescent little scamp (who thought he knew everything, of course) I thought to myself "I know how to code, dumb ass."  
 
 But I was wrong.  _Concepts_ was at the same time much more high level and abstract as it was just _different_.  This was chiefly because all of our homework was in a little language called [Scheme](https://en.wikipedia.org/wiki/Scheme_(programming_language)).  _Scheme_ was like reading some odd alien script.  It looked nothing like all of the higher level languages I _had_ been using, which really all get their rough syntax and structure from C (this includes: C++, Objective-C, Java, JavaScript, even C#).
 
@@ -90,13 +93,54 @@ Break your brain.
 
 [Table of Contents](#table-of-contents)
 
+## Pretty Functional
+
+I've been calling a lot of the JavaScript and TypeScript I've written over the years "pretty functional."  Truth be told, even languages built around pure functional programming have to make concessions.  External APIs, any sort of I/O, all sorts of things break this paradigm.  We can't _always_ make our input data sets what we expect them to be.  I mean if I had a dollar for every `NullPointerException` or `NullReferenceException` I've seen in my life, I'd not be typing this now.  I'd be going crazy, Marlon Brando style, on an island of my own near Tahiti.  No language can guarantee "safe" input.  It can lie to you with static analysis, your IDE can asuage you of your sins, it can give you a level of confidence that is unwarrented, and that, dear reader, is why we have jobs.  We write bugs all the time.
+
+_However_, I am a firm believer that this _pretty functional_ approach, while it has its flaws, encourages you to write _very_ hardened code.  As we start to break apart simple problems into a _series_ of functions, you start to see how confident we can be in some of our solutions.  I find that the _pretty functional_ approach encourages you to _write lots of unit tests_ which most programmers have an aversion to.
+
+Why do we hate writing tests?
+
+I can't say I have a definitve answer, but for me, it's hubris all the way.  I _know_ how to write code.  I _know_ how that library or function works.  So I don't like writing unit tests, because, _duh_ I know what I am doing.
+
+But I don't.
+
+I can't control my inputs.  Even with this approach, you can _still write bugs_.  Nothing stops you from shooting yourself in the foot.  Or, as the joke goes, in Haskell you might shoot yourself in the foot, only to discover that all of those were aliases and you really hung yourself and shot fifty other people in the foot.  There is an _older_ joke about C++ along those lines from [Bjarne Stroustrup](https://en.wikipedia.org/wiki/Bjarne_Stroustrup):
+>C makes it easy to shoot yourself in the foot; C++ makes it harder, but when you do it blows your whole leg off.
+
+When I discovered the concept of [operator overloading](https://en.wikipedia.org/wiki/Operator_overloading) I wrote a lot of gibberish looking C++ because I thought "hey, I can now _add_ objects together."  Ick.
+
+I will say this right now __I am not the best functional programmer_.  That's why this book is called "Pretty Functional" and not "Absolute FP Extreme Code Red."  We're going to get _pretty functional_, but I hope that you will start sending me elegant pull requests and suggestions that make me look... like an amateurish fool.
+
+At the end of our journey, I hope that you can write _pretty functional_ code too.
+
+[Table of Contents](#table-of-contents)
+
+# Lego All Over the Floor
+
+Going back down memory lane... when I was a boy I loved Lego, so much so that when I turned 3 (or so the story goes), I demanded a set.  My father, looking at the age statements on the boxes, bought me Duplo.  I was _very unhappy_.  He realized I wanted the "tiny bricks" and bought me a proper set.  It was a love affair that predated anything else I can recall, save reading, and I was obsessed.  In the first few years of my Lego wrangling, I bullied him into purchasing for me a giant Plano tackle box.  I used the little drawers to organize my blocks by color and category.  Red 2x1s went here, black 4x2s went there. 
+
+Quickly, this scheme was shot to hell as my father got into it as well.  Soon we just had large plastic bins roughly sorted by Space and Town (the only two categories in the early eighties) and, inevitably, the Lego bricks would be all over the floor and I would poke through them to find the _one piece_ I needed to make my pre-license version of an X-Wing or whatever Mad Max style monstrosity I was building.  (When the Medieval stuff came around, and more so with Pirates, you could build wonderful post-apocalyptic junkyard worlds.)
+
+An aside, within the aside: stepping on Lego bricks barefoot is a very _first world_ experience I think we've all had.  In fact, a good friend of mine (an industrial designer who designs backpacks, some of which you might even own and a _sick_ bmx rider and moutain biker) broke his toe in his twenties when he had been fiddling about with Lego (it's still fun as an adult) and left some bits on the floor... he stepped on one and kicked some furniture when he drunkenly went for a _slash_ as the Brits say.
+
+The whole point of this rambling story: the big refactor.  You've come to some point with some code and you tell your boss "this has to be rewritten."  Product managers and owners cringe, because they _don't get why it's so bad without lots of illustrations_, but you end up _breaking everything_ as you rewrite it.
+
+I call this "Lego All Over the Floor."
+
+You can plan around it, try to break it up into stories, but you will, _inevitably_, end up with a mess that takes a week to clean up.  It always happens and always will.
+
+As you get _pretty functional_, you will probably get Lego all over the place.  Only now, you can better organize those piles, as you will see.  But I use this idiom often.
+
+[Table of Contents](#table-of-contents)
+
 # Caveat Emptor
 
 Functional Programming will solve all of your problems.  When you've finished these exercises you will be fitter, more attractive, younger, and wealthier... nah.  You will just be older, maybe even less fit and less attractive, but you will be _wiser_.  If you've been around programming long enough, you will always hear/read about some new paradigm or technology that will _solve all of your problems_.  Object Oriented Programming will make your code more readible and easier to debug, until it becomes a mess of spaghetti.  [Aspect Oriented Programming](https://en.wikipedia.org/wiki/Aspect-oriented_programming) was going to save the world by extracting cross cutting concerns.  Machine Learning (what we used to just call Neural Networks) would monetize your data (somehow)!  Visual Studio was going to provide _everything_ you would need to build, collaborate, and... and... well none of these things was or is a panacea.  
 
 Functional Programming is no different.  By itself, it won't do anything (especially at first) aside from frustrate and alienate you.  There are a few reasons that I think it's a worthwhile paradigm, regardless:
 - It forces you to consider _data_ over behavior, which is something OO languages often obfuscate.
-- It encourages you to break apart problems into _many_ functions and to write tests against those functions to make sure your solutions are robust... in fact, with tools like `lodash`, `ramda`, `rx`, and `monet` you will start doing it all the time because you might not know _exactly_ how that one monad works.
+- It encourages you to break apart problems into _many_ functions and to write tests against those functions to make sure your solutions are robust... in fact, with tools like `lodash`, `ramda`, `rx`, and `monet` you will start doing it all the time because you might not know _exactly_ how that one monad or operator works.
 - It teaches you all kinds of silly new terminology you can flaunt at developer meet ups, so... that's good, right?
 - By doing all of the above, you end up with code that is much more predictable and you can write tests around the things that aren't.
 - Learning the core concepts will open you up to other FP languages: Scala, Haskel, Erlang, Lisp, Clojure and the like.  And those jobs [often pay more than imperitve or OO dev jobs](https://www.quora.com/Why-is-the-salary-of-Haskell-Lisp-and-Clojure-programmers-lower-than-others).
@@ -122,8 +166,8 @@ It's an apt aphorism for life.  You either seek out as much comfort as possible,
 If you're _not_ familiar with Functional Programming, then I hope you find this both entertaining and educational (and that is the _last_ time I will use that phrase).  As mentioned before, even if you _don't_ end up using many of these concepts and approaches we're going to work through, I hope it opens you up to new ideas and adds a new dimension to your own problem solving.
 
 A few things to consider:
-* As Knuth has always pointed out (in his long running, yet to be complete series [_The Art of Computer Programming_](https://en.wikipedia.org/wiki/The_Art_of_Computer_Programming)), Computer Science is really equal parts science, art, and hackery.  There will be some math in this volume.  There will be some art.  And there will be a lot of hackery.  
-* As a youth, I often felt that Computer Science was akin to some weird Alchemy.  Some mystical, though not fantastical, art that the lay person would never understand.  But darkness cannot live where light penetrates (I say that to myself in an Ian McCellan as Gandalf voice), and I hope this book sheds some light on an oft banted topic that might seem inscrutable.
+* As Knuth has always pointed out (in his long running, yet to be complete series [_The Art of Computer Programming_](https://en.wikipedia.org/wiki/The_Art_of_Computer_Programming)), Computer Science is really equal parts science, art, and hackery (my term).  There will be some math in this volume.  There will be some art.  And there will be a lot of hackery.  
+* As a youth, I often felt that Computer Science was akin to some weird Alchemy.  Some mystical, though not fantastical, art that the lay person would never understand.  But darkness cannot live where light penetrates (I say that to myself in an Ian McCellan as Gandalf voice or maybe it's a Harry Potter thing), and I hope this book sheds some light on an oft banted topic that might seem inscrutable.
 * You will learn enough to be dangerous.  Do I consider myself an expert in _any_ discipline of Computer Science?  To be blunt, hell no.  Writing this has been a good refresher for your author and it should be good for you, but it is far from complete.  There is no such thing as "complete" in any remotely scientific discipline.  There is only the earnest need to improve and expand.
 
 [Table of Contents](#table-of-contents)

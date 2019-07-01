@@ -1,14 +1,37 @@
 # Chapter 1: Pretty Fizzy
 
-If this were a more academic tome, we'd start out with the mathy bits firts.  There _is_ a whole way of viewing functional programming through the lens of [_lambda calculus_](https://en.wikipedia.org/wiki/Lambda_calculus), but we aren't there yet.  While your author certainly loves to talk about math, this book aims to be a bit more practical.  So we're going to start with some very basic concepts and... immediately start writing code.  The goal of this approach is to build your confidence in a new skillset, before we start throwing around words like _monad_ and _closure_ and the like.
+- [Terminology](#terminology)
+- [Functional FizzBuzz](#functional-fizzbuzz)
 
-For now, let's just call _everything_ a function.
+I won't lie to you, dear reader.  I love a good academic tome.  I love theory and abstract concepts.  Learning a few basic things about limits and building up to integrals, that sort of thing.  _However_, time has taught me that while this is fun within the confines of academia, it's a bit hard for some folks to _grok_.  
 
-There are three things that we do need to consider, before we begin:
+There _is_ a whole way of viewing functional programming through the lens of [_lambda calculus_](https://en.wikipedia.org/wiki/Lambda_calculus), but we aren't there yet.  While your author certainly loves to talk about math, this book aims to be a bit more practical and start by _building confidence_ in a few basic ideas and a very different way of looking at data.
 
-- __Immutability__: we don't mutate any data _in place_, instead we make a copy.
-- __Pure functions__: functions have no external side effects.
-_ __Currying__: this can be a bit esotric, but it's basically the practice of returning functions, that can return other functions that can... ahhh!
+This, of course, has benefits for you.  So the focus of the first chapter won't be to delve into more esoteric operators, which you find in `ramda` and `lodash/fp` or introduce you to the most digestible _monads_ from `monet`.  We won't even jump into the _streaming_ concept you would get with `rxjs`.
+
+This will be pure and concrete demonstration of functional ideas using the humble `lodash` library.
+
+# Terminology
+
+For now, let's just call _everything_ a function.  Beyond that, there are some other terms bandied about: _closure_, _higher order functions_, _anonymous functions_, and many more.  These terms are useful to know, but I don't want to delve too deeply into the nuances between all of those terms.  We're just going to talk about functions.
+
+There are three concepts that we _do_ need to consider, before we begin:
+
+- __Immutability__
+- __Pure functions__
+_ __Currying__
+
+A little on each, and we'll demonstrate their use _shortly_.
+
+__Immutability__ is the idea that we don't change any data in place.  Data comes in, new data (most likely copied data) comes out.  If you remember some language concepts, what we're really doing is _passing by value_.  Javascript libraries that lend themselves to functional programming exculsively operate in this manner.  We'll elaborate on this more later, but JavaScript doesn't _really_ support pass by reference, at a language level.  Even an object is actually a value and not a reference, but that nuance leads to a [rabbit hole of stupid arguments](https://stackoverflow.com/questions/2835070/is-there-thing-like-pass-by-value-pass-by-reference-in-javascript).
+
+Don't mutate data, we'll demonstrate this shortly.
+
+A __pure function__ is one that doesn't modify any values outside of its scope.  What happens between braces (or not between braces as you will see) is the end of it.  No extra values are set on the global scope.  A database isn't written to.  The last bit is important.  We can compose calls to, say, a REST API with functional code, but that's technically _unpredictable_.  It is outside of our control.  We want to seperate our data operations from say acquiring or writing data.  The _logic_ needs to be stand alone.  This will benefit you greatly, in the very near future.
+
+Lastly, __currying__, which is... hard to explain without an example, so...
+
+# Functional FizzBuzz
 
 Let's write some code that introduces these concepts.  In fact, let's start with some _bad_ code (from a functional programming standpoint).  Let's say we want to write good old [`FizzBuzz`](https://www.tomdalling.com/blog/software-design/fizzbuzz-in-too-much-detail/).
 
@@ -64,7 +87,15 @@ const fizzBuzzer = (n: number) => {
 }
 ```
 
-Of course, this is still not functional in any way.  Externally, it seems okay... but what's wrong with it?
+Now you're probably saying "but TypeScript has classes!" and here's the other thing to __drill into your ~tiny~ sexy brain__: concatenation operators are not _very FP_.
+
+E.g. `foo.someThing().otherThing()`
+
+Some FP languages (ahem Scala) do that, but really when we are talking about base operators, it's a bad thing.  We're not in the `HAS-A` world anymore, Dorothy.  As we turn this solution into something that's _pretty functional_, those concatenated calls end up causing debugging nightmares and they also belie this core conceit: it's all about the functions, bud.  Using `pipe` or `flow` (as you will shortly see) has an elegance that emphasizes _functions_ and seperates them from their data.  Kind of.  
+
+Trust me.  Swallow this little red pill and all will be illuminated.  It's not rohypnol, I swear.
+
+Of course, this solution is still not functional in any way.  Externally, it seems okay... but what's wrong with it?
 
 1. That `var` keyword implies that you're not being functional.  We are mutating a reference as we concatenate the strings.  You might say to yourself: "It's fine
 it's a _local_ variable."  Nyet.  A _pretty functional_ version would _omit_ local variables alltogether, even `const`s.
@@ -112,7 +143,7 @@ const fizzBuzzer: (
 ```
 
 `flow` returns a new function that takes in an argument.  We are telling the TypeScript transpiler that we will be passing this new function a number and that it will
-return an array of strings.
+return an array of strings.  This is where __currying__ will come into play, as the problems become more complex.
 
 Everything in the chain is a _function_.  `range` is a Lodash utility to fill an array with numbers in ascending order.  So, it expects a `number` as an argument.
 
@@ -132,7 +163,34 @@ const fizzBuzzer: (
  ),
  ```
 
- Ah, you might be wondering what `partialRight` is doing in all of these.  Good question!
+Before I explain the use of `partialRight`, you might notice something if you run this code... there's a bug!
+
+What is the bug?  Well, this is the output of that call:
+
+```js
+[0, 1, 2, 3, 4]
+```
+
+So we can't just use range.  This is where being able to toss in a new function, in this case, `tap` can be handy for debugging.
+
+```js
+const fizzBuzzer: (
+ n: number
+) => string[] = flow(
+ n => range(1, n + 1),
+ partialRight(
+  tap,
+  console.warn
+ ),
+ ```
+
+ This gives us a new collection, that meets our specs:
+
+ ```js
+ [1, 2, 3, 4, 5]
+ ```
+
+ Now, you might be wondering what `partialRight` is doing in all of these.  Good question!
 
  `partialRight` curries a function for you, by letting you pass all the arguments to the _right_ of the primary argument for any function.  `partial` does the reverse.
 
@@ -162,7 +220,10 @@ const fizzBuzzer: (
  ),
  ```
 
- It just saves you the trouble of having to type out the anonymous function to pass the array reference to `tap`.
+ It just saves you the trouble of having to type out the anonymous function to pass the array reference to `tap`.  Congratulations, you've now seen a bit of _currying_ in action.  In fact, much of what `lodash/fp` adds to `lodash` is just wrappers that do what `partial` and `partialRight` do.  Let's move on and I can explain this better.  
+
+ If you find yourself fancying some Thai food, that is perfectly understandable.  I do love a good Panang style curry.
+
 
  The rest of the solution then seems kind of... obvious:
 
@@ -181,9 +242,30 @@ const fizzBuzzer: (
  )
  ```
 
- So, what could we do to make this _more_ functional?  
+With the partials on `map` it becomes a little more... well, is _this_ __currying__?
 
- There are quite a few ways to do this with `lodash`, but since we're just starting, let's keep it pretty basic.
+Yes.
+
+What `partialRight` is doing is saying: "Hey, I'm going to use `map`, but I'm going to change the order so you're really getting something like this:"
+
+```js
+const curriedMap = (
+  otherFunction: {(
+    i: number
+  ): number | string}
+) => (
+  array: (number | string)[]
+) => map(array, otherFunction)
+
+```
+
+By _capturing_ the `otherFunction` we now have a _new_ function that takes in an array.  This allows us to easily compose our functions via `flow`.
+
+While this solution is _better_ and _more_ functional, I think we can do a lot better.
+
+So, what could we do to make this _more_ functional?  
+
+There are quite a few ways to do this with `lodash`, but since we're just starting, let's keep it pretty basic.
 
 While the problem statement asks for _a function_ there's nothing wrong with making more.  Each of the `partialRight(map, ...)` lines are what are called _anonymous functions_.  They
 have no named constant pointing to them.  They are kind of "one and done" tools.
@@ -213,25 +295,6 @@ const replacer = (
 Now, TypeScript wants us to decorate this, but we could just make it trimmer in pure JS.  The slight verbosity is a _little annoying_, but it does tell the reader (or you, a week later when you forgot what you did), exactly what that was doing.
 
 With that, the code becomes simpler... 
-
-```js
-const fizzBuzzer: (
- n: number
-) => string[] = flow(
- range,
- replacer(15, 'FizzBuzz'),
- replacer(3, 'Fizz'),
- replacer(5,'Buzz')
-)
-```
-
-Now, you've probably already noticed a bug in this code.
-
-Did you find it?
-
-The problem is `range`.  It starts at 0 and goes to a value _less_ than our input, _n_.
-
-We can fix it trivially, by wrapping it in a new _anonymous function_:
 
 ```js
 const fizzBuzzer: (
@@ -277,7 +340,7 @@ Well, let's work backwards.
 
 We can make a wrapper that will do the printing for us, or we could simply put a `console.log` at the end of the `flow` call.  I'm not going to do that.  
 
-Instead, let's make a new wrapper, so we can keep our logic seperate.  I will explain why in a moment.
+Instead, let's make a new wrapper, so we can keep our logic seperate.  This will make it a more _pure function_ even though we are just moving that logic to _another function_.  I will explain why in a moment.
 
 ```js
 interface Printer {
@@ -303,12 +366,12 @@ const fizzPrinter = (
 )
 ```
 
-But, I find that lends to a lack of readability.
+But, I find that lends to a lack of readability.  Again, ask yourself if you could easily grok this word jumble after a few beers, a month later, when you sit down at home, it's 10 pm at night, and you really _really_ want to fix that bug you were struggling with all day.
 
 Okay, so now I will answer the unanswered question, why did I not just append my original function, `fizzBuzzer`?
 
 Well, I'm glad I asked:
-* The `console` is really not a very functional construct, but we have to touch non-functional things, at times.  It's rare, but you could get an error by calling it.
+* The `console` is really not a very functional construct, but we have to touch non-functional things, at times.  It's rare, but you could get an error by calling it.  In general, _I/O of any sort is unpredictable_.  By seperating the _logic_ of creating our array, we're starting to _think_ more functionally.
 * I might want to make a bunch of different printer type functions.
 
 For example:
@@ -322,7 +385,7 @@ fizzWarn(20)
 fizzError(10)
 ```
 
-I mentioned the _verbosity_ issue... that's kind of just the price you pay when dealing with TypeScript.  It's certainly confusing, at times.
+I mentioned the _verbosity_ issue... that's kind of just the price you pay when dealing with TypeScript.  It's certainly confusing, at times, as TypeScript is still fairly young.
 
 For example:
 
@@ -340,7 +403,12 @@ Can _also_ be written as:
 const foo: (x: number) => void = console.log
 ```
 
-I _prefer_ the last iteration because it's more true to the _functional_ paradigm.  I know I'm dealing with a function and don't need to _capture_ the `x` for any reason.
+I _prefer_ the last iteration because it's more true to the _functional_ paradigm.  I know I'm dealing with a function and don't need to _capture_ the `x` for any reason.  At the end of the day, programmers are not writing data directly to a computer.  You're not inserting carefully curated, artisinal integers into registers or anything like that.  We're _kind of_ just glorfied typists.  It's a fun way to introduce yourself at parties.
+
+> Friend of a Friend (FOF): So what do you do for work?
+You: I type all day.  Sometimes I swear.
+FOF: Oh... okay... 
+_walks away slowly, doesn't bother you with their brilliant idea for a mobile application_
 
 Now, before we talk about how we might _ditch_ the ternary operator, let's look at the whole shebang again:
 
@@ -383,17 +451,29 @@ fizzWarn(20)
 fizzError(10)
 ```
 
-Gaze upon it!  Behold!  It is _pretty_ functional, compared to our old looping mess, right?  Well, trust me: it is.
+Gaze upon it!  Behold!  It is _pretty functional_, compared to our old looping mess, right?  Well, trust me: it is.
 
 Let's think about this differently, though.
 
 What jumps out at you about this solution?
 
-Let me get your gears turning... how would you _test_ this solution?
+Let me get your brain's gears turning: how would you _test_ this solution?
 
 I hope you said to yourself "Well, now I can test everything!"
 
 You can test `replacer` on its own.  You can test `fizzBuzzer` on its own.  And then you might not even need to test your `Printer` functions at all (it's possible to test console logging,
 I've done it when writing API level code, but it can be a pain in the ass (P.I.T.A.)).
 
-You can also slip `tap` functions into the `flow` chain and easily see what is going on at each stage.  _More importantly_ the core functionality is _pretty_ pure and it's discrete.  
+You can also slip `tap` functions into the `flow` chain and easily see what is going on at each stage.  _More importantly_ the core functionality is _pretty_ pure and it's discrete, there's no funny business going on with global variables.  
+
+But let's call this "FizzBuzz Lodash 2: Electric Boogaloo".  What if there was a fan made _alternate_ sequel that also "got the job done?"
+
+However, pause for a moment.  Before you delve into that, feel free to explore this solution in [CodePen](https://codepen.io/ezweave/pen/wLyXGG).  Add some `tap` calls and see what is happening with each new array.  I want you to _get this_.  Playing with the code and _primitive debugging_ can be _very_ illuminating.
+
+Also, in these CodePen exercises, libraries are globally scoped.  So there are no `import` statements.  Instead you have:
+
+```js
+const { flow, tap, range, partialRight, map } = _
+```
+
+In your code, you will use `import`.  I hope that's not confusing... it shouldn't be!
