@@ -21,11 +21,11 @@ This will be pure and concrete demonstration of functional ideas using the humbl
 
 # Terminology
 
-For now, let's just call _everything_ a function.  Beyond that, there are some other terms bandied about: _closure_, _higher order functions_, _anonymous functions_, and many more.  These terms are useful to know, but I don't want to delve too deeply into the nuances between all of those terms.  We're just going to talk about functions.
+For now, let's just call _everything_ a function.  Beyond that, there are some other terms bandied about: _higher order functions_, _anonymous functions_, and many more.  These terms are useful to know, but I don't want to delve too deeply into the nuances between all of those terms.  We're just going to talk about functions.
 
 # What Is A Function?
 
-People often use the terms _method_, _procedure_, and _function_ interchangably.  While this is _sort of_ okay it's sort of like mixing up bourbon, rye, and Scotch whisk(e)y.
+People often use the terms _method_, _procedure_, and _function_ interchangably.  While this is _sort of_ okay it's sort of like mixing up bourbon, rye, and Scotch whisk(e)y.  There are differences between them and you'd probably not make any friends by confusing them.
 
 __Function__: the name is mathematical and the concept is too, this is kind of the core of _functional programming_.  E.g.
 ```

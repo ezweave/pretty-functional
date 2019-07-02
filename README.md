@@ -14,7 +14,7 @@
 - [Who Are You?](#whoami)
 - [How To Use This Book](#this-is-how-we-do-it)
 - [Chapter 1](/chapters/one/one.md)
-
+- [Additional Resources](#additional-resources)
 
 ## Introduction
 
@@ -212,5 +212,15 @@ To work through this book, I would suggest:
 If you find any mistakes or want to make a correction, also feel free to submit a P.R.  I will handily ignore it, unless you can procure for me a bottle of Sazerac 18.  Then we can talk.
 
 [Chapter 1](/chapters/one/one.md)
+
+[Table of Contents](#table-of-contents)
+
+# Additional Resources
+
+I'm hardly the inventor of functional programming, or functional programming in JavaScript.  There are some additional resources that you might find valuable:
+
+* [Functional Light JS](https://github.com/getify/Functional-Light-JS): a similar book, though the theoretical focus is a _wee_ bit different.  This book (the one you're reading) focuses a bit more on practical exercises using a myriad of common frameworks and, paradoxically, on lambda calculus.  A good read, none the less.
+* [Functional Programming in JavaScript](https://www.manning.com/books/functional-programming-in-javascript): I won't give this book a firm endorsemsent, it appears to be riddled with bugs and a bit out of date.  But it's worth a gander.
+* [RxJS in Action](https://www.manning.com/books/rxjs-in-action): while the resources available on [_Learn RxJS_](https://www.learnrxjs.io/) are useful, it assumes some _a priori_ knowledge that you're unlikely to have (though hopefully that is less true after you finish this book).  The underlying concepts of rxjs are kind of glossed over in some of the online documentation and a few tools, like `redux-observable` operate so entirely on rxjs streams that if you _don't_ understand it well enough, you will hit roadblocks when attempting to solve real world problems almost immediately.
 
 [Table of Contents](#table-of-contents)
