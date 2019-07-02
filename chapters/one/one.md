@@ -1,6 +1,8 @@
 # Chapter 1: Pretty Fizzy
 
 - [Terminology](#terminology)
+ - [What is a function?](#what-is-a-function?)
+ - [Three key concepts](#three-key-concepts)
 - [Functional FizzBuzz](#functional-fizzbuzz)
   - [The Imperitive Approach](#the-imperitive-approach)
   - [Functionalish Approach](#functionalish-approach)
@@ -21,11 +23,119 @@ This will be pure and concrete demonstration of functional ideas using the humbl
 
 For now, let's just call _everything_ a function.  Beyond that, there are some other terms bandied about: _closure_, _higher order functions_, _anonymous functions_, and many more.  These terms are useful to know, but I don't want to delve too deeply into the nuances between all of those terms.  We're just going to talk about functions.
 
+# What Is A Function?
+
+People often use the terms _method_, _procedure_, and _function_ interchangably.  While this is _sort of_ okay it's sort of like mixing up bourbon, rye, and Scotch whisk(e)y.
+
+__Function__: the name is mathematical and the concept is too, this is kind of the core of _functional programming_.  E.g.
+```
+f(x) = y
+```
+
+For some input value _x_, return a _y_.
+
+Consider a simple _linear_ function.
+
+```
+f(x) = mx + b
+```
+
+In a Cartesian co-ordinate system, this gives you a _straight line_.  Which is to say if we represent the inputs, _x_, on the horizontal axis and the output, _f(x)_ (aka _y_) on the vertical axis, and _m_ and _b_ are constants, then _m_ represents the _slope_ of a line and _b_ represents the point on the vertical (or _y_) axis where _x_ is zero.
+
+That's pretty basic math and you can imagine a TypeScript function that does _exactly_ that:
+
+```js
+function f(x: number): number {
+  return 4 * x + 12
+}
+```
+
+If you wanted to make that more _functional_ (in style) we could write something like this:
+
+```js
+const f = (
+  m: number,
+  b: number
+) => (
+  x: number
+): number => m * x + b
+
+const f1 = f(4, 12)
+const y = f1(2)
+// y = 20
+```
+
+"What the eff is that mess?"
+
+We will get to that... I'm just teasing you with the format, but you can see that we _take some input_ and return some _output_.  If we go back to our more traditional `function f(x)` we can see that _no matter the input we return the same output_.  This concept is important (we call this being _deterministic_) and is _easy_ in something as simple as `f(x) = mx + b`.  But this idea is _fundamental_ to functional programming.  It might quickly grow to something that you can't easily describe, as a formula, using basic Algebra, but we always want to do the same thing, given the same input.
+
+Of course, taken further, you will see that _external_ injection (like getting data from a REST endpoint) needs to be handled carefully.  More on that later.
+
+__Method__: methods _are functions_, but they are often divorced from the notion of a _pure function_ (we will explain this shortly).  _Methods_ come from object oriented programming and specifically refer to a _member function_.  But, as you can see, the math can break down.  Consider the practice of `getters` and `setters` in Java:
+
+```java
+class Foo {
+  private String bar;
+
+  public void setBar(String bar) {
+    this.bar = bar;
+  }
+
+  public String getBar() {
+    return this.bar;
+  }
+}
+```
+
+While `setBar` and `getBar` are _member functions_, they don't lend themselves to mathematical description easily. 
+
+Why?
+
+It's because they don't have both an obvious _x_ or an obvious _y_.  For our purposes, class level functions (really _methods_) are not very functional.  More on that in a bit, but for now...
+
+__Procedure__: largely this term isn't used by modern programmers, but it occasionally pops up.  While _methods_ often don't return anything, _procedures_ never do.  It's basically a swallower of variables.  It doesn't mean they don't _do_ anything.  The one place you will find them pop up is in the realm of relational database systems.  The use of the term there is a bit different, however, it is correct in that they usually are triggered by some data being written to a table, where upon they will write to some other table.  So they don't really have outputs as you would expect.
+
+We don't use this term or concept at all in functional programming directly.  I/O _can_ often be considered a procedure, but usually we at least get some sort of status value from those sorts of calls.  Whether or not you wish to call that a _procedure_ is sort of up to you, but you might get some odd looks from your collegues.
+
+And one more thing, before we move on: __closures__.  Closures are actually quite simple things and we hinted at one above, in concrete terms _a closure is a function that captures some lexical state and returns a new function_.  This is at the heart of _currying_.  We will discuss currying further in the next section, but let's write a little closure in _old school_ ES6/TypeScript:
+
+```js
+function decorator(greeting: string) {
+  return function(name: string) {
+    return `${greeting}, ${name}!`
+  }
+}
+```
+
+This can be used as such:
+
+```js
+const howdy = decorator('Howdy')
+howdy('pardner`)
+// 'Howdy, pardner!'
+```
+
+The `greeting` may only be available to you at a certain point in execution, but you might need it later.  So the closure, `decorator` is capturing that value when you have it, so you can use it later.  As you will see in the __toy problem__ we are about to look at, you will _do this all the time_.
+
+This will make more sense shortly, but really I would write the `decorator` as such:
+
+```js
+const decorator = (
+  greeting: string
+) => (
+  name: string
+): string => `${greeting}, ${name}!`
+```
+
+You will really see how handy this is, very, very soon.
+
+# Three Key Concepts
+
 There are three concepts that we _do_ need to consider, before we begin:
 
 - __Immutability__
 - __Pure functions__
-_ __Currying__
+- __Currying__
 
 A little on each, and we'll demonstrate their use _shortly_.
 
@@ -33,9 +143,9 @@ __Immutability__ is the idea that we don't change any data in place.  Data comes
 
 Don't mutate data, we'll demonstrate this shortly.
 
-A __pure function__ is one that doesn't modify any values outside of its scope.  What happens between braces (or not between braces as you will see) is the end of it.  No extra values are set on the global scope.  A database isn't written to.  The last bit is important.  We can compose calls to, say, a REST API with functional code, but that's technically _unpredictable_.  It is outside of our control.  We want to seperate our data operations from say acquiring or writing data.  The _logic_ needs to be stand alone.  This will benefit you greatly, in the very near future.
+A __pure function__ is one that doesn't modify any values outside of its scope.  This goes back to our talk on _functions_, _methods_, and _procedures_.  What happens between braces (or not between braces as you will see) is the end of it.  No extra values are set on the global scope.  A database isn't written to.  The last bit is important.  We can compose calls to, say, a REST API with functional code, but that's technically _unpredictable_.  It is outside of our control.  We want to seperate our data operations from say acquiring or writing data.  The _logic_ needs to be stand alone.  This will benefit you greatly, in the very near future.
 
-Lastly, __currying__, which is... hard to explain without an example, so...
+Lastly, __currying__, we talked about _closures_ and _currying_ is really utilizing the JavaScript notion of a closure to capture variables at different stages.  This is also called _capturing lexical state_.  This is a very powerful, very useful tool in functional programming.
 
 # Functional FizzBuzz
 
@@ -74,7 +184,7 @@ do that intentionally.  What is not trivial is this:
 * Don't use the `function` keyword.
 
 That's _not_ really within the functional idiom.  You can absolutely write functional code that way, but as we get further into these exercises, you will find yourself fighting TypeScript,
-and it will become confusing.  Instead, if we apply a little common sense to `FizzBuzz` we can, at least, rewrite our _imperitive_ version with a bit more verve and a fat arrow:
+and it will become confusing.  When we talked about _functions_ and _closures_, I rewrote the _closure_ without the `function` keyword for a reason.  Even if we don't solve the other issues with the _imperitive_ approach to `FizzBuzz` we can, at least, rewrite our _imperitive_ version with a bit more verve and a fat arrow:
 
 ```js
 const fizzBuzzer = (n: number) => {
@@ -95,7 +205,7 @@ const fizzBuzzer = (n: number) => {
 }
 ```
 
-Now you're probably saying "but TypeScript has classes!" and here's the other thing to __drill into your ~tiny~ sexy brain__: concatenation operators are not _very FP_.
+Now you're probably saying "but TypeScript has classes!" and here's the other thing to __drill into your ~tiny~ sexy brain__: concatenation operators are not _very FP_.  Remember, classes really have _methods_ which may or may not be _pure functions_.
 
 E.g. `foo.someThing().otherThing()`
 
@@ -153,7 +263,7 @@ const fizzBuzzer: (
 ```
 
 `flow` returns a new function that takes in an argument.  We are telling the TypeScript transpiler that we will be passing this new function a number and that it will
-return an array of strings.  This is where __currying__ will come into play, as the problems become more complex.
+return an array of strings.  This is where __currying__ will come into play, as the problems become more complex.  In fact, you will find yourself using __currying__ constantly, so much so that you won't even think about it.  You'll even find yourself going more than two levels deep... you may find that you pass around curried functions and keep invoking new closures for a while... until your curried function (which is a data type that is somewhat similar to an object) is four levels deep.  But don't worry about that for now.
 
 Everything in the chain is a _function_.  [`range`](https://lodash.com/docs/4.17.11#range) is a Lodash utility to fill an array with numbers in ascending order.  So, it expects a `number` as an argument.
 
@@ -202,7 +312,7 @@ const fizzBuzzer: (
 
  Now, you might be wondering what `partialRight` is doing in all of these.  Good question!
 
- [`partialRight`](https://lodash.com/docs/4.17.11#partialRight) curries a function for you, by letting you pass all the arguments to the _right_ of the primary argument for any function.  [`partial`](https://lodash.com/docs/4.17.11#partial) does the reverse.
+ [`partialRight`](https://lodash.com/docs/4.17.11#partialRight) curries a function for you, by letting you pass all the arguments to the _right_ of the primary argument for any function.  [`partial`](https://lodash.com/docs/4.17.11#partial) does this but in normal, left-to-right order.  `partialRight` is very useful with `lodash` (and other libraries) because often, the first argument of an operator is an array or collection, but if you're using a `pipe`/`flow` construct, you won't have that in your current lexical scope.
 
  So, as an example this:
 
@@ -601,7 +711,7 @@ Here, also, is our second bug.  We should just be able to pass in `find` without
 
 Now, [this solution](https://codepen.io/ezweave/pen/qzoaYp) is a bit of a mess.  This is not nearly as elegant as the [last solution](https://codepen.io/ezweave/pen/wLyXGG), but there is a lesson to be learned here: _functions_ can do logical operations.
 
-This is an important concept as in the next chapter, when we start looking at _monads_, we will be doing the same thing only without any flow control.  It will make sense later on.
+This is an important concept as in the third chapter, when we start looking at _monads_, we will be doing the same thing only without any flow control.  It will make sense later on.
 
 For the purposes of introducing some of these concepts, the "Mark 2" solution is really best and what I would rather see.  The last solution is really just to demonstrate just how differently you can approach this problem.
 
@@ -772,7 +882,7 @@ Things we _haven't_ dealt with yet:
 * Alternative approaches using other libraries
 * Performance
 
-I hope you aren't sick of `FizzBuzz` quite yet... it's a stupidly simple problem (a __toy problem__), that we will be revisiting when we start talking about _monads_ in Chapter 2.
+I hope you aren't sick of `FizzBuzz` quite yet... it's a stupidly simple problem (a __toy problem__), that we will be revisiting when we start talking about _monads_ in Chapter 3.
 
 # Exercises
 
