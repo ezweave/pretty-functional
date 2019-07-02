@@ -5,6 +5,7 @@
   - [The Imperitive Approach](#the-imperitive-approach)
   - [Functionalish Approach](#functionalish-approach)
   - [Another Functionalish Approach](#another-functionalish-approach)
+- [Functional Recursion](#functional-recursion)
 - [Summary](#summary)
 - [Exercises](#exercises)
 
@@ -38,7 +39,7 @@ Lastly, __currying__, which is... hard to explain without an example, so...
 
 # Functional FizzBuzz
 
-Let's write some code that introduces these concepts.  In fact, let's start with some _bad_ code (from a functional programming standpoint).  Let's say we want to write good old [`FizzBuzz`](https://www.tomdalling.com/blog/software-design/fizzbuzz-in-too-much-detail/).
+Let's write some code that introduces these concepts.  In fact, let's start with some _bad_ code (from a functional programming standpoint).  Let's say we want to write good old [`FizzBuzz`](https://www.tomdalling.com/blog/software-design/fizzbuzz-in-too-much-detail/).  This is, of course, a __toy problem__.
 
 > Write a function that prints the numbers from 1 to n. But for multiples of three print "Fizz" instead of the number and for the multiples of five print "Buzz". For numbers which are multiples of both three and five print "FizzBuzz".
 
@@ -604,13 +605,161 @@ This is an important concept as in the next chapter, when we start looking at _m
 
 For the purposes of introducing some of these concepts, the "Mark 2" solution is really best and what I would rather see.  The last solution is really just to demonstrate just how differently you can approach this problem.
 
+# Functional Recursion
+
+_Recusion_ can be a hairy beast.  It starts off so innocently.  You've been handed some exercise by your professor and you have some faint knowledge that "functions can call themselves" and then you get going and... BOOM.  Stack overflow.
+
+This usually happens because some lack of guard has allowed your recursive function to be _too greedy_.  
+
+This is a huge problem for compilers and virtual machines that lack [tail recursion](https://en.wikipedia.org/wiki/Tail_call).  _Hotspot_, which is the Sun originated virtual machine for languages that run on the JVM (redundant, but Java, Scala, Grails) doesn't support it _directly_.  It is possible in Scala because they have a `@tailrec` annotation that tells the compiler, "hey buddy, I am going to call this a great deal so please don't create a new stack frame that is the same as the last fella, eh?"
+
+That's not an important thing to understand and I am doing a great deal of hand waving.  What you need to know is that there are problems that are recursive in the functional world.  I am guessing you have figured that out, since you're this far into a section entitled _Functional Recursion_.
+
+What scares many folks away from such things when trying to be _pretty functional_ in JavaScript and TypeScript is the notion of currying.  The obvious question is "How can I recursively call a curried function?"
+
+Now, to be totally fair, few production problems _require_ recursion.  So you might have dodged this bullet for some time.  But there are _legitamate_ problems that require recursive solutions.  We are ignoring performance, for now, so just bear with me.  But imagine you need to implement a binary search tree, for a good reason (like deeply nested SQL queries that can't be properly optimized at that layer).  If I left you without _some_ exposure on how to handle this functionally, you'd go back to your old ways and write something with bad guards and blow up the stack and be left to contemplate suicide by bashing one's head against a flimsy LED screen.
+
+So, we're going to start _easy_.  Let's do `n!`.  It's a classic and a __toy problem__.
+
+Basicaly `n!` is _factorial of n_, which is the product of integer numbers from 1 to n.
+
+The real _recursion_ here is just in the `reduce` call:
+
+```js
+const factorial: (
+ n: number
+) => number = flow(
+ n => range(1, n + 1),
+ partialRight(
+  reduce,
+  (p: number, i: number): number => p * i
+ )
+)
+```
+
+In this example, if I set `n = 10`, I see this output:
+
+```
+3628800
+```
+
+So this seems so trivial, you're asking "where is the recursion?"  Well, in this __toy problem__, it's all in the function I pass to `reduce`:
+
+```js
+(p: number, i: number): number => p * i
+```
+
+This is, believe it or not, called _recursively_ but it isn't what you are used to seeing.
+
+A functionalish (wait for it) _recursive_ solution _sans_ reduce looks like this:
+
+```js
+const factorialRecurse = (
+ n: number
+) => n === 0 ? 1 : n * factorialRecurse(n - 1)
+```
+
+Again, this isn't mind blowing and the `lodash`-less solution is actually easier to grok.  So let's step through it.
+
+If we want `n = 4`, this becomes easier.  That is:
+
+```
+4 * 3 * 2 * 1 = 24
+```
+
+The `lodash`-less way is super obvious.  We're just backing down, `1` at a time from `n`.
+
+With the more _idiomatic_ approach, we're sort of cheating.  We _start_ with an array that looks like this (from `range`):
+
+```
+[1, 2, 3, 4]
+```
+
+Those are, literally, the steps down from `n`, which is 4.
+
+Next, we are using `reduce` to just multiply them all together.  That looks like this:
+
+```
+at p=1 i=2 p*i=2
+at p=2 i=3 p*i=6
+at p=6 i=4 p*i=24
+```
+
+If it's not obvious yet... we're cheating.  This isn't _recursive_ in the sense you're used to.  It is, however, recursive with regards to the data.  We are taking advantage of the fact that we _know_ that the multipicands are going to be the values in the array `[1, 2, 3, 4]`.
+
+The real answer here is that we don't want to _do recursion_ in the conventional way.  There is a problem of scope _and_ of idiom.
+
+In the ES6 (modern, at this time, JavaScript world) we _could_ use `bind` (or the `lodash` equivalent) to set and access variables on the global scope.  This is how you would get around problems with _anonymous_ functions inside of a curried series.  _However_ this is _inherintly_ not functional, so I won't explain it.  Don't do that.
+
+Remember Scala and the annotation for tail recursion?
+
+You don't usually need to do that.  The truth is, recursion isn't very FP.  Not in the traditional sense.  Instead, we want to change one set of data and pass it on.  `reduce` is great for this.  Again, `n!` is a __toy problem__.  You won't be doing anything that trivial in production applications.  You can get _functionalish_ by using the `factorialRecurse` style, but really, we are breaking the idiom.
+
+_However_ you can do it in some languages.  In the Scala world, if you use the `@tailrec` annotation, the compiler _checks to see if your call is tail recursive and then makes it imperitive_.  It also lies to you.
+
+Let me be clear.  You don't need to grok Scala to get this ([taken from here](https://alvinalexander.com/scala/scala-recursion-examples-recursive-programming#a-tail-recursive-fibonacci-recursion-example)):
+
+```scala
+import scala.annotation.tailrec
+
+/**
+ * The `fibHelper` code comes from this url: rosettacode.org/wiki/Fibonacci_sequence#Scala  
+ */
+object FibonacciTailRecursive extends App {
+    
+    println(fib(9)) // this is a static call, since you might not know Scala... if you do this outside of toy problems, you suck
+
+    def fib(x: Int): BigInt = {
+        // Scala needs this annotation or it will yell at you, because you're gonna blow that stack when n gets big
+        @tailrec def fibHelper(n: Int, prev: BigInt = 0, next: BigInt = 1): BigInt = n match {
+            case 0 => prev
+            case 1 => next
+            case _ => fibHelper(n - 1, next, (next + prev))
+        }
+        fibHelper(x)
+    }
+
+}
+```
+
+In this case, `fibHelper` is a function.  `fib`, which is the _member function_ of a class that has nothing else (again, Scala isn't pure FP, yell at me all you'd like).  It is merely _the step 0_ of a recursive call.  `fibHelper` is the one being called _over and over again_.
+
+This isn't too different from our `n!` using `reduce`.  Just shift your thinking from recusion being:
+
+```
+  foo
+    foo
+      foo
+        foo
+         ... until some guard is hit
+```
+
+To:
+
+```
+Look at data.
+Change data.
+Pass new data.
+Repeat.
+```
+
+That's it.
+
+I've actually lied to you.  This isn't _recursion_ per se.  `reduce` allows the _same logic_ but without the same programmatic constructs one would use when writing recursive functions in other languages.  It is _and_ isn't recursive.  We are _recursive_ in the sense that `reduce` operations look at _the last_ thing we fiddled with and it _is_ calling the same "function" but it isn't.  We could _bike shed_ about various JavaScript runtimes, but from your perspective (and you're not wrong) it's calling a _new anonymous function_ that just looks the same with _new_ data (the output of the last cycle).
+
+You will find that `reduce` is useful in lots of places and I suspect, you might have fiddled with it already.  There are other ways to do _recursive_ style operations in JavaScript, but it isn't really _your grandad's recursion_.  (I am 39, so I could be... or perhaps am, your granddad.)
+
+What is important to grok, is that using `reduce` requires similar thinking to how you'd write `foo calls foo` in another language.  You still need guards in that anonymous function.  If you don't... you can end up with sexy new errors.
+
+Basically, almost any problem you would do _impertively_ with calls to the function calling, can be solved differently in the _pretty functional_ world.  Think about the data, not the call stack.
+
 # Summary
 
 So we've started to get _more_ functional.  We're eschewing the use of ES6 classes and operators (`Array.map`, for example) and using `lodash`s `flow` with functions that are not connected to any particular data type.  We're also starting to think about operating on collections, vs objects. Oh wait, are we?
 
 Remember that JSON is just a `map`.  It's really just another collection type, which is why many `lodash` operators work on arrays or maps.  Keep that in mind going forward.  When we start using `rxjs` and introduce the concept of a _stream_, this is an important thing to understand.  But we're limping before we're sprinting.  For our purposes, ES6 classes are _not_ particularly useful.  There is a difference, of course between JSON and an ES6 class.  I prefer the former, as it lends to a _more_ functional style.
 
-Some basic take aways:
+Some basic takeaways:
 * Fat arrows are your friend.
 * Compose operations as a series of functions, each doing something _discrete_ to a data set.
 * Write tests around your functions.
@@ -618,13 +767,12 @@ Some basic take aways:
 * `partialRight` is _very_ handy in currying functions to expect the _data_ last.
 
 Things we _haven't_ dealt with yet:
-* Recusion
 * WTF is a _monad_?
 * Dealing with external, unpredictable endpoints
 * Alternative approaches using other libraries
 * Performance
 
-I hope you aren't sick of `FizzBuzz` quite yet... it's a stupidly simple problem, that we will be revisiting when we start talking about _monads_ in Chapter 2.
+I hope you aren't sick of `FizzBuzz` quite yet... it's a stupidly simple problem (a __toy problem__), that we will be revisiting when we start talking about _monads_ in Chapter 2.
 
 # Exercises
 
@@ -643,3 +791,7 @@ To run the tests (from the root of the repo) simply type:
 ```bash
 jest chapters/one/exerciseOne.spec.ts
 ```
+
+Of course, you can _read_ the tests.  I just don't want you to [Kobayashi Maru](https://en.wikipedia.org/wiki/Kobayashi_Maru) them, because then you learn nothing and Gene Wilder as Willy Wonka won't let you take over the factory.  Stretch that brain, do it differently.  Play around.
+
+[Table of Contents](../../README.md#table-of-contents)

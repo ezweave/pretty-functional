@@ -10,6 +10,7 @@
   - [Pretty Functional](#pretty-functional)
   - [Lego All Over The Floor](#lego-all-over-the-floor)
 - [Caveat Emptor](#caveat-emptor)
+- [Toy Problems Versus Real Problems](#toy-problems-versus-real-problems)
 - [Who Are You?](#whoami)
 - [How To Use This Book](#this-is-how-we-do-it)
 - [Chapter 1](/chapters/one/one.md)
@@ -146,6 +147,30 @@ Functional Programming is no different.  By itself, it won't do anything (especi
 In some ways, the approach I have found to be most practical for Functional Programming, almost _requires_ some form of [Test Driven Development](https://en.wikipedia.org/wiki/Test-driven_development)(TDD).  TDD is always a rather hard sell on its own, but when you "break your brain" and embrace the FP lifestyle, it becomes a dear ally and _with good reason_.
 
 And, lastly, if nothing else, learning a new paradigm like FP will open new pathways in your brain and change how you approach problem solving.  In some very real, but rather esoteric ways, it will "expand your mind."
+
+[Table of Contents](#table-of-contents)
+
+# Toy Problems Versus Real Problems
+
+When it comes to any sort of technical publication, whether it's something that seems somewhat _esoteric_ to your day to day life as a programmer, like the [Dragon Book](https://en.wikipedia.org/wiki/Compilers:_Principles,_Techniques,_and_Tools) on compiler design, something fun and whimsical like [Learn You A Haskell For Great Good](https://nostarch.com/lyah.htm), or even just the [`rxjs` documentation](https://www.learnrxjs.io/) there is this odd tension between what I like to call _toy problems_ and _real problems_.
+
+__Toy problems__ often encapsulate problems that are either:
+* Classic problems like implementing various sort algorithms, capitalizing words in a sentence, Fibonacci, Golden Ratio, et cetera.
+* Bits of esoteric ephemeria that some library or tool is better suited for (like writing a parser without [yacc](https://en.wikipedia.org/wiki/Yacc)).  Things you might do in school, but you'd likely go elsewhere unless it's part of your job.
+
+__Real problems__ are things like:
+* Pulling REST data into an `rxjs` stream.
+* Making multiple asynchronous calls in one block of logic.
+
+The problem is that many books rely to heavily on the former and skimp on the latter, or implement the latter in such a way that some of the concepts may be lost.  `rxjs` seems particularly bad about this, lacking documentation that fully explains what a _stream is doing_, but throws you lots of little examples of very discrete things.  If you don't fully understand streams, in this case, trying to use _interval_ with some sort of variable versus a constant becomes... confusing.
+
+In this book I start with some __toy problems__, but move on, as we build your confidence to __real problems__.  I have often found this lack of transition to be quite frustrating when dealing with a new API or paradigm.  I want you, dear reader, to fully [_grok_](https://en.wikipedia.org/wiki/Grok) some basics before I throw you in the deep end.  Or, rather, I'd use the analogy (well debunked) of a [frog in boiling water](https://en.wikipedia.org/wiki/Boiling_frog)(and maybe don't click that... I think it's rather cruel): I'd rather slowly get you there than just turn up the heat right away.  Also, I may be a cannibal.
+
+The most rewarding thing in _attempting_ to teach anyone, is to:
+1. Observe the "aha" moment wherin the student really _does understand_ something.
+1. Be told how wrong you are by someone who isn't being cocky, but is _actually correct_.
+
+We start with the toys, because they are actually kind of fun (in my opinion) and move onto some hairy, real world situations.  I have often found that the jump from _toy_ to _day job_ problems highlight some deficiency in my own knowledge and... it can often be hard to bridge the two.  Nothing is worse than having someone say "good book, but I can't use any of this bullshit at work."  Together, we can ~save humanity~ try to avoid that mess.
 
 [Table of Contents](#table-of-contents)
 

@@ -82,7 +82,7 @@ export const capitalizeEveryNthWord = (
  * Solve this in a functional way.
  * 
  * There are a few ways of doing this... you might
- * have to use recursion!
+ * have to use recursion or do you?
  *
  * Be wary of boundary conditions!
  */
