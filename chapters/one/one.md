@@ -131,7 +131,7 @@ You will really see how handy this is, very, very soon.
 
 # Three Key Concepts
 
-There are three concepts that we _do_ need to consider, before we begin:
+There are three concepts in functional programming that we need to have some knowledge of before we really start writing code:
 
 - __Immutability__
 - __Pure functions__
@@ -143,7 +143,7 @@ __Immutability__ is the idea that we don't change any data in place.  Data comes
 
 Don't mutate data, we'll demonstrate this shortly.
 
-A __pure function__ is one that doesn't modify any values outside of its scope.  This goes back to our talk on _functions_, _methods_, and _procedures_.  What happens between braces (or not between braces as you will see) is the end of it.  No extra values are set on the global scope.  A database isn't written to.  The last bit is important.  We can compose calls to, say, a REST API with functional code, but that's technically _unpredictable_.  It is outside of our control.  We want to seperate our data operations from say acquiring or writing data.  The _logic_ needs to be stand alone.  This will benefit you greatly, in the very near future.
+A __pure function__ is one that doesn't modify any values outside of its scope.  This goes back to our talk on _functions_, _methods_, and _procedures_.  What happens between braces (or not between braces as you will see) is the end of it.  No extra values are set on the global scope.  A database isn't written to.  The last bit is important.  We can compose calls to, say, a REST API with functional code, but that's technically _unpredictable_.  It is outside of our control.  We want to seperate our data operations from say acquiring or writing data.  The _logic_ needs to be stand alone.  This will benefit you greatly, in the very near future.  In practice, you _will_ have to deal with I/O (let's consider all such things: writing or reading from a database, a REST call, an external library) _non-deterministic_.  You can still write functional code that interacts with _non-deterministic_ entities, you just _compose_ it differently.
 
 Lastly, __currying__, we talked about _closures_ and _currying_ is really utilizing the JavaScript notion of a closure to capture variables at different stages.  This is also called _capturing lexical state_.  This is a very powerful, very useful tool in functional programming.
 
@@ -153,11 +153,11 @@ Let's write some code that introduces these concepts.  In fact, let's start with
 
 > Write a function that prints the numbers from 1 to n. But for multiples of three print "Fizz" instead of the number and for the multiples of five print "Buzz". For numbers which are multiples of both three and five print "FizzBuzz".
 
-There's a few ways to skin this cat.
+There's a [few ways to skin this cat.](https://youtu.be/cUcjn1CuRZI?t=45)
 
 ## The Imperitive Approach
 
-Here is a traditional, more _imperitive_ solution.  It's probably the _obvious_ solution to anyone who comes from the C-syntax world:
+Here is a traditional, more _imperitive_ solution.  It's probably the _obvious_ solution to anyone who comes from the C-family world:
 
 ```js
 function fizzBuzzer(n: number) {
@@ -183,7 +183,7 @@ do that intentionally.  What is not trivial is this:
 
 * Don't use the `function` keyword.
 
-That's _not_ really within the functional idiom.  You can absolutely write functional code that way, but as we get further into these exercises, you will find yourself fighting TypeScript,
+That's _not_ really within the functional idiom.  I realize I just told you not to use the keyword `function` when writing functional code.  Divorce the keyword from the concept.  You can absolutely write functional code that way, but as we get further into these exercises, you will find yourself fighting TypeScript,
 and it will become confusing.  When we talked about _functions_ and _closures_, I rewrote the _closure_ without the `function` keyword for a reason.  Even if we don't solve the other issues with the _imperitive_ approach to `FizzBuzz` we can, at least, rewrite our _imperitive_ version with a bit more verve and a fat arrow:
 
 ```js
@@ -291,7 +291,7 @@ What is the bug?  Well, this is the output of that call:
 [0, 1, 2, 3, 4]
 ```
 
-So we can't just use range.  This is where being able to toss in a new function, in this case, `tap` can be handy for debugging.
+So we can't just use range.  This is where being able to toss in a new function, in this case, `tap` can be handy for debugging.  We've spotted a problem we didn't even think of.
 
 ```js
 const fizzBuzzer: (
@@ -342,8 +342,7 @@ const fizzBuzzer: (
 
  It just saves you the trouble of having to type out the anonymous function to pass the array reference to `tap`.  Congratulations, you've now seen a bit of _currying_ in action.  In fact, much of what `lodash/fp` adds to `lodash` is just wrappers that do what `partial` and `partialRight` do.  Let's move on and I can explain this better.  
 
- If you find yourself fancying some Thai food, that is perfectly understandable.  I do love a good Panang style curry.
-
+ If you find yourself fancying some Thai food, that is perfectly understandable.  I do love a good Panang style curry.  However, the term _curry_ is actual a reference to [Haskell Curry](https://en.wikipedia.org/wiki/Haskell_Curry).
 
  The rest of the solution then seems kind of... obvious:
 
@@ -491,7 +490,7 @@ But, I find that lends to a lack of readability.  Again, ask yourself if you cou
 Okay, so now I will answer the unanswered question, why did I not just append my original function, `fizzBuzzer`?
 
 Well, I'm glad I asked:
-* The `console` is really not a very functional construct, but we have to touch non-functional things, at times.  It's rare, but you could get an error by calling it.  In general, _I/O of any sort is unpredictable_.  By seperating the _logic_ of creating our array, we're starting to _think_ more functionally.
+* The `console` is really not a very functional construct, but we have to touch non-functional things, at times.  It's rare, but you could get an error by calling it.  In general, _I/O of any sort is unpredictable and non-deterministic_, as we have stated previously.  By seperating the _logic_ of creating our array, we're starting to _think_ more functionally.
 * I might want to make a bunch of different printer type functions.
 
 For example:
@@ -719,15 +718,117 @@ For the purposes of introducing some of these concepts, the "Mark 2" solution is
 
 _Recusion_ can be a hairy beast.  It starts off so innocently.  You've been handed some exercise by your professor and you have some faint knowledge that "functions can call themselves" and then you get going and... BOOM.  Stack overflow.
 
-This usually happens because some lack of guard has allowed your recursive function to be _too greedy_.  
+This usually happens because some lack of guard has allowed your recursive function to be _too greedy_, but it is also a problem of _growing the call stack_.  A recursive function that is _too greedy_ adds too many frames to the call stack (which we just call "the stack").
 
-This is a huge problem for compilers and virtual machines that lack [tail recursion](https://en.wikipedia.org/wiki/Tail_call).  _Hotspot_, which is the Sun originated virtual machine for languages that run on the JVM (redundant, but Java, Scala, Grails) doesn't support it _directly_.  It is possible in Scala because they have a `@tailrec` annotation that tells the compiler, "hey buddy, I am going to call this a great deal so please don't create a new stack frame that is the same as the last fella, eh?"
+For example:
+
+```js
+const foo = (
+  x: number
+) => {
+  const n = x > 0 ? foo (x -1) : x
+  return n
+}
+```
+
+The stack, of course, will grow until the guard is hit, and then it will pass back that reference through all prior calls.
+
+Essentially, for `foo(4`), the stack looks like this when we hit the guard:
+
+```js
+foo(0)
+foo(1)
+foo(2)
+foo(3)
+foo(4)
+```
+
+For large values of `x`, the stack will grow in a linear fashion, but this (of course) is a _very_ toy problem and in reality it will grow much larger.  There is a way to rewrite `foo` to prevent this, but more on that in a moment.
+
+Out of control stack growth is a huge problem for compilers and virtual machines that lack support for [tail calls](https://en.wikipedia.org/wiki/Tail_call).  _Hotspot_, which is the Sun originated virtual machine for languages that run on the JVM (redundant, but Java, Scala, Grails) doesn't support it _directly_.  It is possible in Scala because they have a `@tailrec` annotation that tells the compiler, "hey buddy, I am going to call this a great deal so please don't create a new stack frame that is the same as the last fella, eh?"
 
 That's not an important thing to understand and I am doing a great deal of hand waving.  What you need to know is that there are problems that are recursive in the functional world.  I am guessing you have figured that out, since you're this far into a section entitled _Functional Recursion_.
 
-What scares many folks away from such things when trying to be _pretty functional_ in JavaScript and TypeScript is the notion of currying.  The obvious question is "How can I recursively call a curried function?"
+Remember Scala and the annotation for tail recursion?
 
-Now, to be totally fair, few production problems _require_ recursion.  So you might have dodged this bullet for some time.  But there are _legitamate_ problems that require recursive solutions.  We are ignoring performance, for now, so just bear with me.  But imagine you need to implement a binary search tree, for a good reason (like deeply nested SQL queries that can't be properly optimized at that layer).  If I left you without _some_ exposure on how to handle this functionally, you'd go back to your old ways and write something with bad guards and blow up the stack and be left to contemplate suicide by bashing one's head against a flimsy LED screen.
+JavaScript _does_ support tail calls, and tail calls aren't even only the domain of recursion.  Simply put, a tail call (wherein we don't add to the call stack unecessary frames), is _any_ function that calls another function on a return:
+
+```js
+
+const otherFoo = (
+  x: number
+) => bar(x)
+```
+
+That is technically a tail call.  JavaScript supports tail calls in `strict` mode, which helps with memory (the bane of recursion).
+
+We can also rewrite `foo` to use a tail call:
+
+```js
+const foo = (
+  x: number
+) => x > 0 ? foo(x - 1): x
+```
+
+This, when employed in `strict` mode, is called a __Proper Tail Call__ (PTC).
+
+But writing a PTC is a subtle thing because neither this:
+
+```js
+const yetSomeOtherFoo = (
+  x: number
+) => x + bar(x)
+```
+
+nor our old `foo`:
+
+```js
+const foo = (
+  x: number
+) => {
+  const n = x > 0 foo(x - 1) : x
+  return n 
+}
+```
+
+Writing a PTC in JavaScript is important.  It helps memory issues.
+
+Now in the Scala world, if you use the `@tailrec` annotation, the compiler _checks to see if your call is tail recursive and then makes it imperitive_ (such trickery). 
+
+Let me be clear.  You don't need to grok Scala to get this ([taken from here](https://alvinalexander.com/scala/scala-recursion-examples-recursive-programming#a-tail-recursive-fibonacci-recursion-example)):
+
+```scala
+import scala.annotation.tailrec
+
+/**
+ * The `fibHelper` code comes from this url: rosettacode.org/wiki/Fibonacci_sequence#Scala  
+ */
+object FibonacciTailRecursive extends App {
+    
+    println(fib(9)) // this is a static call, since you might not know Scala... if you do this outside of toy problems, you suck
+
+    def fib(x: Int): BigInt = {
+        // Scala needs this annotation or it will yell at you, because you're gonna blow that stack when n gets big
+        @tailrec def fibHelper(n: Int, prev: BigInt = 0, next: BigInt = 1): BigInt = n match {
+            case 0 => prev
+            case 1 => next
+            case _ => fibHelper(n - 1, next, (next + prev)) // tail call!
+        }
+        fibHelper(x)
+    }
+
+}
+```
+
+In this case, `fibHelper` is a function.  `fib`, which is the _member function_ of a class that has nothing else (again, Scala isn't pure FP, yell at me all you'd like).  It is merely _the step 0_ of a recursive call.  `fibHelper` is the one being called _over and over again_.
+
+__Now for some bad news!__
+
+Since I told you about how great PTCs are, you should know that very few JavaScript runtimes _actually_ support them.  _Le sigh_.  As of this writing, [you can see that](https://kangax.github.io/compat-table/es6/#test-proper_tail_calls_(tail_call_optimisation)) when it comes to ES6, not even [Node](https://stackoverflow.com/questions/23260390/node-js-tail-call-optimization-possible-or-not) supports them.  Oddly enough, Safari does.  Yay?
+
+Ignoring that, what scares many folks away from such things when trying to be _pretty functional_ in JavaScript and TypeScript is the notion of currying.  The obvious question is "How can I recursively call a curried function?"
+
+To be totally fair, few __real problems__ _require_ this type of recursion.  So you might have dodged this bullet for some time.  But there are _legitamate_ problems that require recursive solutions.  Imagine you need to implement a binary search tree, for a good reason (like deeply nested SQL queries that can't be properly optimized at that layer).  If I left you without _some_ exposure on how to handle this functionally, you'd go back to your old ways and write something with bad guards and blow up the stack and be left to contemplate suicide by bashing one's head against a flimsy LED screen.
 
 So, we're going to start _easy_.  Let's do `n!`.  It's a classic and a __toy problem__.
 
@@ -769,7 +870,9 @@ const factorialRecurse = (
 ) => n === 0 ? 1 : n * factorialRecurse(n - 1)
 ```
 
-Again, this isn't mind blowing and the `lodash`-less solution is actually easier to grok.  So let's step through it.
+But, of course, it really needs PTC support to be performant, but barring that....
+
+This isn't mind blowing and the `lodash`-less solution is actually easier to grok.  So let's step through it.
 
 If we want `n = 4`, this becomes easier.  That is:
 
@@ -795,44 +898,7 @@ at p=2 i=3 p*i=6
 at p=6 i=4 p*i=24
 ```
 
-If it's not obvious yet... we're cheating.  This isn't _recursive_ in the sense you're used to.  It is, however, recursive with regards to the data.  We are taking advantage of the fact that we _know_ that the multipicands are going to be the values in the array `[1, 2, 3, 4]`.
-
-The real answer here is that we don't want to _do recursion_ in the conventional way.  There is a problem of scope _and_ of idiom.
-
-In the ES6 (modern, at this time, JavaScript world) we _could_ use `bind` (or the `lodash` equivalent) to set and access variables on the global scope.  This is how you would get around problems with _anonymous_ functions inside of a curried series.  _However_ this is _inherintly_ not functional, so I won't explain it.  Don't do that.
-
-Remember Scala and the annotation for tail recursion?
-
-You don't usually need to do that.  The truth is, recursion isn't very FP.  Not in the traditional sense.  Instead, we want to change one set of data and pass it on.  `reduce` is great for this.  Again, `n!` is a __toy problem__.  You won't be doing anything that trivial in production applications.  You can get _functionalish_ by using the `factorialRecurse` style, but really, we are breaking the idiom.
-
-_However_ you can do it in some languages.  In the Scala world, if you use the `@tailrec` annotation, the compiler _checks to see if your call is tail recursive and then makes it imperitive_.  It also lies to you.
-
-Let me be clear.  You don't need to grok Scala to get this ([taken from here](https://alvinalexander.com/scala/scala-recursion-examples-recursive-programming#a-tail-recursive-fibonacci-recursion-example)):
-
-```scala
-import scala.annotation.tailrec
-
-/**
- * The `fibHelper` code comes from this url: rosettacode.org/wiki/Fibonacci_sequence#Scala  
- */
-object FibonacciTailRecursive extends App {
-    
-    println(fib(9)) // this is a static call, since you might not know Scala... if you do this outside of toy problems, you suck
-
-    def fib(x: Int): BigInt = {
-        // Scala needs this annotation or it will yell at you, because you're gonna blow that stack when n gets big
-        @tailrec def fibHelper(n: Int, prev: BigInt = 0, next: BigInt = 1): BigInt = n match {
-            case 0 => prev
-            case 1 => next
-            case _ => fibHelper(n - 1, next, (next + prev))
-        }
-        fibHelper(x)
-    }
-
-}
-```
-
-In this case, `fibHelper` is a function.  `fib`, which is the _member function_ of a class that has nothing else (again, Scala isn't pure FP, yell at me all you'd like).  It is merely _the step 0_ of a recursive call.  `fibHelper` is the one being called _over and over again_.
+If it's not obvious yet... `reduce` is recursive and is employed often in pretty functional JS. 
 
 This isn't too different from our `n!` using `reduce`.  Just shift your thinking from recusion being:
 
@@ -855,13 +921,15 @@ Repeat.
 
 That's it.
 
-I've actually lied to you.  This isn't _recursion_ per se.  `reduce` allows the _same logic_ but without the same programmatic constructs one would use when writing recursive functions in other languages.  It is _and_ isn't recursive.  We are _recursive_ in the sense that `reduce` operations look at _the last_ thing we fiddled with and it _is_ calling the same "function" but it isn't.  We could _bike shed_ about various JavaScript runtimes, but from your perspective (and you're not wrong) it's calling a _new anonymous function_ that just looks the same with _new_ data (the output of the last cycle).
-
 You will find that `reduce` is useful in lots of places and I suspect, you might have fiddled with it already.  There are other ways to do _recursive_ style operations in JavaScript, but it isn't really _your grandad's recursion_.  (I am 39, so I could be... or perhaps am, your granddad.)
 
-What is important to grok, is that using `reduce` requires similar thinking to how you'd write `foo calls foo` in another language.  You still need guards in that anonymous function.  If you don't... you can end up with sexy new errors.
+What is important to grok, is that using `reduce` requires similar thinking to how you'd write `foo calls foo` in another language in that you still need guards in that anonymous function and it still needs to be a PTC or you will have memory issues.
 
 Basically, almost any problem you would do _impertively_ with calls to the function calling, can be solved differently in the _pretty functional_ world.  Think about the data, not the call stack.
+
+I've really only touched on recursion, as that's not the focus of this book.  I'm just giving you enough to be dangerous.  For a more in depth look at various recursive styles, I'd refer you to [Functional Light JS](https://github.com/getify/Functional-Light-JS/blob/master/manuscript/ch8.md/#chapter-8-recursion) wherein the author, Kyle Simpson goes a bit further with explaining the state of the stack and various styles of recursion.
+
+It's a damn shame that PTCs aren't widely supported.
 
 # Summary
 
@@ -878,9 +946,9 @@ Some basic takeaways:
 
 Things we _haven't_ dealt with yet:
 * WTF is a _monad_?
-* Dealing with external, unpredictable endpoints
-* Alternative approaches using other libraries
-* Performance
+* Dealing with external, unpredictable endpoints.
+* Alternative approaches using other libraries.
+* Performance (especially since we don't have PTCs).
 
 I hope you aren't sick of `FizzBuzz` quite yet... it's a stupidly simple problem (a __toy problem__), that we will be revisiting when we start talking about _monads_ in Chapter 3.
 
