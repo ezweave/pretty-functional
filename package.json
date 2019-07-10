@@ -1,6 +1,6 @@
 {
   "name": "pretty-functional",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A book with examples on making more functional js",
   "main": "chapters/index.ts",
   "scripts": {

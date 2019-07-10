@@ -18,25 +18,27 @@
 
 ## Introduction
 
-The year is 1999 and when not reinforcing my Y2K bunker, you could find me either riding mountain bikes or staring off into the void just beyond the corner of my monitor trying to will myself into a decent programmer.
+There's no way for me to broach the topic of functional programming without invoking some Proustian moment wherein I am suddenly twenty years old again and the world is quite a different place from the world you now live in.  I wasn't yet old enough to buy myself a beer (in the United States, at least) and my chief concerns were mountain biking, mountain biking, and school.
 
 In those halycon days, the University of Colorado at Colorado Springs' College of Engineering had just moved the early level Computer Science (CS) courses over to Java from [Pascal](https://en.wikipedia.org/wiki/Pascal_(programming_language)).  Over the course of my undergraduate work, I would learn many languages: MIPS assembly, Bash scripting, Python, C, C++, a wee bit of PHP, Javascript (who would use _this scoping disaster_ language for anything, right), and, as mentioned, Java.
 
 _Most_ of these languages share some bits of C in their DNA (so much so that they're often called [the C-family programming languages](https://en.wikipedia.org/wiki/List_of_C-family_programming_languages)).  Even if it's soley _syntax_, Java, C++, Objective-C, C#, even JavaScript, all share some concepts from C.  Of course, they are _very_ different languages, I'm not unaware. 
 
-Most of my early education, when not writing low level instructions or embedded or operating system level code, was focused on _Object Oriented Programming_ (OOP).  It was such a prevailing concept, that you almost learned it as a matter of course... in fact, the first class solely focused on OOP was a 300 level C++ programming class.  All other classes were more about data structures, discrete mathematics, algorithms, and the like and utilized Java.
+Most of my early education, when not writing low level instructions or embedded or operating system level code, involved _Object Oriented Programming_ (OOP or OO).  It was such a prevailing concept, that you almost learned it as a matter of course... in fact, the first class solely focused on OOP was a 300 level C++ programming class.  All other classes were more about data structures, discrete mathematics, algorithms, and the like and utilized Java if one wrote any code at all.
 
-Until I took [_Concepts of Programming Languages_](https://www.amazon.com/Concepts-Programming-Languages-Robert-Sebesta/dp/013394302X), which was taught by the author, Dr Robert W Sebesta.
+Then I took [_Concepts of Programming Languages_](https://www.amazon.com/Concepts-Programming-Languages-Robert-Sebesta/dp/013394302X), which was taught by the author, Dr Robert W Sebesta.
 
 _NOTE: he literally looked like what we thought Gandalf would look like, before the Peter Jacson films.  I mean [seriously](http://cs.uccs.edu/~rsebesta/sebesta.gif).  We joked that "one shouldn't cross a wizard."_
 
 If you're familiar with the class and/or the book, it is one of those insidiously deceptive titles.  Much like _Linear Algebra_.  As a barely post-pubescent little scamp (who thought he knew everything, of course) I thought to myself "I know how to code."  
 
-But I was wrong.  _Concepts_ was both abstract and exact and it was just _different_.  This was partly because all of our homework was in a little language called [Scheme](https://en.wikipedia.org/wiki/Scheme_(programming_language)).  _Scheme_ was like reading some odd alien script.  It looked nothing like all of the C family languages with which I was familiar.
+Knowing how to write some C++ is _not_ the same as understanding programming languages on the whole.  Knowing a handful of languages isn't much use either.
+
+_Concepts_ was both abstract and exact and it was just _different_.  This was partly because all of our homework was in a little language called [Scheme](https://en.wikipedia.org/wiki/Scheme_(programming_language)).  _Scheme_ was like reading some odd alien script.  It looked nothing like all of the C family languages with which I was familiar.
 
 As an example, this is what a [Fibonacci sequence to _n_](https://en.wikipedia.org/wiki/Fibonacci_number) implementation looks like in Scheme:
 
-```
+```scheme
 (define (fibo n)
   (cond
     ((= n 0) 1)
@@ -44,21 +46,15 @@ As an example, this is what a [Fibonacci sequence to _n_](https://en.wikipedia.o
     (true (+ (fibo (- n 1)) (fibo (- n 2))))
     )
   )
-
-(define (sumofint n)
-  (cond
-    ((= n 0) 0)
-    (true (+ (sumofint (- n 1)) n))
-    )
 ```
 
-Kind of confusing if you come from the C-syntax languages, eh?  Scheme is a dialect of [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) and is high on _minimalism_ and lots and lots of parens.
+It's kind of confusing to look at if you come from the C-syntax languages, eh? _(Some of that difference is infix versus postfix, of course.)_  Scheme is a dialect of [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) and is high on _minimalism_ and lots and lots of parens.
 
 ![xkcd](https://imgs.xkcd.com/comics/lisp_cycles.png)
 
 This, of course, isn't about Scheme or Lisp (AKA 'Lost In Stupid Parentheses'), but about _functional programming_. Scheme was my introduction to the idea, only I didn't quite [_grok_](https://en.wikipedia.org/wiki/Grok) that yet...
 
-There was a moment, amidst that semester, when something clicked in my brain.  At first, Scheme's simple operators (`car` and `cdr`) and its endless rebuilding of arrays was grating.  The scant examples we were given were inscrutable.  The only IDE we had to use, other than simple running it from the command line, was a fickle, crude thing called "Dr Scheme" (which has evolved into the much more refined [Racket](https://racket-lang.org/)).  Now, I wasn't unaware of the concept of "primitive debugging" (which is not referring to a datatype, but was slang we used to describe priting output to the console in lieu of using `gdb` or a full on IDE like Visual Studio), but it didn't even help that much in the Scheme world.
+There was a moment, amidst that semester, when something clicked in my brain.  At first, Scheme's simple operators (`car` and `cdr`) and its endless rebuilding of arrays was grating.  The scant examples we were given were inscrutable.  The only IDE we had to use, other than simple running it from the command line, was a fickle, crude thing called "Dr Scheme" (which has evolved into the much more refined [Racket](https://racket-lang.org/)) and it really didn't seem to help all that much.  Where was my intellisense?
 
 So it took a lot of thinking, diagrams, and really contemplating what we were doing to even think of how to approach building solutions to the homework assignments.  They were all such trivial things, in other languages, and more than one student asked Dr Sebesta if they could "just do it in C."  
 
@@ -66,9 +62,9 @@ It was amidst these conditions that I locked myself in the computer lab and just
 
 Truthfully, OOP, as we know it, really just enforces [_imperitive programming practices_](https://en.wikipedia.org/wiki/Imperative_programming).  Sure it gives you some better ways to organize your data and some handy tools to operate on it (polymorphism, shadowing, composition, the whole IS-A and HAS-A thing), but it often just leads to... bloat.
 
-All of the big, popularly understood as OO languages (Java, C#, and C++) are rife with [anti-patterns](https://en.wikipedia.org/wiki/Anti-pattern) which are one of many sources of ["code smell"](https://en.wikipedia.org/wiki/Code_smell).
+All of the big, popularly-understood-as-OO languages (Java, C#, and C++) are rife with [anti-patterns](https://en.wikipedia.org/wiki/Anti-pattern) which are one of many sources of ["code smell"](https://en.wikipedia.org/wiki/Code_smell).
 
-Ignoring all of this naval gazing, let's jump into 2019.  JavaScript, thanks largely in part to Node.js, has become a _very_ powerful programming language, but it also suffers from a sort of "programming multiple personality disorder."  You can write very OO looking JS or you can write more functional JS.
+Ignoring all of this naval gazing, let's jump nearly twenty years into 2019.  JavaScript, thanks largely in part to Node.js, has become a _very_ powerful programming language, but it also suffers from a sort of "programming multiple personality disorder."  You can write very OO looking JS or you can write more functional JS.
 
 The truth is that none of the popular functional frameworks are as purely functional as they would have you think.  Even [Scala](https://en.wikipedia.org/wiki/Scala_(programming_language))(which runs on the Java Virtual Machine and can utilize Java's SDK) has to bastardize itself a little because there are things you just can't fully control:
 - REST calls to an external API
@@ -92,17 +88,17 @@ Break your brain.
 
 ## Pretty Functional
 
-I've been calling a lot of the JavaScript and TypeScript I've written over the years "pretty functional."  Truth be told, even languages built around pure functional programming have to make concessions.  External APIs, any sort of I/O, all sorts of things break this paradigm.  We can't _always_ make our input data sets what we expect them to be.  I mean if I had a dollar for every `NullPointerException` or `NullReferenceException` I've seen in my life, I'd not be typing this now.  I'd be going crazy, Marlon Brando style, on an island of my own near Tahiti.  No language can guarantee "safe" input.  It can lie to you with static analysis, your IDE can asuage you of your sins, it can give you a level of confidence that is unwarrented, and that, dear reader, is why we have jobs.  We write bugs all the time.
+I've been calling a lot of the JavaScript and TypeScript I've written over the years "pretty functional."  As I mentioned in the introduction, even languages built around pure functional programming have to make concessions.  External APIs, any sort of I/O, all sorts of things break this paradigm.  We can't _always_ make our input data sets what we expect them to be.  I mean if I had a dollar for every `NullPointerException` or `NullReferenceException` I've seen in my life, I'd not be typing this now.  I'd be going crazy, Marlon Brando style, on an island of my own near Tahiti.  No language can guarantee "safe" input.  It can lie to you with static analysis, your IDE can asuage you of your sins, it can give you a level of confidence that is unwarrented, and that, dear reader, is why we have jobs.  We write bugs all the time.
 
 _However_, I am a firm believer that this _pretty functional_ approach, while it has its flaws, encourages you to write _very_ hardened code.  As we start to break apart simple problems into a _series_ of functions, you start to see how confident we can be in some of our solutions.  I find that the _pretty functional_ approach encourages you to _write lots of unit tests_ which most programmers have an aversion to.
 
 Why do we hate writing tests?
 
-I can't say I have a definitve answer, but for me, it's hubris all the way.  I _know_ how to write code.  I _know_ how that library or function works.  So I don't like writing unit tests, because, _duh_ I know what I am doing.
+I can't say I have a definitve answer, but for me, it's hubris all the way.  I _know_ how to write code.  I _know_ how that library or function works.  So I don't like writing unit tests, because, _duh_ I know what I am doing and my time is valuable.
 
-But I don't.
+But I don't and the time I spend _not_ writing tests is far outpaced by the time (as in money) my company spends fixing things, when bugs are invariably discovered.
 
-I can't control my inputs.  Even with this approach, you can _still write bugs_.  Nothing stops you from shooting yourself in the foot.  Or, as the joke goes, in Haskell you might shoot yourself in the foot, only to discover that all of those were aliases and you really hung yourself and shot fifty other people in the foot.  There is an _older_ joke about C++ along those lines from [Bjarne Stroustrup](https://en.wikipedia.org/wiki/Bjarne_Stroustrup):
+I can't control my inputs.  Even with this approach of breaking up logic and writing lots of tests, you can and will _still write bugs_.  Nothing stops you from shooting yourself in the foot.  Or, as the joke goes, in Haskell you might shoot yourself in the foot, only to discover that all of those were aliases and you really hung yourself and shot fifty other people in the foot.  There is an _older_ joke about C++ along those lines from [Bjarne Stroustrup](https://en.wikipedia.org/wiki/Bjarne_Stroustrup):
 >C makes it easy to shoot yourself in the foot; C++ makes it harder, but when you do it blows your whole leg off.
 
 When I discovered the concept of [operator overloading](https://en.wikipedia.org/wiki/Operator_overloading) I wrote a lot of gibberish looking C++ because I thought "hey, I can now _add_ objects together."  Ick.
@@ -117,7 +113,7 @@ In common English usage, "pretty" is used to describe beauty.  Quite literally i
 
 You might say of a Jaguar Series I E-Type: "That's a rather pretty car."
 
-![E-Type](https://en.wikipedia.org/wiki/Jaguar_E-Type#/media/File:Jaguar_E-Type_(1963).jpg)
+![E-Type](static/images/e-type.jpg)
 
 You might read a [poem by Rainer Maria Rilke](https://poets.org/poem/i-am-much-too-alone-world-yet-not-alone) and say "That's a pretty poem." Or perhaps listen to the entirity of [Jeff Mangum's opus](https://open.spotify.com/album/5COXoP5kj2DWfCDg0vxi4F?si=EmAiAqvQTke2rpwIgXVlOA) and remark "What a pretty concept."
 
@@ -133,9 +129,11 @@ I hope the concepts and exercises herein inspire the same sort of desire within 
 
 # Lego All Over the Floor
 
+![Lego](/static/images/lego.jpg)
+
 Going back down memory lane... when I was a boy I loved Lego, so much so that when I turned 3 (or so the story goes), I demanded a set.  My father, looking at the age statements on the boxes, bought me Duplo.  I was _very unhappy_.  He realized I wanted the "tiny bricks" and bought me a proper set.  It was a love affair that predated anything else I can recall, save reading, and I was obsessed.  In the first few years of my Lego wrangling, I bullied him into purchasing for me a giant Plano tackle box.  I used the little drawers to organize my blocks by color and category.  Red 2x1s went here, black 4x2s went there. 
 
-Quickly, this scheme was shot to hell.  Soon I just had large plastic bins roughly sorted by Space and Town (the only two categories in the early eighties) and, inevitably, the Lego bricks would be all over the floor and I would poke through them to find the _one piece_ I needed to make little fortress or whatever it was I had in my head complete. 
+Quickly, this scheme was shot to hell.  Soon I just had large plastic bins roughly sorted by Space and Town (the only two categories in the early eighties) and, inevitably, the Lego bricks would be all over the floor and I would poke through them to find the _one piece_ I needed to make the little fortress or whatever it was I had in my head complete. 
 
 The whole point of this rambling story: the big refactor.  You've come to some point with some code and you tell your boss "this has to be rewritten."  Product managers and owners cringe, because they _don't get why it's so bad without lots of illustrations_, but you end up _breaking everything_ as you rewrite it.
 
@@ -160,7 +158,7 @@ Functional Programming is no different.  By itself, it won't do anything (especi
 
 In some ways, the approach I have found to be most practical for Functional Programming, almost _requires_ some form of [Test Driven Development](https://en.wikipedia.org/wiki/Test-driven_development)(TDD).  TDD is always a rather hard sell on its own, but when you "break your brain" and embrace the FP lifestyle, it becomes a dear ally and _with good reason_.
 
-And, lastly, if nothing else, learning a new paradigm like FP will open new pathways in your brain and change how you approach problem solving.  In some very real, but rather esoteric ways, it will "expand your mind."
+And, lastly, if nothing else, learning a new paradigm like FP will open new pathways in your brain and change how you approach problem solving.  In some very real ways, it has the potential to "expand your mind."
 
 [Table of Contents](#table-of-contents)
 
@@ -192,9 +190,11 @@ We start with the toys, because they are actually kind of fun (in my opinion) an
 
 This is meant as a bit of _rhetoric_, but let's introduce ourselves before we go much further.
 
-__Your humble(ish) author__: my name is Matt Weaver (long called "ezweave" on "teh webz") and I'm a software engineer by trade, but a programmer for purposes of our one-sided discourse.  I was born in the early 80s (making me either an "in-betweener" or "the oldest Millenial") and started programming around 1989-90 (maybe?) when my father (an engineer at Bell Labs, at the time) forced me to learn QBASIC, of all things (`GOTO another_programming_language`).  I come from a wee bit of an academic background (with a Bachelor's and Master's of Science in Computer Science and some now expired credits towards a PhD in the same), somewhat due to my aforementioned father... but also because I was a solitary child, whose best friends were books and Lego bricks.  I like the music of Converge, short walks on the beach (I hate sand in my shoes), racing bicycles, and generally making an ass out of myself.  You'll find this book rife with odd humor that I blame on being Candian-American (and the added twist of having spent much of my youth in a mix of the American Southeast, rural Alberta, and the 'burbs of Chicago), but I'll try to keep it light.  I'm familiar enough with the writing of the likes of [Andrew Tanenebaum](https://en.wikipedia.org/wiki/Andrew_S._Tanenbaum) and [Donald Knuth](https://en.wikipedia.org/wiki/Donald_Knuth) to know that humor in Computer Science can sometimes be either too dry or not present at all.  I'd like to make your experience with this volume as entertaining and educational as possible, so there you go.
+__Your humble(ish) author__: my name is Matt Weaver and, I'm sure you've gathered that I have some experience with programming languages.  I have both an Master's and Bachelor's of Science in Computer Science, I enjoy extremely short walks on the beach (sand in your shoes is no fun), the music of Converge, pushing myself, and bicycles.  I'm familiar enough with the writing of the likes of [Andrew Tanenebaum](https://en.wikipedia.org/wiki/Andrew_S._Tanenbaum) and [Donald Knuth](https://en.wikipedia.org/wiki/Donald_Knuth) to know that humor in Computer Science can sometimes be either too dry or not present at all.  I'd like to make your experience with this volume as entertaining and educational as possible, so there you go.
 
-__You, Dear Reader__: you're a programmer. Okay, let's move on... no, no.  That won't do.  I'm going to do a bit of projection here, to get you into the right _frame of mind_.  To set the mood.  You're either curious or someone forced you to read this.  You're either self-driven or lazy, but I suspect not so much the latter and more so the former.  By nature, we often get quite comfortable with the knowledge and skillset we have.  If you're anything like I was/am/was, you're ever earnest to be _uncomfortable_, but perhaps not.  I say "uncomfortable" because I often suspect, that when things are _going too well_ I am somehow "bollocksing up."  What am I not doing, right now?  None other than perhaps the greatest American Cyclist, Mr Greg LeMond put it best:
+__You, Dear Reader__: you're a programmer. Okay, let's move on... no, no.  That won't do.  I'm going to do a bit of projection here, to get you into the right _frame of mind_.  To set the mood.  You're either curious or someone forced you to read this.  You're either self-driven or lazy, but I suspect not so much the latter and more so the former.  By nature, we often get quite comfortable with the knowledge and skillset we have.  If you're anything like I was/am/was, you're ever earnest to be _uncomfortable_, but perhaps not.  I say "uncomfortable" because I often suspect, that when things are _going too well_ I am somehow "bollocksing up."  What am I not doing, right now?  
+
+None other than perhaps the greatest American Cyclist, Mr Greg LeMond put it best:
 
 > It never gets easier, you just go faster.
 
@@ -211,7 +211,7 @@ A few things to consider:
 
 # This Is How We Do It
 
-I'll go over this more in the first chapter, but to go through this book, you will need:
+To go through the exercises in this book, you will need:
 
 * A computer or some device so like a computer that you can install `git` and `nvm`.
 * A somewhat working knowledge of a shell... `bash` is fine, though I am quite fond of `zsh` via [`yadr`](https://github.com/skwp/dotfiles) as it let's me do such silly things as use `vim` commands in the interpreter.

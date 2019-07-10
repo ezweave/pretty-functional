@@ -327,7 +327,7 @@ const fizzBuzzer: (
  )
  ```
 
- Is the same as:
+Is the same as:
 
  ```js
 const fizzBuzzer: (
@@ -580,8 +580,7 @@ Let me get your brain's gears turning: how would you _test_ this solution?
 
 I hope you said to yourself "Well, now I can test everything!"
 
-You can test `replacer` on its own.  You can test `fizzBuzzer` on its own.  And then you might not even need to test your `Printer` functions at all (it's possible to test console logging,
-I've done it when writing API level code, but it can be a pain in the ass (P.I.T.A.)).
+You can test `replacer` on its own.  You can test `fizzBuzzer` on its own.  And then you might not even need to test your `Printer` functions at all (it's possible to test console logging, I've done it when writing API level code, but it can be a pain in the ass (P.I.T.A.)).
 
 You can also slip `tap` functions into the `flow` chain and easily see what is going on at each stage.  _More importantly_ the core functionality is _pretty_ pure and it's discrete, there's no funny business going on with global variables.  
 
@@ -718,7 +717,11 @@ For the purposes of introducing some of these concepts, the "Mark 2" solution is
 
 _Recusion_ can be a hairy beast.  It starts off so innocently.  You've been handed some exercise by your professor and you have some faint knowledge that "functions can call themselves" and then you get going and... BOOM.  Stack overflow.
 
-This usually happens because some lack of guard has allowed your recursive function to be _too greedy_, but it is also a problem of _growing the call stack_.  A recursive function that is _too greedy_ adds too many frames to the call stack (which we just call "the stack").
+```
+RangeError: Maximum call stack size exceeded
+```
+
+This usually happens because some lack of guard has allowed your recursive function to be _too greedy_, but it is also a problem of _growing the call stack_.  A recursive function that is _too greedy_ adds too many frames to the [call stack](https://en.wikipedia.org/wiki/Call_stack) (which we just call "the stack").
 
 For example:
 
@@ -760,7 +763,7 @@ const otherFoo = (
 ) => bar(x)
 ```
 
-That is technically a tail call.  JavaScript supports tail calls in `strict` mode, which helps with memory (the bane of recursion).
+That is technically a tail call.  JavaScript supports tail calls in `strict` mode, which helps to keep the stack in check.
 
 We can also rewrite `foo` to use a tail call:
 
@@ -791,9 +794,9 @@ const foo = (
 }
 ```
 
-Writing a PTC in JavaScript is important.  It helps memory issues.
+Have PTCs.
 
-Now in the Scala world, if you use the `@tailrec` annotation, the compiler _checks to see if your call is tail recursive and then makes it imperitive_ (such trickery). 
+Now in the Scala world, if you use the `@tailrec` annotation, the compiler _checks to see if your call is tail recursive_ (such trickery). 
 
 Let me be clear.  You don't need to grok Scala to get this ([taken from here](https://alvinalexander.com/scala/scala-recursion-examples-recursive-programming#a-tail-recursive-fibonacci-recursion-example)):
 
@@ -824,11 +827,13 @@ In this case, `fibHelper` is a function.  `fib`, which is the _member function_ 
 
 __Now for some bad news!__
 
-Since I told you about how great PTCs are, you should know that very few JavaScript runtimes _actually_ support them.  _Le sigh_.  As of this writing, [you can see that](https://kangax.github.io/compat-table/es6/#test-proper_tail_calls_(tail_call_optimisation)) when it comes to ES6, not even [Node](https://stackoverflow.com/questions/23260390/node-js-tail-call-optimization-possible-or-not) supports them.  Oddly enough, Safari does.  Yay?
+Since I told you about how great PTCs are, you should know that very few JavaScript runtimes _actually_ support them in 2019.  _Le sigh_.  As of this writing, [you can see that](https://kangax.github.io/compat-table/es6/#test-proper_tail_calls_(tail_call_optimisation)) when it comes to ES6, not even [Node](https://stackoverflow.com/questions/23260390/node-js-tail-call-optimization-possible-or-not) supports them.  Oddly enough, Safari does.  Yay?
 
-Ignoring that, what scares many folks away from such things when trying to be _pretty functional_ in JavaScript and TypeScript is the notion of currying.  The obvious question is "How can I recursively call a curried function?"
+I mentioned PTCs, knowing full well you probably can't use them, solely because I'm hopeful that _one day_ you will.  It's also just important to understand what happens when you make a recursive call.
 
-To be totally fair, few __real problems__ _require_ this type of recursion.  So you might have dodged this bullet for some time.  But there are _legitamate_ problems that require recursive solutions.  Imagine you need to implement a binary search tree, for a good reason (like deeply nested SQL queries that can't be properly optimized at that layer).  If I left you without _some_ exposure on how to handle this functionally, you'd go back to your old ways and write something with bad guards and blow up the stack and be left to contemplate suicide by bashing one's head against a flimsy LED screen.
+Ignoring that, what scares many folks away from recursion when trying to be _pretty functional_ in JavaScript and TypeScript is the notion of currying.  The obvious question is "How can I recursively call a curried function?"
+
+It's really no different than how you'd call a function by itself (remembering that a curried function returns a new function with lexical state), but let's start writing some actual code.
 
 So, we're going to start _easy_.  Let's do `n!`.  It's a classic and a __toy problem__.
 
@@ -854,15 +859,17 @@ In this example, if I set `n = 10`, I see this output:
 3628800
 ```
 
-So this seems so trivial, you're asking "where is the recursion?"  Well, in this __toy problem__, it's all in the function I pass to `reduce`:
+This seems so trivial, you're asking "where is the recursion?"  Well, in this __toy problem__, it's all in the function I pass to `reduce`:
 
 ```js
 (p: number, i: number): number => p * i
 ```
 
-This is, believe it or not, called _recursively_ but it isn't what you are used to seeing.
+Now some of you might know that `reduce` isn't really recursive, and you're correct.  But it is _often_ used in place of explcit recursion and, aside from the call stack, can be thought of in a similar fashion.
 
-A functionalish (wait for it) _recursive_ solution _sans_ reduce looks like this:
+`reduce` starts with some initial value, then calls the `iteratee` function until it's mapped over all items in the collection.
+
+A functionalish truly _recursive_ solution looks like this:
 
 ```js
 const factorialRecurse = (
@@ -872,7 +879,7 @@ const factorialRecurse = (
 
 But, of course, it really needs PTC support to be performant, but barring that....
 
-This isn't mind blowing and the `lodash`-less solution is actually easier to grok.  So let's step through it.
+This isn't mind blowing and the `lodash`-less solution is actually easier to grok.  This is a common claim in other functional languages (which also have a `reduce` or analog).  So let's step through it.
 
 If we want `n = 4`, this becomes easier.  That is:
 
@@ -888,7 +895,7 @@ With the more _idiomatic_ approach, we're sort of cheating.  We _start_ with an 
 [1, 2, 3, 4]
 ```
 
-Those are, literally, the steps down from `n`, which is 4.
+Those are the steps down from `n`, which is 4.
 
 Next, we are using `reduce` to just multiply them all together.  That looks like this:
 
@@ -897,8 +904,6 @@ at p=1 i=2 p*i=2
 at p=2 i=3 p*i=6
 at p=6 i=4 p*i=24
 ```
-
-If it's not obvious yet... `reduce` is recursive and is employed often in pretty functional JS. 
 
 This isn't too different from our `n!` using `reduce`.  Just shift your thinking from recusion being:
 
@@ -923,11 +928,83 @@ That's it.
 
 You will find that `reduce` is useful in lots of places and I suspect, you might have fiddled with it already.  There are other ways to do _recursive_ style operations in JavaScript, but it isn't really _your grandad's recursion_.  (I am 39, so I could be... or perhaps am, your granddad.)
 
-What is important to grok, is that using `reduce` requires similar thinking to how you'd write `foo calls foo` in another language in that you still need guards in that anonymous function and it still needs to be a PTC or you will have memory issues.
+What is important to grok, is that using `reduce` requires similar thinking to how you'd write `foo calls foo` with a truly recursive call.  You need to think about the data set you're building as you step through the data set.
+
+Now, there's an even _wilder_ concept to grab onto.
+
+_Recursive reducing._
+
+Lodash (and all the other libraries we will use in subsequent chapters) has a `flattenDeep` method that will flatten nested arrays into one.
+
+Basically, if the input array looks like this:
+
+```js
+[1, 2, [3, [4, 5]]]
+```
+
+Then running `flattenDeep` gives us:
+
+```js
+[1, 2, 3, 4, 5]
+```
+
+ES6 has this built in, but (of course) it's a member of the `Array.prototype` and smacks of OO styling.
+
+But what if we were to... write our own?
+
+Let's call ours `flattenSoDeep` because it's funny (right?):
+
+```js
+const flattenSoDeep = (
+ arreh: number[]
+): number[] => isArray(arreh) ?
+  reduce(
+    arreh, 
+    (done: number[], current: number[]) => concat(done, flattenSoDeep(current)),
+    []
+  ) : arreh
+```
+_NOTE: here TypeScript actually lets us be a bit lazy... we really have an irregular array and not a normal one dimensional job._
+
+Not very surprising, is it?
+
+The important part, as with all recursive code, is to _make sure your guard is hit_.  The guard in this case is just the check to see if we have reached the end of nested arrays.  E.g. `isArray`.
+
+[Try it yourself!](https://codepen.io/ezweave/pen/GbzGXq)
+
+Now, what if we want to make our syntax just a _bit tighter_?  Well... we can, by using a technique called _mutual recursion_.
+
+Behold:
+
+```js
+interface Flattener {
+ (x: number[]): number[]
+}
+
+const mutual = (
+ flattener: Flattener
+) => (
+ done: number[],
+ current: number[]
+): number[] => concat(done, flattener(current))
+
+const flattenSoDeep = (
+ arreh: number[]
+): number[] => isArray(arreh) ?
+  reduce(
+    arreh, 
+    mutual(flattenSoDeep),
+    []
+  ) : arreh
+```
+
+I added the `Flattener` type for convenience, but you can see what we are doing.  The function passed in calls `mutual` which then calls the function that we passed in... this is a form of _mutual recursion_.  This solution, for what it's worth, is harder to understand than the more obvious solution we tackled earlier, but it demonstrates the concept.
+
+[Give it a go](https://codepen.io/ezweave/pen/YoBjyG) and see what you think.
 
 Basically, almost any problem you would do _impertively_ with calls to the function calling, can be solved differently in the _pretty functional_ world.  Think about the data, not the call stack.
 
-I've really only touched on recursion, as that's not the focus of this book.  I'm just giving you enough to be dangerous.  For a more in depth look at various recursive styles, I'd refer you to [Functional Light JS](https://github.com/getify/Functional-Light-JS/blob/master/manuscript/ch8.md/#chapter-8-recursion) wherein the author, Kyle Simpson goes a bit further with explaining the state of the stack and various styles of recursion.
+__I've really only touched on recursion__, as that's not the focus of this book.  I'm just giving you enough to be dangerous.  For a more in depth look at various recursive approaches, I'd refer you to [Functional Light JS](https://github.com/getify/Functional-Light-JS/blob/master/manuscript/ch8.md/#chapter-8-recursion) wherein the author, Kyle Simpson goes a bit further with explaining the state of the stack and various styles of recursion.
 
 It's a damn shame that PTCs aren't widely supported.
 
