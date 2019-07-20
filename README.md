@@ -50,7 +50,9 @@ As an example, this is what a [Fibonacci sequence to _n_](https://en.wikipedia.o
 
 It's kind of confusing to look at if you come from the C-syntax languages, eh? _(Some of that difference is infix versus postfix, of course.)_  Scheme is a dialect of [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) and is high on _minimalism_ and lots and lots of parens.
 
-![xkcd](https://imgs.xkcd.com/comics/lisp_cycles.png)
+<p align="center">
+  <img width="414" height="136" src="https://imgs.xkcd.com/comics/lisp_cycles.png">
+</p>
 
 This, of course, isn't about Scheme or Lisp (AKA 'Lost In Stupid Parentheses'), but about _functional programming_. Scheme was my introduction to the idea, only I didn't quite [_grok_](https://en.wikipedia.org/wiki/Grok) that yet...
 
