@@ -6,7 +6,7 @@ import {
   capitalizeEveryNthWord
 } from './exerciseOne'
 
-describe('Excercise one tests', () => {
+describe('Exercise one tests', () => {
   describe('FizzBuzz tests', () => {
     describe('replacer', () => {
       const fizzBuzzReplacer = replacer(15, 'FizzBuzz')

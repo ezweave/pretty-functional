@@ -13,19 +13,19 @@
 
 I won't lie to you, dear reader.  I love a good academic tome.  I love theory and abstract concepts.  Learning a few basic things about limits and building up to integrals, that sort of thing.  _However_, time has taught me that while this is fun within the confines of academia, it's a bit hard for some folks to _grok_.  
 
-There _is_ a whole way of viewing functional programming through the lens of [_lambda calculus_](https://en.wikipedia.org/wiki/Lambda_calculus), but we aren't there yet.  While your author certainly loves to talk about math, this book aims to be a bit more practical and start by _building confidence_ in a few basic ideas and a very different way of looking at data.
+There _is_ a whole way of viewing functional programming through the lens of [_lambda calculus_](https://en.wikipedia.org/wiki/Lambda_calculus), but we aren't there yet.  While your author certainly loves to talk about math (or pretend he knows anything about the subject), this book aims to be a bit more practical and start by _building confidence_ in a few basic ideas and a very different way of looking at data.
 
-This, of course, has benefits for you.  So the focus of the first chapter won't be to delve into more esoteric operators, which you find in `ramda` and `lodash/fp` or introduce you to the most digestible _monads_ from `monet`.  We won't even jump into the _streaming_ concept you would get with `rxjs`.
+This, of course, has benefits for you.  So the focus of the first chapter won't be to delve into more esoteric operators, which you find in `ramda` and `lodash/fp` or introduce you to the most digestible _monads_ from `monet` (there is a joke about writing blog posts on monads as a rite of passage for functional programmers).  We won't even jump into the _streaming_ concept you would get with `rxjs`.
 
-This will be pure and concrete demonstration of functional ideas using the humble `lodash` library.
+This will be pure and concrete demonstration of functional ideas using the humble `lodash` library.  You can write functional code with `lodash`?  Absolutely.
 
 # Terminology
 
-For now, let's just call _everything_ a function.  Beyond that, there are some other terms bandied about: _higher order functions_, _anonymous functions_, and many more.  These terms are useful to know, but I don't want to delve too deeply into the nuances between all of those terms.  We're just going to talk about functions.
+For now, let's just call _everything_ a function.  Beyond that, there are some other terms bandied about: _higher order functions_, _anonymous functions_, and many more.  These terms are useful to know, but I don't want to delve too deeply into the nuances between all of those terms.  I'm just going to talk about functions.
 
 # What Is A Function?
 
-People often use the terms _method_, _procedure_, and _function_ interchangably.  While this is _sort of_ okay it's sort of like mixing up bourbon, rye, and Scotch whisk(e)y.  There are differences between them and you'd probably not make any friends by confusing them.
+People often use the terms _method_, _procedure_, and _function_ interchangeably.  While this is _sort of_ okay it's sort of like mixing up bourbon, rye, and Scotch whisk(e)y.  There are differences between them and you'd probably not make any friends by confusing them.
 
 __Function__: the name is mathematical and the concept is too, this is kind of the core of _functional programming_.  E.g.
 ```
@@ -40,7 +40,7 @@ Consider a simple _linear_ function.
 f(x) = mx + b
 ```
 
-In a Cartesian co-ordinate system, this gives you a _straight line_.  Which is to say if we represent the inputs, _x_, on the horizontal axis and the output, _f(x)_ (aka _y_) on the vertical axis, and _m_ and _b_ are constants, then _m_ represents the _slope_ of a line and _b_ represents the point on the vertical (or _y_) axis where _x_ is zero.
+When these inputs and outputs are represented graphically on a Cartesian co-ordinate system, this gives you a _straight line_.  Which is to say if we represent the inputs, _x_, on the horizontal axis and the output, _f(x)_ (aka _y_) on the vertical axis, and _m_ and _b_ are constants, then _m_ represents the _slope_ of a line and _b_ represents the point on the vertical (or _y_) axis where _x_ is zero.  But this is really just a relationship between inputs and outputs and the "graph" you may remember from your youth is just a way of representing that relationship.
 
 That's pretty basic math and you can imagine a TypeScript function that does _exactly_ that:
 
@@ -50,7 +50,7 @@ function f(x: number): number {
 }
 ```
 
-If you wanted to make that more _functional_ (in style) we could write something like this:
+If you wanted to make that more _functional_ (in style or perhaps, _pretty functional_) you could write something like this:
 
 ```js
 const f = (
@@ -67,11 +67,11 @@ const y = f1(2)
 
 "What the eff is that mess?"
 
-We will get to that... I'm just teasing you with the format, but you can see that we _take some input_ and return some _output_.  If we go back to our more traditional `function f(x)` we can see that _no matter the input we return the same output_.  This concept is important (we call this being _deterministic_) and is _easy_ in something as simple as `f(x) = mx + b`.  But this idea is _fundamental_ to functional programming.  It might quickly grow to something that you can't easily describe, as a formula, using basic Algebra, but we always want to do the same thing, given the same input.
+I will get to that... I'm just teasing you with the format, but you can see that we _take some input_ and return some _output_.  If we go back to our more traditional `function f(x)` we can see that _no matter the input we return the same output_.  This concept is important (we call this being _deterministic_) and is _easy_ in something as simple as `f(x) = mx + b`.  But this idea is _fundamental_ to functional programming.  It might quickly grow to something that you can't easily describe, as a formula, using basic Algebra, but we always want to do the same thing, given the same input.
 
-Of course, taken further, you will see that _external_ injection (like getting data from a REST endpoint) needs to be handled carefully.  More on that later.
+Of course, taken further, you will see that _external_ injection (like getting data from a REST endpoint) needs to be handled carefully.  More on that later, which is to say, that's where `rxjs` really shines.
 
-__Method__: methods _are functions_, but they are often divorced from the notion of a _pure function_ (we will explain this shortly).  _Methods_ come from object oriented programming and specifically refer to a _member function_.  But, as you can see, the math can break down.  Consider the practice of `getters` and `setters` in Java:
+__Method__: methods _are functions_, but they are often divorced from the notion of a _pure function_ (we will explain this shortly).  _Methods_ come from object oriented programming and specifically refer to a _member function_.  Which is to say, a _function_ that is a member in the same way that a _variable_ might be: it is encapsulated by a parent.  But, as you can see, the math can break down.  Consider the practice of `getters` and `setters` in Java:
 
 ```java
 class Foo {
@@ -91,13 +91,15 @@ While `setBar` and `getBar` are _member functions_, they don't lend themselves t
 
 Why?
 
-It's because they don't have both an obvious _x_ or an obvious _y_.  For our purposes, class level functions (really _methods_) are not very functional.  More on that in a bit, but for now...
+> _Caveat emptor: your author has strong feelings about class level functions, which you may disagree with._
+
+It's because they don't have both an obvious _x_ or an obvious _y_.  One can argue that they do, but because they're bound to an object, they don't _feel_ very functional.  For our purposes, class level functions (really _methods_) are not very functional.  More on that in a bit, but for now...
 
 __Procedure__: largely this term isn't used by modern programmers, but it occasionally pops up.  While _methods_ often don't return anything, _procedures_ never do.  It's basically a swallower of variables.  It doesn't mean they don't _do_ anything.  The one place you will find them pop up is in the realm of relational database systems.  The use of the term there is a bit different, however, it is correct in that they usually are triggered by some data being written to a table, where upon they will write to some other table.  So they don't really have outputs as you would expect.
 
-We don't use this term or concept at all in functional programming directly.  I/O _can_ often be considered a procedure, but usually we at least get some sort of status value from those sorts of calls.  Whether or not you wish to call that a _procedure_ is sort of up to you, but you might get some odd looks from your collegues.
+We don't use this term or concept at all in functional programming directly.  I/O _can_ often be considered a procedure, but usually we at least get some sort of status value from those sorts of calls.  Whether or not you wish to call that a _procedure_ is sort of up to you, but you might get some odd looks from your colleagues.
 
-And one more thing, before we move on: __closures__.  Closures are actually quite simple things and we hinted at one above, in concrete terms _a closure is a function that captures some lexical state and returns a new function_.  This is at the heart of _currying_.  We will discuss currying further in the next section, but let's write a little closure in _old school_ ES6/TypeScript:
+And one more thing, before I move on: __closures__.  Closures are actually quite simple things and we introduced one above, in concrete terms _a closure is a function that captures some lexical state and returns a new function_.  This is at the heart of _currying_.  I will discuss currying further in the next section, but let's write a little closure in _old school_ ES6/TypeScript:
 
 ```js
 function decorator(greeting: string) {
@@ -131,21 +133,21 @@ You will really see how handy this is, very, very soon.
 
 # Three Key Concepts
 
-There are three concepts in functional programming that we need to have some knowledge of before we really start writing code:
+There are three concepts in functional programming that we need to have some knowledge of before we really start writing code, I've introduced some of these already, but let's be explicit:
 
 - __Immutability__
 - __Pure functions__
 - __Currying__
 
-A little on each, and we'll demonstrate their use _shortly_.
+A little on each, and I'll demonstrate their use _shortly_.
 
-__Immutability__ is the idea that we don't change any data in place.  Data comes in, new data (most likely copied data) comes out.  If you remember some language concepts, what we're really doing is _passing by value_.  Javascript libraries that lend themselves to functional programming exculsively operate in this manner.  We'll elaborate on this more later, but JavaScript doesn't _really_ support pass by reference, at a language level.  Even an object is actually a value and not a reference, but that nuance leads to a [rabbit hole of stupid arguments](https://stackoverflow.com/questions/2835070/is-there-thing-like-pass-by-value-pass-by-reference-in-javascript).
+__Immutability__ is the idea that we don't change any data in place.  Data comes in, new data (most likely copied data) comes out.  If you remember some language concepts, what we're really doing is _passing by value_.  Javascript libraries that lend themselves to functional programming exclusively operate in this manner.  We'll elaborate on this more later, but JavaScript doesn't _really_ support pass by reference, at a language level.  Even an object is actually a value and not a reference, but that nuance leads to a [rabbit hole of stupid arguments](https://stackoverflow.com/questions/2835070/is-there-thing-like-pass-by-value-pass-by-reference-in-javascript).
 
-Don't mutate data, we'll demonstrate this shortly.
+Don't mutate data, I'll demonstrate this shortly.
 
-A __pure function__ is one that doesn't modify any values outside of its scope.  This goes back to our talk on _functions_, _methods_, and _procedures_.  What happens between braces (or not between braces as you will see) is the end of it.  No extra values are set on the global scope.  A database isn't written to.  The last bit is important.  We can compose calls to, say, a REST API with functional code, but that's technically _unpredictable_.  It is outside of our control.  We want to seperate our data operations from say acquiring or writing data.  The _logic_ needs to be stand alone.  This will benefit you greatly, in the very near future.  In practice, you _will_ have to deal with I/O (let's consider all such things: writing or reading from a database, a REST call, an external library) _non-deterministic_.  You can still write functional code that interacts with _non-deterministic_ entities, you just _compose_ it differently.
+A __pure function__ is one that doesn't modify any values outside of its scope.  This goes back to our talk on _functions_, _methods_, and _procedures_.  What happens between braces (or not between braces as you will see) is the end of it.  No extra values are set on the global scope.  A database isn't written to.  The last bit is important.  We can compose calls to, say, a REST API with functional code, but that's technically _unpredictable_.  It is outside of our control.  We want to separate our data operations from say acquiring or writing data.  The _logic_ needs to be stand alone.  This will benefit you greatly, in the very near future.  In practice, you _will_ have to deal with I/O (let's consider all such things: writing or reading from a database, a REST call, an external library) _non-deterministic_.  You can still write functional code that interacts with _non-deterministic_ entities, you just _compose_ it differently.  Of course, when we delve into problems with `rxjs` you will see that it has unique ways of handling calls that might be _non-deterministic_, but for now, I'm not going to bother with that.
 
-Lastly, __currying__, we talked about _closures_ and _currying_ is really utilizing the JavaScript notion of a closure to capture variables at different stages.  This is also called _capturing lexical state_.  This is a very powerful, very useful tool in functional programming.
+Lastly, __currying__, I talked about _closures_ and _currying_ is really utilizing the JavaScript notion of a closure to capture variables at different stages.  This is also called _capturing lexical state_.  This is a very powerful, very useful tool in functional programming.
 
 # Functional FizzBuzz
 
@@ -155,9 +157,9 @@ Let's write some code that introduces these concepts.  In fact, let's start with
 
 There's a [few ways to skin this cat.](https://youtu.be/cUcjn1CuRZI?t=45)
 
-## The Imperitive Approach
+## The Imperative Approach
 
-Here is a traditional, more _imperitive_ solution.  It's probably the _obvious_ solution to anyone who comes from the C-family world:
+Here is a traditional, more _imperative_ solution.  It's probably the _obvious_ solution to anyone who comes from the C-family world:
 
 ```js
 function fizzBuzzer(n: number) {
@@ -183,8 +185,9 @@ do that intentionally.  What is not trivial is this:
 
 * Don't use the `function` keyword.
 
-That's _not_ really within the functional idiom.  I realize I just told you not to use the keyword `function` when writing functional code.  Divorce the keyword from the concept.  You can absolutely write functional code that way, but as we get further into these exercises, you will find yourself fighting TypeScript,
-and it will become confusing.  When we talked about _functions_ and _closures_, I rewrote the _closure_ without the `function` keyword for a reason.  Even if we don't solve the other issues with the _imperitive_ approach to `FizzBuzz` we can, at least, rewrite our _imperitive_ version with a bit more verve and a fat arrow:
+> _Caveat emptor: the author has strong feelings about [fat arrows](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)!_
+
+That's _not_ really within the functional idiom, or at least outside of the idiom I call _pretty functional_.  I realize I just told you not to use the keyword `function` when writing functional code.  Divorce the keyword from the concept.  You can absolutely write functional code that way, but as we get further into these exercises, you will find yourself fighting TypeScript, and it will become confusing.  When we talked about _functions_ and _closures_, I rewrote the _closure_ without the `function` keyword for a reason.  Even if we don't solve the other issues with the _imperative_ approach to `FizzBuzz` we can, at least, rewrite our _imperative_ version with a bit more verve and a fat arrow:
 
 ```js
 const fizzBuzzer = (n: number) => {
@@ -205,18 +208,24 @@ const fizzBuzzer = (n: number) => {
 }
 ```
 
-Now you're probably saying "but TypeScript has classes!" and here's the other thing to __drill into your ~tiny~ sexy brain__: concatenation operators are not _very FP_.  Remember, classes really have _methods_ which may or may not be _pure functions_.
+Now you're probably saying "but TypeScript has classes!" and here's the other thing to __drill into your ~tiny~ beautiful brain__: concatenation operators are not _very FP_.  Remember, classes really have _methods_ which may or may not be _pure functions_.
 
 E.g. `foo.someThing().otherThing()`
 
-Some FP languages (ahem Scala) do that, but really when we are talking about base operators, it's a bad thing.  We're not in the `HAS-A` world anymore, Dorothy.  As we turn this solution into something that's _pretty functional_, those concatenated calls end up causing debugging nightmares and they also belie this core conceit: it's all about the functions, bud.  Using `pipe` or `flow` (as you will shortly see) has an elegance that emphasizes _functions_ and seperates them from their data.  Kind of.  
+Some FP languages (ahem Scala) do that, but really when we are talking about base operators, it's a bad thing.  We're not in the `HAS-A` world anymore, Dorothy.  As we turn this solution into something that's _pretty functional_, those concatenated calls end up causing debugging nightmares and they also belie this core conceit: it's all about the functions, bud.  Using `pipe` or `flow` (as you will shortly see) has an elegance that emphasizes _functions_ and separates them from their data.  Kind of.  It also prevents calls that start to look like:
 
-Trust me.  Swallow this little red pill and all will be illuminated.  It's not rohypnol, I swear.
+```js
+doOneThing(x)
+ .someThingElse(b)
+    .someThingElse(c)
+```
+
+Trust me.  Swallow this little red pill and all will be illuminated.  It's not Rohypnol, I swear.
 
 Of course, this solution is still not functional in any way.  Externally, it seems okay... but what's wrong with it?
 
 1. That `var` keyword implies that you're not being functional.  We are mutating a reference as we concatenate the strings.  You might say to yourself: "It's fine
-it's a _local_ variable."  Nyet.  A _pretty functional_ version would _omit_ local variables alltogether, even `const`s.
+it's a _local_ variable."  Nyet.  A _pretty functional_ version would _omit_ local variables altogether, even `const`s.
 1. That `for` loop isn't functional at all.  It's _conceptually_ mutating.  We are basically building our data set as we go.
 1. Technically, writing to the console is... an external side effect.
 
@@ -224,10 +233,9 @@ So how would we change this?
 
 ## Functionalish Approach
 
-For our first go, we're going to utilize the more functional aspects of the widely available [`lodash`](https://lodash.com/) library.  It is far from a complete library for functional programming,
-but it has grown _a lot_ since it was forked from the underscore (`_`) library many moons ago.
+For our first go, we're going to utilize the more functional aspects of the widely available [`lodash`](https://lodash.com/) library.  It is far from a complete library for functional programming, but it has grown _a lot_ since it was forked from the underscore (`_`) library many moons ago.
 
-It has a lot of operators that you can use and since it's probably already in your project... there's no overhead added by using it in existing repos.
+It has a lot of operators that you can use and since it's widely used outside of _functional_ programming, you might already be familiar with aspects of it or are even using it already.  In other words there's no overhead added by using it in existing repositories, because someone probably already did.  Or didn't, let's not fight about that.
 
 So let's start with what I will call "pretty functional FizzBuzz lodash, mark 1":
 
@@ -253,8 +261,7 @@ const fizzBuzzer: (
 
 Well that looks _more_ functional, but it's not really there... let's dissect what I did, before we add some polish.
 
-First off, you will notice that I have only _typed_ the arguments for this function.  Lodash has a [`flow`](https://lodash.com/docs/4.17.11#flow) operator (you will see it again in Ramda and rx under the name `pipe`),
-which basically allows you to curry the input and then pass the results of one function to the other.
+First off, you will notice that I have only _typed_ the arguments for this function.  Lodash has a [`flow`](https://lodash.com/docs/4.17.11#flow) operator (you will see it again in Ramda and `rxjs` under the name `pipe`), which basically allows you to curry the input and then pass the results of one function to the other.
 
 ```js
 const fizzBuzzer: (
@@ -267,7 +274,7 @@ return an array of strings.  This is where __currying__ will come into play, as 
 
 Everything in the chain is a _function_.  [`range`](https://lodash.com/docs/4.17.11#range) is a Lodash utility to fill an array with numbers in ascending order.  So, it expects a `number` as an argument.
 
-But let's say you aren't quite sure... did it do what I wanted it to do?  This is a pretty normal reaction when using new operators.  All of the libraries we are 
+But let's say you aren't quite sure... did it do what I wanted it to do?  This is a pretty normal reaction when using new operators.  All of the libraries we are going to be 
 using also have a very handy function [`tap`](https://lodash.com/docs/4.17.11#tap).  `tap` returns its input but lets you operate on it.
 
 So, we can add it right after the `range` call to see what we're working with:
@@ -340,11 +347,39 @@ const fizzBuzzer: (
  ),
  ```
 
- It just saves you the trouble of having to type out the anonymous function to pass the array reference to `tap`.  Congratulations, you've now seen a bit of _currying_ in action.  In fact, much of what `lodash/fp` adds to `lodash` is just wrappers that do what `partial` and `partialRight` do.  Let's move on and I can explain this better.  
+ Which is to say that we could rewrite them as:
 
- If you find yourself fancying some Thai food, that is perfectly understandable.  I do love a good Panang style curry.  However, the term _curry_ is actual a reference to [Haskell Curry](https://en.wikipedia.org/wiki/Haskell_Curry).
+ ```js
+ const func1 = (
+   data: number[]
+ ) => tap(data, console.warn)
+```
 
- The rest of the solution then seems kind of... obvious:
+Is the same as:
+
+```js
+const func1 = partialRight(
+  tap,
+  console.warn
+)
+```
+
+Which we can even type explicitly as:
+
+```js
+const func1: (data: number[]) => number = partialRight(
+  tap,
+  console.warn
+)
+```
+
+To make it more clear that the two are _identical_.  One is just a little less typing.
+
+It just saves you the trouble of having to type out the anonymous function to pass the array reference to `tap`.  Congratulations, you've now seen a bit of _currying_ in action.  In fact, much of what `lodash/fp` adds to `lodash` is just wrappers that do what `partial` and `partialRight` do.  Let's move on and I can explain this better.  
+
+If you find yourself fancying some Thai food, that is perfectly understandable.  I do love a good Panang style curry.  However, the term _curry_ is actual a reference to [Haskell Curry](https://en.wikipedia.org/wiki/Haskell_Curry).
+
+The rest of the solution then seems kind of... obvious:
 
  ```js
  partialRight(
@@ -453,13 +488,13 @@ What is bad about this implementation?
 
 1. It's still using a conventional operator (the ternary) to control the flow.
 1. It's pretty verbose...
-1. It doesn't actually print anything.
+1. __It doesn't actually print anything.__
 
 Well, let's work backwards.
 
 We can make a wrapper that will do the printing for us, or we could simply put a `console.log` at the end of the `flow` arguments.  I'm not going to do that.  
 
-Instead, let's make a new wrapper, so we can keep our logic seperate.  This will make it a more _pure function_ even though we are just moving that logic to _another function_.  I will explain why in a moment.
+Instead, let's make a new wrapper, so we can keep our logic separate.  This will make it a more _pure function_ even though we are just moving that logic to _another function_.  I will explain why in a moment.
 
 ```js
 interface Printer {
@@ -490,7 +525,7 @@ But, I find that lends to a lack of readability.  Again, ask yourself if you cou
 Okay, so now I will answer the unanswered question, why did I not just append my original function, `fizzBuzzer`?
 
 Well, I'm glad I asked:
-* The `console` is really not a very functional construct, but we have to touch non-functional things, at times.  It's rare, but you could get an error by calling it.  In general, _I/O of any sort is unpredictable and non-deterministic_, as we have stated previously.  By seperating the _logic_ of creating our array, we're starting to _think_ more functionally.
+* The `console` is really not a very functional construct, but we have to touch non-functional things, at times.  It's rare, but you could get an error by calling it.  In general, _I/O of any sort is unpredictable and non-deterministic_, as we have stated previously.  By separating the _logic_ of creating our array, we're starting to _think_ more functionally.
 * I might want to make a bunch of different printer type functions.
 
 For example:
@@ -522,7 +557,7 @@ Can _also_ be written as:
 const foo: (x: number) => void = console.log
 ```
 
-I _prefer_ the last iteration because it's more true to the _functional_ paradigm.  I know I'm dealing with a function and don't need to _capture_ the `x` for any reason.  At the end of the day, programmers are not writing data directly to a computer.  You're not inserting carefully curated, artisinal integers into registers or anything like that.  We're _kind of_ just glorfied typists.  It's a fun way to introduce yourself at parties.
+I _prefer_ the last iteration because it's more true to the _functional_ paradigm and it gets you to think of functions as first class constructs.  I know I'm dealing with a function and don't need to _capture_ the `x` for any reason.  At the end of the day, programmers are not writing data directly to a computer.  You're not inserting carefully curated, artisanal integers into registers or anything like that.  We're _kind of_ just glorified typists.  It's a fun way to introduce yourself at parties.
 
 > Friend of a Friend (FOF): So what do you do for work?
 You: I type all day.  Sometimes I swear.
@@ -596,11 +631,11 @@ const { flow, tap, range, partialRight, map } = _
 
 In your code, you will use `import`.  I hope that's not confusing... it shouldn't be!
 
-Now, this code, our first _better_ solution is _pretty functional_.  I don't like the ternarys, but they are what they are.  I'd gladly accept a pull request or merge request (that's the GitLab version) of it, especially if you wrote a _shit ton_ of tests.  I'd say to myself "this isn't perfect, but it's pretty, pretty good." (Channeling Larry David, of course.)
+Now, this code, our first _better_ solution is _pretty functional_.  I don't love the ternary operators, but they are what they are.  Sometimes they _are_ the best solution, but they often get harry (when you start having long chains of them).  I'd gladly accept a pull request or merge request (that's the GitLab version) of it, especially if you wrote a _shit ton_ of tests.  I'd say to myself "this isn't perfect, but it's pretty, pretty good." (Channeling Larry David, of course.)
 
 You're already starting "the dance."  This P.R. is from someone _thinking_ about functions.  They're thinking about how they can do things _functionally_.  It's _pretty damn functional_.
 
-But those ternarys...
+But those ternary operators...
 
 ## Another Functionalish Approach
 
@@ -656,7 +691,7 @@ fizzError(10)
 
 This is a bit of an eyeful... and there _is_ a bug in the version of `lodash` I'm using, which I will point out, shortly. (Two, actually.)
 
-The _key_ difference in this implementation is the use of the [`over`](https://lodash.com/docs/4.17.11#over) operator.  Instead of using ternarys, I am replacing them with a new, curried function:
+The _key_ difference in this implementation is the use of the [`over`](https://lodash.com/docs/4.17.11#over) operator.  Instead of using ternary operators, I am replacing them with a new, curried function:
 
 ```js
 const sassyReplacer = (
@@ -707,15 +742,15 @@ Here, also, is our second bug.  We should just be able to pass in `find` without
 
 `find` takes _any_ collection (by which we mean an array or JSON) and returns the _first_ truthy value.  For the case of the number `15`, this will be `'FizzBuzz'`.
 
-Now, [this solution](https://codepen.io/ezweave/pen/qzoaYp) is a bit of a mess.  This is not nearly as elegant as the [last solution](https://codepen.io/ezweave/pen/wLyXGG), but there is a lesson to be learned here: _functions_ can do logical operations.
+Now, [this solution](https://codepen.io/ezweave/pen/qzoaYp) is a bit of a mess.  This is not nearly as elegant as the [last solution](https://codepen.io/ezweave/pen/wLyXGG), but there is a lesson to be learned here: _functions_ can do logical operations. 
 
-This is an important concept as in the third chapter, when we start looking at _monads_, we will be doing the same thing only without any flow control.  It will make sense later on.
+This is an important concept as in the third chapter, when we start looking at _monads_, we will be doing the same thing only without any flow control.  Monads will provide the control for us, but this is to give you an inkling into what we will be doing when we start talking about left and right values and the like.
 
 For the purposes of introducing some of these concepts, the "Mark 2" solution is really best and what I would rather see.  The last solution is really just to demonstrate just how differently you can approach this problem.
 
 # Functional Recursion
 
-_Recusion_ can be a hairy beast.  It starts off so innocently.  You've been handed some exercise by your professor and you have some faint knowledge that "functions can call themselves" and then you get going and... BOOM.  Stack overflow.
+_Recursion_ can be a hairy beast.  It starts off so innocently.  You've been handed some exercise by your professor and you have some faint knowledge that "functions can call themselves" and then you get going and... BOOM.  Stack overflow.
 
 ```
 RangeError: Maximum call stack size exceeded
@@ -754,7 +789,7 @@ That's not an important thing to understand and I am doing a great deal of hand 
 
 Remember Scala and the annotation for tail recursion?
 
-JavaScript _does_ support tail calls, and tail calls aren't even only the domain of recursion.  Simply put, a tail call (wherein we don't add to the call stack unecessary frames), is _any_ function that calls another function on a return:
+JavaScript _does_ support tail calls (as a language spec, but I'll get to that in a bit), and tail calls aren't even only the domain of recursion.  Simply put, a tail call (wherein we don't add to the call stack unnecessary frames), is _any_ function that calls another function on a return:
 
 ```js
 
@@ -837,7 +872,7 @@ It's really no different than how you'd call a function by itself (remembering t
 
 So, we're going to start _easy_.  Let's do `n!`.  It's a classic and a __toy problem__.
 
-Basicaly `n!` is _factorial of n_, which is the product of integer numbers from 1 to n.
+Basically `n!` is _factorial of n_, which is the product of integer numbers from 1 to n.
 
 The real _recursion_ here is just in the `reduce` call:
 
@@ -865,7 +900,7 @@ This seems so trivial, you're asking "where is the recursion?"  Well, in this __
 (p: number, i: number): number => p * i
 ```
 
-Now some of you might know that `reduce` isn't really recursive, and you're correct.  But it is _often_ used in place of explcit recursion and, aside from the call stack, can be thought of in a similar fashion.
+Now some of you might know that `reduce` isn't really recursive, and you're correct.  I've basically cheated.  But it is _often_ used in place of explicit recursion and, aside from the call stack, can be thought of in a similar fashion.
 
 `reduce` starts with some initial value, then calls the `iteratee` function until it's mapped over all items in the collection.
 
@@ -889,7 +924,7 @@ If we want `n = 4`, this becomes easier.  That is:
 
 The `lodash`-less way is super obvious.  We're just backing down, `1` at a time from `n`.
 
-With the more _idiomatic_ approach, we're sort of cheating.  We _start_ with an array that looks like this (from `range`):
+With the more _idiomatic_ approach, we're cheating.  We _start_ with an array that looks like this (from `range`):
 
 ```
 [1, 2, 3, 4]
@@ -905,7 +940,7 @@ at p=2 i=3 p*i=6
 at p=6 i=4 p*i=24
 ```
 
-This isn't too different from our `n!` using `reduce`.  Just shift your thinking from recusion being:
+This isn't too different from our `n!` using `reduce`.  Just shift your thinking from recursion being:
 
 ```
   foo
@@ -964,7 +999,7 @@ const flattenSoDeep = (
     []
   ) : arreh
 ```
-_NOTE: here TypeScript actually lets us be a bit lazy... we really have an irregular array and not a normal one dimensional job._
+_NOTE: here TypeScript actually lets us be a bit lazy... we really have an irregular array and not a normal one dimensional job.  It's not wrong, but the actual typing is not obvious._
 
 Not very surprising, is it?
 
@@ -1002,7 +1037,7 @@ I added the `Flattener` type for convenience, but you can see what we are doing.
 
 [Give it a go](https://codepen.io/ezweave/pen/YoBjyG) and see what you think.
 
-Basically, almost any problem you would do _impertively_ with calls to the function calling, can be solved differently in the _pretty functional_ world.  Think about the data, not the call stack.
+Basically, almost any problem you would do _imperatively_ with calls to the function calling, can be solved differently in the _pretty functional_ world.  Think about the data, not the call stack.
 
 __I've really only touched on recursion__, as that's not the focus of this book.  I'm just giving you enough to be dangerous.  For a more in depth look at various recursive approaches, I'd refer you to [Functional Light JS](https://github.com/getify/Functional-Light-JS/blob/master/manuscript/ch8.md/#chapter-8-recursion) wherein the author, Kyle Simpson goes a bit further with explaining the state of the stack and various styles of recursion.
 
@@ -1031,7 +1066,7 @@ I hope you aren't sick of `FizzBuzz` quite yet... it's a stupidly simple problem
 
 # Exercises
 
-For your first assignment, I've already pulled in the `FizzBuzz` solution for you.  In the version of TypeScript that is bundled with this repo, there are more disagreements between `lodash` and TypeScript, so the code is a _wee_ bit different.
+For your first assignment, I've already pulled in the `FizzBuzz` solution for you.  In the version of TypeScript that is bundled with this repository, there are more disagreements between `lodash` and TypeScript, so the code is a _wee_ bit different.
 
 Don't let that alienate you, because I didn't want to throw you into the fire with syntax that is slightly off.
 
@@ -1041,7 +1076,7 @@ As for the rest of the problems, the ones you will do yourself, _feel free_ to b
 
 I can't really (or easily) analyze your code programmatically to see if it is functional.  
 
-To run the tests (from the root of the repo) simply type:
+To run the tests (from the root of the repository) simply type:
 
 ```bash
 jest chapters/one/exerciseOne.spec.ts
