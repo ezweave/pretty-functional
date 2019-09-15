@@ -129,7 +129,7 @@ In common English usage, "pretty" is used to describe beauty.  Quite literally i
 
 You might say of a Jaguar Series I E-Type: "That's a rather pretty car."
 
-![E-Type](static/images/e-type.jpg)
+![E-Type](static/images/prett_functional_etype.png)
 
 You might read a [poem by Rainier Maria Rilke](https://poets.org/poem/i-am-much-too-alone-world-yet-not-alone) and say "That's a pretty poem." Or perhaps listen to the entirety of [Jeff Mangum's opus](https://open.spotify.com/album/5COXoP5kj2DWfCDg0vxi4F?si=EmAiAqvQTke2rpwIgXVlOA) and remark "What a pretty concept."
 

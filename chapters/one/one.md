@@ -1055,6 +1055,7 @@ Some basic takeaways:
 * Write tests around your functions.
 * Use `tap` to inspect data without manipulating it.
 * `partialRight` is _very_ handy in currying functions to expect the _data_ last.
+* Despite what some may tell you, `lodash` is a perfectly viable toolset to use for Functional Programming.
 
 Things we _haven't_ dealt with yet:
 * WTF is a _monad_?
