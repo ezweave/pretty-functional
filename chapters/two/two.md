@@ -25,7 +25,7 @@ Now, to be _completely transparent_, Reactive X is actually a "reactive extensio
 
 But let's not get _too_ far ahead of ourselves.  I should probably explain to you what is meant by "reactive programming."
 
-A snarky answer would say "it's all in the name," which is true.  But that also doesn't illuminate reactive programming as a concept.
+A snarky answer would say "it's all in the name," which is true.  But that fails to explain reactive programming as a concept.  Definition via definition, which is not going to help you.
 
 There are two overarching design goals that really inform _all_ reactive programming:
 * __Data as a stream__, that is data being dealt with as a _series of events_ (this isn't quite right, but I will start here).
@@ -178,6 +178,8 @@ This is one of the main concerns with __reactive programming__.  You can't just 
 
 But to understand why this is important, you're going to have to understand what we mean by "stream".  And for that... we must dive in!
 
+[Top](#chapter-2-events-in-the-stream)
+
 # WTF Is a Stream?
 
 Let's be clear and flog this deceased equine (a way of saying "beat this dead horse" to those not familiar with this idiom for "saying something over and over until it is annoying"):
@@ -188,7 +190,7 @@ It _can_ be I/O, but it can be local (e.g in memory, within execution context) t
 
 So let's talk about `rxjs` and what a stream is... with some easy to grok examples!
 
-I'll be linking to some code you can play with because __streams are absolutely fundamental__ to understanding `rxjs`.  I've encountered lots of folks who use `redux` in single page applications (SPA, for short... usually [React](https://reactjs.org/) or [Angular](https://angularjs.org/)) and then they learn about [`redux-observable`](https://redux-observable.js.org/) and still don't really grok what a stream is.
+I'll be linking to some code you can play with because __streams are absolutely fundamental__ to understanding `rxjs`.  I've encountered lots of folks who use `redux` in single page applications (SPA, for short... usually [React](https://reactjs.org/) or [Angular](https://angularjs.org/)) and then they learn about [`redux-observable`](https://redux-observable.js.org/) (which uses `rxjs`) and still don't really grok what a stream is.
 
 This is one of your author's big hangups with the ease in which you can pull a library in.  You hear of something "cool" and you add it to your project, copy a few examples from Stackoverflow (don't lie, this is the definition of ["copy pasta"](https://www.urbandictionary.com/define.php?term=copypasta) as far as programming goes) and... then things start to fall apart.  Part of this is that what we're about to dive into isn't really clearly explained.  And `rxjs` operators are much like those in `lodash` and `ramda` and if you don't understand, don't have a good mental image of a stream, you start to misunderstand what you're blindly subscribing to.
 
@@ -241,8 +243,6 @@ Each subscriber just got each element from the array and operated on it.  This i
 
 [Play around with it!](https://codepen.io/ezweave/pen/mNzmvN)
 
-[`from`](https://www.learnrxjs.io/operators/creation/from.html) is the base operator in `rxjs`.  All other functions are derived from it.  
-
 We can even get `async` with it:
 
 ```js
@@ -291,7 +291,7 @@ So now, we are asking for a subscription from an _external I/O_ source.  This is
 
 Now, there's a lot of particulars I am _definitely_ and _intentionally_ glossing over.
 * The test uri (https://jsonplaceholder.typicode.com/todos/1) is asking for a document, that is a JSON object, in this case.  You need to understand _that_, but you probably already do.
-* You might have been exposed to something like `Observables` but you missed this key part... and that's why things get "hard" to do.
+* You might have been exposed to something like `Observable` but you missed this key part... and that's why things get "hard" to do (more on this in a bit, because you're _technically_ already using one).
 
 And that's it.  That's all the reactive programming fundamentals there are.  You are just dealing with a _sliding_ view into a bunch of objects.  They could be in an array, from a user event in a webpage (like a click), or from some external source.  The important part is that this _stream_ is just a view of some type of _state_.  The state could be blank, awaiting a response from a REST endpoint or it could be an array of objects.  This is the important part: __you don't need to know where data was emitted from to consume it__.  This is going to become _abundantly_ clear in the next section.
 
@@ -304,6 +304,10 @@ Well, fellow traveler: you're reacting to data.  You are reacting to events.  Th
 We haven't even begun to talk about _functional programming_ within this _miasma_ of knowledge.  But I can't just explain `Observable`s to you without telling you what is going on, underneath.
 
 My trivial example in the last section?  It's not that _far_ from the truth.  Think about every change to your back end data store, it may represent state, it may represent something else (which is probably state) but regardless of `redux` or whatever other tool brings you to `rxjs`, it's just a _stream_ of events/values/actions. This is precisely what they fail to tell you concisely.  You will get _something_.  It will be an object or a primitive, but you will get whatever is being _emitted_ on a stream.  And a stream is _not_ necessarily I/O.  It might just be data from some local store, which is really an object or really an array.  The point is that the stream is a __sliding window of changing things__.  Each one should be atomic and discrete, but you get them as they come.
+
+_NOTE: to aid in explaining the concepts we're describing, I am explicitly typing the `const` values as `Observable<T>`.  In practice, you should be able to infer this, or your IDE will._
+
+[Top](#chapter-2-events-in-the-stream)
 
 # Observables
 
@@ -375,7 +379,7 @@ Well there, partner, you are correct!  The `ajax` call was a _push_ and not a _p
 
 What, _indeed_?
 
-What we've done is exposed `Observable`.  The `from` operator, if you haven't noticed, actually creates an `Observable` for you.  The difference is that it uses _three_ possible sources for input:
+What we've done is exposed `Observable`.  The `from` operator, if you haven't noticed, actually creates an `Observable` for you (this _almost_ makes me a liar).  The difference is that it uses _three_ possible sources for input:
 
 - An array: any array of data.
 - An iterable: a collection (e.g. could be JSON key value pairs) that is iterable (e.g. "array like").
@@ -417,3 +421,252 @@ usingFrom.subscribe(console.warn)
 And will have _the same_ output.
 
 The _difference_ is that when we create the `Observable` ourselves, we can directly _control_ how and when the values are emitted.  That's it!  This will become _more_ powerful when we start _composing_ operators on the stream.  But, for now, remember that `from` will give you an `Observable`, but it will not let that `Observable` truly control when it emits a value.  That is why we can also create `Observable`s explicitly.
+
+# Fizz Buzz
+
+Let's look at ways to approach the old `FizzBuzz` problem using `rxjs` and `Observable`s.  As a little refresher,
+
+- Print the numbers from 1 to _n_. 
+- For multiples of three print "Fizz" instead of the number. 
+- For the multiples of five print "Buzz". 
+- For numbers which are multiples of both three and five print "FizzBuzz".
+
+Now, there's a few ways of solving this and it all comes down to what we're trying to emulate, problem solving wise.  On the one hand, you could construct an `Observable` that emits the output of some function, `f(x)` wherein we use the logic we applied via `lodash` in Chapter 1.  _However_, doing so would simply _move_ the logic out of the real of `rxjs` and back into the same sort of structure we used for a `lodash` FP solution.
+
+Instead, let's start _simply_ with an `Observable` that just fills an array of length _n_ with integer values.  We construct a _function_ that will create an `Observable` for the given range, then emit those values when a subscription is hooked up:
+
+```js
+const generateN = (
+ n: number
+): Observable<number> => from(
+  range(1, n + 1)
+)
+
+generateN(5).subscribe(console.info)
+```
+
+This generates the output:
+
+```bash
+1
+2
+3
+4
+5
+```
+
+We use the `rxjs` operator `range` to populate our data source.  Now, I bet you're thinking "let's just use the `subscribe` operator to do the logical bit!"  You certainly _could_ do that and you'd end up placing the logic used prior to determine where to put `Fizz` or `Buzz` or `FizzBuzz`.  But... that wouldn't do much to teach you about `rxjs`.  _Instead_ let us examine another operator in the `rxjs` universe: [`pipe`](https://rxjs-dev.firebaseapp.com/api/index/function/pipe).  Before I explain _how_ it works, let's just tinker with it:
+
+```js
+const generateN = (
+ n: number
+): Observable<number> => range(1, n + 1)
+
+generateN(5).pipe(
+ tap(n => console.info('Value is', n)) 
+).subscribe()
+```
+
+Now, we're using `tap` from `rxjs`, but it behaves _exactly_ like `tap` from `lodash`.  As you might imagine, `pipe` is quite similar to `flow`.  But there's one key bit you should pay attention to here.  Let us split up our `Observable`s so it is more obvious.
+
+```js
+const generateN = (
+ n: number
+): Observable<number> => range(1, n + 1)
+
+const observable$: Observable<number> = generateN(5)
+const pipedObservable$: Observable<number> = observable$.pipe(
+ tap(n => console.info('Value is', n))
+)
+pipedObservable$.subscribe()
+```
+
+What do you notice now?
+
+For one, the `generateN` call, which uses `range` to create an `Observable` is _one_ `Observable`.  And when we call `pipe`, we're actually getting a _different_ `Observable` back.  This should remind you of one of the core tenets of _Functional Programming_ which is to avoid mutation.
+
+Put a pin in that thought and let's mention _the most important_ bit here.
+
+A note on naming in the `rxjs` world: if anything is a _stream_ (as in an explicit `stream` or an `Observable`), it is common to append a `$` to indicate as much.  This helps to avoid confusion later on, but you will see this pattern throughout these exercises.
+
+If we comment out the `pipedObservable$.subscribe()` call _nothing happens_.  In the `rxjs` world, `subscribe` is the faucet.  You might also have noticed that we aren't doing anything with the subscription, right now.  `subscribe` doesn't have to do anything with emitted values.  All it does is say "turn on the stream!".
+
+Is that clear?  Remember __`subscribe` is the faucet__.  Without calling `subscribe`, nothing will happen.  Ever.
+
+Let's go back to the aforementioned bit we just discussed, about new `Observable`s.  What if we wanted to handle the values emitted on the stream differently?  Let's first change this so that we actually do something with the values in the first `pipe`.  Let's change it so that we are now going to intercept the values that could be `Fizz`.
+
+```js
+const generateN = (
+ n: number
+): Observable<number> => range(1, n + 1)
+
+const observable$: Observable<number> = generateN(5)
+const pipedObservable$: Observable<string | number> = observable$.pipe(
+ tap(n => console.info('Value is', n)),
+ map(
+  n => n % 3 === 0 ? 'Fizz' : n
+ ),
+ tap(n => console.info('Value after transformation is', n))
+)
+pipedObservable$.subscribe(console.info)
+```
+
+The `map` we are using is _not_ from `lodash` but from `rxjs`.  You can see that we are now spitting out `Fizz` in the `subscribe` call if values are divisible by three, per the rules of `FizzBuzz`.  But I want to play around a little, before we solve the problem.  Let's make _another_ pipeline that handles the `Buzz` case.  I'm going to omit the `tap` calls for now (because it is cluttering up the output).
+
+```js
+const observable$: Observable<number> = generateN(5)
+const pipedObservable$: Observable<string | number> = observable$.pipe(
+ map(
+  n => n % 3 === 0 ? 'Fizz' : n
+ )
+)
+pipedObservable$.subscribe(console.info)
+const pipedObservable2$: Observable<string | number> = observable$.pipe(
+ map(
+  n => n % 5 === 0 ? 'Buzz' : n
+ )
+)
+pipedObservable2$.subscribe(console.info)
+```
+
+Now, the output is _two_ sets of data:
+
+```bash
+1
+2
+Fizz
+4
+5
+```
+
+And...
+
+```bash
+1
+2
+3
+4
+Buzz
+```
+
+This, obviously, is not going to meet the criteria of `FizzBuzz`, but it demonstrates an important concept with regards to _immutability_.  The new `Observable` doesn't manipulate the original `Observable` that emits our integer values.  They are now _discrete_ and only operate within their own confines.  While this does nothing for the problem statement it _does_ demonstrate what is going on, under the hood.
+
+Let's go back to our original and implement a _sort of_ naive solution, using what we already know:
+
+```js
+const generateN = (
+ n: number
+): Observable<number> => range(1, n + 1)
+
+const observable$: Observable<number> = generateN(15)
+const pipedObservable$: Observable<string | number> = observable$.pipe(
+ map(
+  n => n % 15 === 0 ? 'FizzBuzz': n
+ ),
+ map(
+  n => n % 3 === 0 ? 'Fizz' : n
+ ),
+ map(
+  n => n % 5 === 0 ? 'Buzz': n
+ )
+)
+pipedObservable$.subscribe(console.info)
+```
+
+This, obviously, meets the requirements for our solution, but it is _very_ simplistic.  In fact, there's several ways we _could_ solve this problem even using one `map` operator.  But let's see if we can do something that exercises our knowledge of `rxjs` and introduces some _further_ concepts.  Before we get too far, feel free to [explore this solution](https://codepen.io/ezweave/pen/bGbjXPR).
+
+So, let's do something a wee bit different.  Earlier we touched on the idea of creating new streams to handle "Fizz" and "Buzz" separately.  While what we did won't actually produce a viable solution, we can use the [`zip`](https://www.learnrxjs.io/operators/combination/zip.html) operator to _combine_ the output of streams.
+
+Let's see what _that_ would look like:
+
+```js
+const generateN = (
+ n: number
+): Observable<number> => range(1, n + 1)
+
+const numbers$: Observable<number> = generateN(15)
+const fizz$: Observable<string> = numbers$.pipe(
+ map(
+  n => n % 3 === 0 ? 'Fizz': ''
+ )
+)
+const buzz$: Observable<string> = numbers$.pipe(
+ map(
+  n => n % 5 === 0 ? 'Buzz': ''
+ )
+)
+
+zip(
+ numbers$,
+ fizz$,
+ buzz$
+).pipe(
+ map(
+  ([n, fizz, buzz]) => fizz + buzz || `${n}`) 
+).subscribe(console.info)
+```
+
+ So what is going on now?  Well, when we `zip` the streams together, we effectively create a new array that looks like this:
+
+ | Index | Values |
+ | --- | --- |
+ | `0` | `[1, '', '']` |    
+ | `1` | `[2, '', '']` |    
+ | `2` | `[3, 'Fizz', '']` |    
+ | `3` | `[4, '', '']` |    
+ | `4` | `[5, '', 'Buzz']` |
+ | ... | ... |    
+ | `14` | `[15, 'Fizz', 'Buzz']` |
+
+ Then we use `map` to combine the values we need, either the literal strings or the integer value.
+
+ It's actually relatively straightforward from there.    
+
+ Now, we could also make a _further_ optimization, just to minimize our code:
+
+ ```js
+const generateN = (
+ n: number
+): Observable<number> => range(1, n)
+
+const subForN = (
+ obs$: Observable<number>,
+ n: number,
+ substitution: string
+): Observable<string> => obs$.pipe(
+ map(
+  x => x % n === 0 ? substitution : ''
+ )
+)
+
+const numbers$: Observable<number> = generateN(15)
+const fizz$: Observable<string> = subForN(numbers$, 3, 'Fizz')
+const buzz$: Observable<string> = subForN(numbers$, 5, 'Buzz')
+
+zip(
+ numbers$,
+ fizz$,
+ buzz$
+).pipe(
+ map(
+  ([n, fizz, buzz]) => fizz + buzz || `${n}`
+ ),
+ scan(
+  (results, curr) => results.concat(curr),
+  [] 
+ )
+).subscribe(console.info)
+ ```
+
+The only _other_ difference here, in the our _more idiomatic_ solution is the use of [`scan`](https://www.learnrxjs.io/operators/transformation/scan.html).  All `scan` is doing, is basically a `reduce` type operation _over time_ when all of the values have been emitted.  It's just a way of returning the whole array as:
+
+```bash
+["1", "2", "Fizz", "4", "Buzz", "Fizz", "7", "8", "Fizz", "Buzz", "11", "Fizz", "13", "14", "FizzBuzz"]
+```
+Instead of logging each value in place.  In practice, you may find that you _do_ want to use `scan`. A rather subtle distinction between `scan` and [`reduce`](https://www.learnrxjs.io/operators/transformation/reduce.html)(yes, there is an `rxjs` specific `reduce` operator) is that `reduce` operates only on a _complete_ emission. E.g. the stream will generate no new values.  `scan`, on the other hand works with each new emission.  If you look at the solution, you can see the array grow with each call to `scan`.  Now, we really could just use `reduce` here, but I wanted to expose you to `scan` as you may find it is more appropriate in cases where you might be collecting an indeterminate amount of data.  We will talk more about this in the next section.
+
+I hope that the notion of what a `stream` is and the _push_ behavior of an `Observable` is a bit more clear after you've explored this exercise.
+
+Feel free to [explore the solution](https://codepen.io/ezweave/pen/vYBzBvJ).
+
+[Top](#chapter-2-events-in-the-stream)

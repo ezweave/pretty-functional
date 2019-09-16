@@ -1,5 +1,7 @@
 # Chapter 1: Pretty Fizzy
 
+![lodash](static/images/lodash.png)
+
 - [Terminology](#terminology)
  - [What is a function?](#what-is-a-function?)
  - [Three key concepts](#three-key-concepts)
@@ -18,6 +20,12 @@ There _is_ a whole way of viewing functional programming through the lens of [_l
 This, of course, has benefits for you.  So the focus of the first chapter won't be to delve into more esoteric operators, which you find in `ramda` and `lodash/fp` or introduce you to the most digestible _monads_ from `monet` (there is a joke about writing blog posts on monads as a rite of passage for functional programmers).  We won't even jump into the _streaming_ concept you would get with `rxjs`.
 
 This will be pure and concrete demonstration of functional ideas using the humble `lodash` library.  You can write functional code with `lodash`?  Absolutely.
+
+There will be those of you who read the last statement and close this book forever.  Life is too short for such banalities.  Yes, there are more fully featured libraries, and for many `lodash` is unsexy and unappealing.  I, obviously, disagree.  It is but a tool and you will learn to use many, in your career.  It's akin to asking if you can write Object Oriented code in Java?  Of course you can, but... you can also write very iterative, very non OO code.  Conversely, you can write very non-functional code using `lodash`.  It wasn't built as a functional library, _per se_, though the `lodash/fp` library is literally just a wrapper that does what we will do with `partialRight` and such out of the box.
+
+`lodash` should be given _more_ credit for pushing functional programming concepts (`map` operations in particular) into common use in the JavaScript world, which ultimately led to things like `Array.map` and such being a part of the SDK.  We will address this and, _caveat emptor_, the author does _not_ really like the built in `map` function... but we will get to that.
+
+On with the show!
 
 # Terminology
 
@@ -1047,7 +1055,7 @@ It's a damn shame that PTCs aren't widely supported.
 
 So we've started to get _more_ functional.  We're eschewing the use of ES6 classes and operators (`Array.map`, for example) and using `lodash`s `flow` with functions that are not connected to any particular data type.  We're also starting to think about operating on collections, vs objects. Oh wait, are we?
 
-Remember that JSON is just a `map`.  It's really just another collection type, which is why many `lodash` operators work on arrays or maps.  Keep that in mind going forward.  When we start using `rxjs` and introduce the concept of a _stream_, this is an important thing to understand.  But we're limping before we're sprinting.  For our purposes, ES6 classes are _not_ particularly useful.  There is a difference, of course between JSON and an ES6 class.  I prefer the former, as it lends to a _more_ functional style.
+Remember that JSON is just a `Map` (in terms of data structure).  It's really just another collection type, which is why many `lodash` operators work on arrays or maps.  Keep that in mind going forward.  When we start using `rxjs` and introduce the concept of a _stream_, this is an important thing to understand.  But we're limping before we're sprinting.  For our purposes, ES6 classes are _not_ particularly useful.  There is a difference, of course between JSON and an ES6 class.  I prefer the former, as it lends to a _more_ functional style.
 
 Some basic takeaways:
 * Fat arrows are your friend.
@@ -1063,7 +1071,7 @@ Things we _haven't_ dealt with yet:
 * Alternative approaches using other libraries.
 * Performance (especially since we don't have PTCs).
 
-I hope you aren't sick of `FizzBuzz` quite yet... it's a stupidly simple problem (a __toy problem__), that we will be revisiting when we start talking about _monads_ in Chapter 3.
+I hope you aren't sick of `FizzBuzz` quite yet... it's a stupidly simple problem (a __toy problem__), that we will be revisiting in the next two chapters.
 
 # Exercises
 

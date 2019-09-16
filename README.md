@@ -10,7 +10,7 @@
 - [Introduction](#introduction)
   - [Pretty Functional](#pretty-functional)
   - [Lego All Over The Floor](#lego-all-over-the-floor)
-- [Caveat Emptor](#caveat-emptor)
+- [Panacea](#panacea)
 - [Toy Problems Versus Real Problems](#toy-problems-versus-real-problems)
 - [Who Are You?](#whoami)
 - [How To Use This Book](#this-is-how-we-do-it)
@@ -26,9 +26,11 @@ Dear reader, before you delve into the body of this, er, _tome_, be forewarned: 
 
 The last bullet point is a joke.  If you find that off-putting, I suggest you seek other sources.
 
-All of that aside, I've tried to account for _heavily_ biased sections (to say nothing of the "less heavily biased, but biased none-the-less") portions of this book with the following blocks:
+All of that aside, I've tried to account for _heavily_ biased (to say nothing of the "less heavily biased, but biased none-the-less") portions of this book with the following blocks:
 
 > _Caveat emptor: the following section contains subjective content that you, the reader, may disagree with.  The author implores you to consider the proceeding statements and to ignore them at your peril.  Or just ignore them._
+
+[Table of Contents](#table-of-contents)
 
 ## Introduction
 
@@ -145,13 +147,11 @@ I hope the concepts and exercises herein inspire the same sort of desire within 
 
 # Lego All Over the Floor
 
-![Lego](/static/images/lego.jpg)
+![Lego](/static/images/lego.png)
 
-Going back down memory lane... when I was a boy I loved Lego, so much so that when I turned 3 (or so the story goes), I demanded a set.  My father, looking at the age statements on the boxes, bought me Duplo.  I was _very unhappy_.  He realized I wanted the "tiny bricks" and bought me a proper set.  It was a love affair that predated anything else I can recall, save reading, and I was obsessed.  In the first few years of my Lego wrangling, I bullied him into purchasing for me a giant Plano tackle box.  I used the little drawers to organize my blocks by color and category.  Red 2x1s went here, black 4x2s went there. 
+As a child of the Western world I'm sure that you are at least familiar with Lego brand building blocks.  If you've any experience with said blocks you know that despite attempts at organization a child's Lego collection quickly becomes relegated to giant bins that, while they may have some loose ordering ("Space" in here), they will inevitably be dumped upon the floor and pieces will be picked through to find "that one part they swear they had" for whatever project they are undertaking.  For your author, attempts were made to keep parts sorted in a giant, olive drab Plano fishing tackle box that quickly became inadequate for the sheer volume of Lego I acquired.  If you play with Lego, especially if you're a child, you will dump it all over the floor and spend hours scrounging about for, say, a red 1x1.  It happens.
 
-Quickly, this scheme was shot to hell.  Soon I just had large plastic bins roughly sorted by Space and Town (the only two categories in the eighties) and, inevitably, the Lego bricks would be all over the floor and I would poke through them to find the _one piece_ I needed to make the little fortress or whatever it was I had in my head complete. 
-
-The whole point of this rambling story: the big refactor.  You've come to some point with some code and you tell your boss "this has to be rewritten."  Product managers and owners cringe, because they _don't get why it's so bad without lots of illustrations_, but you end up _breaking everything_ as you rewrite it.
+The whole point of this rambling anecdote: the big refactor.  You've come to some point with some code and you tell your boss "this has to be rewritten."  Product managers and owners cringe, because they _don't get why it's so bad without lots of illustrations_, but you end up _breaking everything_ as you rewrite it.
 
 I call this "Lego All Over the Floor."
 
@@ -159,11 +159,13 @@ You can plan around it, try to break it up into stories, but you will, _inevitab
 
 As you get _pretty functional_, you will probably get Lego all over the place.  Only now, you can better organize those piles, as you will see and now, when your author uses that phrase, you will understand, on some level, what I mean.  And like your author as a frustrated twenty year old, trying to learn Scheme, this might just be the best way for you to understand what _exactly_ is going on.
 
+Now, you can extend this metaphor because, if you've been in a room where Lego has been "dumped all over the floor" you probably have also stepped on a piece of it barefooted and know that there is a special pain, an immediate sensation of anger and frustration, accompanying brick based _impetum pede_.  
+
 Like many things in life, functional programming can be "easy to say, hard to do."
 
 [Table of Contents](#table-of-contents)
 
-# Caveat Emptor
+# Panacea 
 
 Functional Programming will solve all of your problems.  When you've finished these exercises you will be fitter, more attractive, younger, and wealthier... nah.  You will just be older, maybe even less fit and less attractive, but you will be _wiser_.  If you've been around programming long enough, you will always hear/read about some new paradigm or technology that will _solve all of your problems_.  Object Oriented Programming will make your code more readable and easier to debug, until it becomes a mess of spaghetti.  [Aspect Oriented Programming](https://en.wikipedia.org/wiki/Aspect-oriented_programming) was going to save the world by extracting cross cutting concerns.  Machine Learning (what we used to just call Neural Networks) would monetize your data (somehow)!  Visual Studio was going to provide _everything_ you would need to build, collaborate, and... and... well none of these things was or is a panacea.  
 

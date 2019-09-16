@@ -2,9 +2,11 @@
   "name": "pretty-functional",
   "version": "0.1.1",
   "description": "A book with examples on making more functional js",
-  "licenses": [{
-    "type": "GPL-3.0"
-  }],
+  "licenses": [
+    {
+      "type": "GPL-3.0"
+    }
+  ],
   "main": "chapters/index.ts",
   "scripts": {
     "test": "jest",
@@ -72,5 +74,8 @@
     "testMatch": [
       "**/?(*.)(spec|test).ts?(x)"
     ]
+  },
+  "dependencies": {
+    "rxjs": "^6.5.2"
   }
 }
