@@ -1,5 +1,7 @@
 # Chapter 2: Events in The Stream
 
+![stream](static/images/stream.png)
+
 If you've been _functional curious_ for any amount of time and you've poked around, you are probably most curious to know about the `ramda` library.  Originally, this chapter was going to introduce `ramda` using the same problem set, but... it quickly became apparent that without introducing you to `monads`, the code would look _nearly identical_ to the `lodash` solutions we already covered in the previous chapter.  This illustrates both how useful `lodash` can be (when curried and composed properly) and how powerful the `monad` concept is.
 
 This would, could, have been a place to introduce `monad`s.  _However_, before I take you, dear reader, down that rabbit hole, I realize that we've left wholly untouched (thus far) the concept of _reactive programming_.  You will encounter this, and _reactive frameworks_ exist in a myriad of languages, which is to say: before we get further into _functional programming_, it's probably a good idea to introduce _reactive programming_.
@@ -9,6 +11,7 @@ To that end, we revisit our old friend, `FizzBuzz` and solve it using [`rxjs`](h
 - [Reactive Programming](#reactive-programming)
 - [WTF Is A Stream?](#wtf-is-a-stream?)
 - [Observables](#observables)
+ - [FizzBuzz](#fizzbuzz)
 - [Async Operations](#async-operations)
 
 [Table of Contents](../../README.md#table-of-contents)
@@ -41,7 +44,7 @@ Stepping back to what I alluded to earlier, with regards to the "propagation of 
 
 Let's say we have some entity A and A is listening to new data coming in from some message system.  This could be something like a [JMS Topic](https://docs.oracle.com/cd/E24902_01/doc.91/e24429/appx_topic_or_queue.htm) (where all subscribers get the same message) or it could just be a message system that pushes updates from some local collection (interesting, I wonder if this will come up again... in the next section?).  What do you do when some new subscriber, entity B wants to start subscribing to the data source?
 
-The typical problem is that the new entity, B, needs to know about the state of the world (at least the state of the data source) when it starts listening to it.  This problem rears its head all over the place, from inter-system communication (like an [vector clock](https://en.wikipedia.org/wiki/Vector_clock) based distributed data store) to simple, local application message bus architectures (like various event bus implementations in the Java world).
+The typical problem is that the new entity, B, needs to know about the state of the world (at least the state of the data source) when it starts listening to it.  This problem rears its head all over the place, from inter-system communication (like a [vector clock](https://en.wikipedia.org/wiki/Vector_clock) based distributed data store) to simple, local application message bus architectures (like various event bus implementations in the Java world).
 
 The typical approach is that, somehow, the prior state (or an initial state plus diffs) must be pushed to the new subscriber.
 
@@ -167,8 +170,8 @@ Now, the way this is solved in the _reactive world_ is rather simple.  We will g
 const subscribeToDataSource = (
   subscriber: IDataSourceSubscribeCallback
 ) => {
- dataSources.push(subscriber) // obviously bad, but this is an example
- subscriber && subscriber(dataSource)
+  dataSources.push(subscriber) // obviously bad, but this is an example
+  subscriber && subscriber(dataSource)
 }
 ```
 
@@ -658,12 +661,12 @@ zip(
 ).subscribe(console.info)
  ```
 
-The only _other_ difference here, in the our _more idiomatic_ solution is the use of [`scan`](https://www.learnrxjs.io/operators/transformation/scan.html).  All `scan` is doing, is basically a `reduce` type operation _over time_ when all of the values have been emitted.  It's just a way of returning the whole array as:
+The only _other_ difference here, in the our _more idiomatic_ solution is the use of [`scan`](https://www.learnrxjs.io/operators/transformation/scan.html).  All `scan` is doing, is basically a `reduce` type operation _over time_.  It's just a way of returning the whole array as:
 
 ```bash
 ["1", "2", "Fizz", "4", "Buzz", "Fizz", "7", "8", "Fizz", "Buzz", "11", "Fizz", "13", "14", "FizzBuzz"]
 ```
-Instead of logging each value in place.  In practice, you may find that you _do_ want to use `scan`. A rather subtle distinction between `scan` and [`reduce`](https://www.learnrxjs.io/operators/transformation/reduce.html)(yes, there is an `rxjs` specific `reduce` operator) is that `reduce` operates only on a _complete_ emission. E.g. the stream will generate no new values.  `scan`, on the other hand works with each new emission.  If you look at the solution, you can see the array grow with each call to `scan`.  Now, we really could just use `reduce` here, but I wanted to expose you to `scan` as you may find it is more appropriate in cases where you might be collecting an indeterminate amount of data.  We will talk more about this in the next section.
+Instead of logging each value in place.  In practice, you may find that you _do_ want to use `scan`. A rather subtle distinction between `scan` and [`reduce`](https://www.learnrxjs.io/operators/transformation/reduce.html)(yes, there is an `rxjs` specific `reduce` operator) is that `reduce` operates only on a _complete_ emission. E.g. the stream will generate no new values.  `scan`, on the other hand works with each new emission.  If you look at the solution, you can see the array grow with each call to `scan`.  Now, we really could just use `reduce` here, but I wanted to expose you to `scan` as you may find it is more appropriate in cases where you might be collecting an indeterminate amount of data.  We will talk more about this in the next section.  But `reduce` would work here, as well, since we _know_ that the stream will eventually complete.
 
 I hope that the notion of what a `stream` is and the _push_ behavior of an `Observable` is a bit more clear after you've explored this exercise.
 
