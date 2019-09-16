@@ -1,6 +1,6 @@
 # Chapter 2: Events in The Stream
 
-![stream](../static/images/stream.png)
+![stream](/static/images/stream.png)
 
 If you've been _functional curious_ for any amount of time and you've poked around, you are probably most curious to know about the `ramda` library.  Originally, this chapter was going to introduce `ramda` using the same problem set, but... it quickly became apparent that without introducing you to `monads`, the code would look _nearly identical_ to the `lodash` solutions we already covered in the previous chapter.  This illustrates both how useful `lodash` can be (when curried and composed properly) and how powerful the `monad` concept is.
 
