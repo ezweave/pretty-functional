@@ -1,6 +1,6 @@
 # Chapter 1: Pretty Fizzy
 
-![lodash](~/static/images/lodash.png)
+![lodash](/static/images/lodash.png)
 
 - [Terminology](#terminology)
  - [What is a function?](#what-is-a-function?)
