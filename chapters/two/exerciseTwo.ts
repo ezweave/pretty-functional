@@ -53,3 +53,13 @@ export const fizzBuzz = (
   )
 })
 
+export const subscribeToWeather = (
+  zipCode: number  
+): Promise<any> => new Promise((resolve, reject) => {
+  const apiKey = '1e30dc0a67e6c785dcc1cb8ee1cae0f5'
+  const url = 
+    `https://samples.openweathermap.org/data/2.5/weather?zip=${zipCode},us&appid=${apiKey}`
+
+  const weather$ = ajax(url)
+})
+

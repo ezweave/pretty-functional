@@ -675,3 +675,9 @@ I hope that the notion of what a `stream` is and the _push_ behavior of an `Obse
 Feel free to [explore the solution](https://codepen.io/ezweave/pen/vYBzBvJ).
 
 [Top](#introduction)
+
+# Now For Something Completely Different
+
+We've looked at some _toy problems_ with `rxjs`, but it's time to tackle something a little meatier.  Really, we need to look at a more "real world" example.
+
+Now, before we begin, to actually run this code, you will need to get an API key from [Open Weather](https://home.openweathermap.org/).  I'll leave the key field blank in any CodePens but you will want to set that up, if you'd like to play with the API.  There are charges affiliated with load (there is a request per minute cap), but we won't be getting close to those limits.
