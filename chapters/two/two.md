@@ -2,6 +2,8 @@
 
 ![stream](/static/images/stream.png)
 
+# Introduction
+
 If you've been _functional curious_ for any amount of time and you've poked around, you are probably most curious to know about the `ramda` library.  Originally, this chapter was going to introduce `ramda` using the same problem set, but... it quickly became apparent that without introducing you to `monads`, the code would look _nearly identical_ to the `lodash` solutions we already covered in the previous chapter.  This illustrates both how useful `lodash` can be (when curried and composed properly) and how powerful the `monad` concept is.
 
 This would, could, have been a place to introduce `monad`s.  _However_, before I take you, dear reader, down that rabbit hole, I realize that we've left wholly untouched (thus far) the concept of _reactive programming_.  You will encounter this, and _reactive frameworks_ exist in a myriad of languages, which is to say: before we get further into _functional programming_, it's probably a good idea to introduce _reactive programming_.
@@ -14,7 +16,7 @@ To that end, we revisit our old friend, `FizzBuzz` and solve it using [`rxjs`](h
  - [FizzBuzz](#fizzbuzz)
 - [Async Operations](#async-operations)
 
-[Table of Contents](../../README.md#table-of-contents)
+[Table of Contents](/README.md#table-of-contents)
 
 ## Reactive Programming
 
@@ -181,7 +183,7 @@ This is one of the main concerns with __reactive programming__.  You can't just 
 
 But to understand why this is important, you're going to have to understand what we mean by "stream".  And for that... we must dive in!
 
-[Top](#chapter-2-events-in-the-stream)
+[Top](#introduction)
 
 # WTF Is a Stream?
 
@@ -310,7 +312,7 @@ My trivial example in the last section?  It's not that _far_ from the truth.  Th
 
 _NOTE: to aid in explaining the concepts we're describing, I am explicitly typing the `const` values as `Observable<T>`.  In practice, you should be able to infer this, or your IDE will._
 
-[Top](#chapter-2-events-in-the-stream)
+[Top](#introduction)
 
 # Observables
 
@@ -672,4 +674,4 @@ I hope that the notion of what a `stream` is and the _push_ behavior of an `Obse
 
 Feel free to [explore the solution](https://codepen.io/ezweave/pen/vYBzBvJ).
 
-[Top](#chapter-2-events-in-the-stream)
+[Top](#introduction)

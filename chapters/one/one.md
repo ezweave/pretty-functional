@@ -2,6 +2,8 @@
 
 ![lodash](/static/images/lodash.png)
 
+## Introduction
+
 - [Terminology](#terminology)
  - [What is a function?](#what-is-a-function?)
  - [Three key concepts](#three-key-concepts)
@@ -12,6 +14,8 @@
 - [Functional Recursion](#functional-recursion)
 - [Summary](#summary)
 - [Exercises](#exercises)
+
+[Table of Contents](/README.md#table-of-contents)
 
 I won't lie to you, dear reader.  I love a good academic tome.  I love theory and abstract concepts.  Learning a few basic things about limits and building up to integrals, that sort of thing.  _However_, time has taught me that while this is fun within the confines of academia, it's a bit hard for some folks to _grok_.  
 
@@ -30,6 +34,8 @@ On with the show!
 # Terminology
 
 For now, let's just call _everything_ a function.  Beyond that, there are some other terms bandied about: _higher order functions_, _anonymous functions_, and many more.  These terms are useful to know, but I don't want to delve too deeply into the nuances between all of those terms.  I'm just going to talk about functions.
+
+[Top](#introduction)
 
 # What Is A Function?
 
@@ -139,6 +145,8 @@ const decorator = (
 
 You will really see how handy this is, very, very soon.
 
+[Top](#introduction)
+
 # Three Key Concepts
 
 There are three concepts in functional programming that we need to have some knowledge of before we really start writing code, I've introduced some of these already, but let's be explicit:
@@ -157,6 +165,8 @@ A __pure function__ is one that doesn't modify any values outside of its scope. 
 
 Lastly, __currying__, I talked about _closures_ and _currying_ is really utilizing the JavaScript notion of a closure to capture variables at different stages.  This is also called _capturing lexical state_.  This is a very powerful, very useful tool in functional programming.
 
+[Top](#introduction)
+
 # Functional FizzBuzz
 
 Let's write some code that introduces these concepts.  In fact, let's start with some _bad_ code (from a functional programming standpoint).  Let's say we want to write good old [`FizzBuzz`](https://www.tomdalling.com/blog/software-design/fizzbuzz-in-too-much-detail/).  This is, of course, a __toy problem__.
@@ -164,6 +174,8 @@ Let's write some code that introduces these concepts.  In fact, let's start with
 > Write a function that prints the numbers from 1 to n. But for multiples of three print "Fizz" instead of the number and for the multiples of five print "Buzz". For numbers which are multiples of both three and five print "FizzBuzz".
 
 There's a [few ways to skin this cat.](https://youtu.be/cUcjn1CuRZI?t=45)
+
+[Top](#introduction)
 
 ## The Imperative Approach
 
@@ -238,6 +250,9 @@ it's a _local_ variable."  Nyet.  A _pretty functional_ version would _omit_ loc
 1. Technically, writing to the console is... an external side effect.
 
 So how would we change this?
+
+
+[Top](#introduction)
 
 ## Functionalish Approach
 
@@ -645,6 +660,8 @@ You're already starting "the dance."  This P.R. is from someone _thinking_ about
 
 But those ternary operators...
 
+[Top](#introduction)
+
 ## Another Functionalish Approach
 
 So let's break this.
@@ -755,6 +772,8 @@ Now, [this solution](https://codepen.io/ezweave/pen/qzoaYp) is a bit of a mess. 
 This is an important concept as in the third chapter, when we start looking at _monads_, we will be doing the same thing only without any flow control.  Monads will provide the control for us, but this is to give you an inkling into what we will be doing when we start talking about left and right values and the like.
 
 For the purposes of introducing some of these concepts, the "Mark 2" solution is really best and what I would rather see.  The last solution is really just to demonstrate just how differently you can approach this problem.
+
+[Top](#introduction)
 
 # Functional Recursion
 
@@ -1051,6 +1070,8 @@ __I've really only touched on recursion__, as that's not the focus of this book.
 
 It's a damn shame that PTCs aren't widely supported.
 
+[Top](#introduction)
+
 # Summary
 
 So we've started to get _more_ functional.  We're eschewing the use of ES6 classes and operators (`Array.map`, for example) and using `lodash`s `flow` with functions that are not connected to any particular data type.  We're also starting to think about operating on collections, vs objects. Oh wait, are we?
@@ -1093,4 +1114,5 @@ jest chapters/one/exerciseOne.spec.ts
 
 Of course, you can _read_ the tests.  I just don't want you to [Kobayashi Maru](https://en.wikipedia.org/wiki/Kobayashi_Maru) them, because then you learn nothing and Gene Wilder as Willy Wonka won't let you take over the factory.  Stretch that brain, do it differently.  Play around.
 
-[Table of Contents](../../README.md#table-of-contents)
+[Top](#introduction)
+[Table of Contents](/README.md#table-of-contents)
