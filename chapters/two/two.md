@@ -32,6 +32,12 @@ But let's not get _too_ far ahead of ourselves.  I should probably explain to yo
 
 A snarky answer would say "it's all in the name," which is true.  But that fails to explain reactive programming as a concept.  Definition via definition, which is not going to help you.
 
+> Q: What is a monad?
+>
+> A: A functional programming construct for doing monadic things.
+
+That's not very helpful, though that is a _good question_! And it is one that we will get to, further on in this book, but as far as _reactive programming goes_...
+
 There are two overarching design goals that really inform _all_ reactive programming:
 * __Data as a stream__, that is data being dealt with as a _series of events_ (this isn't quite right, but I will start here).
 * __The propagation of changes__, which is to say: how do I tell everyone about _new_ data and, most importantly, how do I tell _new subscribers_ about _new data_.
@@ -42,7 +48,7 @@ Forgetting "data as a stream," I want to talk about the latter point: propagatio
 
 Now, another point that I must _hammer home_ (and I will do so again later) is that the notion of a "stream" in reactive programming is not tied to the concept of a "stream" as in HTML5 video or anything else that is I/O related.  This is a _very common_ misconception.  As soon as someone hears "stream" they immediately start thinking about web sockets or a myriad of other things.  While we can, and will, look at some I/O the reactive concept of a "data stream" is not at all tied to the source of said stream.  This will make more sense in the next section, but I want to get you away from that definition of a data stream.
 
-Stepping back to what I alluded to earlier, with regards to the "propagation of changes" is sort of a larger problem in systems.
+Stepping back to the problem I alluded to earlier is the "propagation of changes," which is sort of a classic problem in systems, _especially_ in distributed systems.
 
 Let's say we have some entity A and A is listening to new data coming in from some message system.  This could be something like a [JMS Topic](https://docs.oracle.com/cd/E24902_01/doc.91/e24429/appx_topic_or_queue.htm) (where all subscribers get the same message) or it could just be a message system that pushes updates from some local collection (interesting, I wonder if this will come up again... in the next section?).  What do you do when some new subscriber, entity B wants to start subscribing to the data source?
 
@@ -52,7 +58,7 @@ The typical approach is that, somehow, the prior state (or an initial state plus
 
 Let's quit being abstract and write a little code to illustrate this.
 
-Let's say that the data source for this little demonstration is some type of JSON object:
+Say that the data source for this little demonstration is some type of JSON object:
 
 ```js
 
@@ -69,7 +75,7 @@ const dataSource: IDataSource = {
 
 So the `count` value is being changed (or copied, because we are good FP programmers) and subscribers see updates.
 
-Let's say we have a block of code that looks like this:
+Then we write a block of code that looks like this:
 
 ```js
 interface IDataSource {
@@ -191,13 +197,15 @@ Let's be clear and flog this deceased equine (a way of saying "beat this dead ho
 
 __A stream is not I/O.__
 
+![dead stream](/static/images/dead_horse.png)
+
 It _can_ be I/O, but it can be local (e.g in memory, within execution context) too.  This is a _higher order_ concept you need to fully grok!  When we talk about _streams_ in the reactive world, we are not talking about I/O or media or anything that you might assume given that term.
 
 So let's talk about `rxjs` and what a stream is... with some easy to grok examples!
 
 I'll be linking to some code you can play with because __streams are absolutely fundamental__ to understanding `rxjs`.  I've encountered lots of folks who use `redux` in single page applications (SPA, for short... usually [React](https://reactjs.org/) or [Angular](https://angularjs.org/)) and then they learn about [`redux-observable`](https://redux-observable.js.org/) (which uses `rxjs`) and still don't really grok what a stream is.
 
-This is one of your author's big hangups with the ease in which you can pull a library in.  You hear of something "cool" and you add it to your project, copy a few examples from Stackoverflow (don't lie, this is the definition of ["copy pasta"](https://www.urbandictionary.com/define.php?term=copypasta) as far as programming goes) and... then things start to fall apart.  Part of this is that what we're about to dive into isn't really clearly explained.  And `rxjs` operators are much like those in `lodash` and `ramda` and if you don't understand, don't have a good mental image of a stream, you start to misunderstand what you're blindly subscribing to.
+This is one of your author's big hangups with the ease in which you can pull a library in.  You hear of something "cool" and you add it to your project, copy a few examples from [Stackoverflow](https://stackoverflow.com/questions/tagged/rxjs) (don't lie, this is the definition of ["copy pasta"](https://www.urbandictionary.com/define.php?term=copypasta) as far as programming goes) and... then things start to fall apart.  Part of this is that what we're about to dive into isn't really clearly explained.  And `rxjs` operators are much like those in `lodash` and `ramda` and if you don't understand, don't have a good mental image of a stream, you start to misunderstand what you're blindly subscribing to.
 
 I don't mean to scare you.  I am just speaking from experience.  You need to understand what streams actually represent.
 
@@ -681,3 +689,217 @@ Feel free to [explore the solution](https://codepen.io/ezweave/pen/vYBzBvJ).
 We've looked at some _toy problems_ with `rxjs`, but it's time to tackle something a little meatier.  Really, we need to look at a more "real world" example.
 
 Now, before we begin, to actually run this code, you will need to get an API key from [Open Weather](https://home.openweathermap.org/).  I'll leave the key field blank in any CodePens but you will want to set that up, if you'd like to play with the API.  There are charges affiliated with load (there is a request per minute cap), but we won't be getting close to those limits.
+
+The point of solving a _real problem_ is to better demonstrate how you'd actually compose a call with `rxjs` versus just throwing more _toy problems_ at you.  In fact, this is going to be the first _real problem_ of the book.
+
+Buckle up!
+
+This example will be slightly contrived, just so we can demonstrate a polling `HTTPRequest`.  But let's state the problem:
+
+* Get sunrise, sunset, and current temperature for a given zip code.
+* Request this `n` times at a given interval.
+
+Realistically, the temperature won't fluctuate enough every few seconds, to make much of a difference, but this will demonstrate how you would wrangle that in the `rxjs` world.
+
+First up, we are going to define some `Interface`s, just for clarity.  Your author has gone to the trouble of typing out the responses and created the following interfaces:
+
+```js
+interface WeatherOverview {
+ description: string
+ icon: string
+ id: number
+ main: string
+}
+
+interface Wind {
+ deg: number
+ speed:number
+}
+
+interface Sun {
+ country: string
+ id: number
+ message: number
+ sunrise: number
+ sunset: number
+ type: number
+}
+
+interface Main {
+ humidity: number
+ pressure: number
+ temp: number
+ temp_max: number
+ temp_min: number
+}
+
+interface Coordinates {
+ lat: number
+ lon: number
+}
+
+interface Clouds {
+ all: number
+}
+
+interface WeatherData {
+ base: string
+ clouds: Clouds
+ cod: number
+ coord: Coordinates
+ dt: number
+ id: number
+ main: Main
+ name: string
+ sys: Sun
+ timezone: number
+ visibility: number
+ weather: WeatherOverview[]
+ wind: Wind
+}
+```
+
+That's really just busy work, for the purposes of solving this problem.  Now, we also want to _spit out_ an array of simplified data, that will be easier to grok.  With that in mind, this is the shape of the objects we will create:
+
+```js
+interface SimplifiedWeatherData {
+ location: string
+ sunrise: string
+ sunset: string
+ temperature: string
+ time: string
+}
+```
+Further discovery shows that the API returns times as seconds since the epoch.  Sadly, the ES6 `Date` object is a bit bulky and the `setUTCSeconds` call does _not_ return the date it operates on (instead it returns... the value you just set it to).  So here's a little, rather _ugly_ function to convert those dates for us:
+
+```js
+const convertUTCSecondsToLocalTime = (
+ epochTimeInMS: number
+) => {
+ const date = new Date(0)
+ date.setUTCSeconds(epochTimeInMS)
+ return date.toString()
+}
+```
+We could do something fancy with `lodash`, but we're going to add more complexity anyway.  I'll leave a nicer solution up to you, dear reader.
+
+Additionally, the temperatures are all in Kelvin, which is great but not very useful to denizens of the United States, who expect temperature to be expressed in Fahrenheit.
+
+```js
+const kelvinToF = (
+ kelvin: number
+) => 9/5 * (kelvin - 273.5)  + 32
+```
+
+Now that is it for the non-`rxjs` code.  It's time to start looking at the `operators` we are going to use to actually _solve_ the problem.
+
+So _here_ is the entirety of the solution, wrapped in a `Promise` for the purposes of testing.  Don't worry, I will walk you through it.
+
+```js
+const getWeather = (
+ zipCode: number,
+ timeInSeconds: number = 5,
+ attempts: number = 5,
+ apiKey: string = '//insert your key here'
+) => new Promise<WeatherData[]>(
+ (resolve, reject) => timer(0, timeInSeconds * 1000).pipe(
+  take(attempts),
+  tap(x => console.log('Requesting weather data...', x)),
+  switchMap(
+    x => ajax.getJSON(
+      `https://api.openweathermap.org/data/2.5/weather?zip=${zipCode},us&appid=${apiKey}`
+    )
+  ),
+  map(
+     ({
+      name: location,
+      sys: {
+        sunrise,
+        sunset
+      },
+      main: {
+       temp: degreesKelvin
+      }
+     }: WeatherData) => ({
+       location,
+       sunrise: convertUTCSecondsToLocalTime(sunrise),
+       sunset: convertUTCSecondsToLocalTime(sunset),
+       temperature: kelvinToF(degreesKelvin),
+       time: new Date().toString()
+     })
+   ),
+  reduce(
+   (results, curr) => results.concat(curr),
+   []
+  ),
+ ).subscribe(resolve, reject)
+)
+```
+
+My, my, that's a bunch of stuff you haven't seen before, no?
+
+Well most of what is going on is rather simple.  It's just that now you have to think of this in terms of a _stream_.
+
+The _first_ thing we are doing is using the `rxjs` [`timer`](https://www.learnrxjs.io/operators/creation/timer.html) operator to emit what is really an _empty_ action at a millisecond interval (hence the `timeInSeconds * 1000` line).  The initial value, is how long to wait for the first emission.  In this case, we want to emit _right away_.  So we pass in `(0, timeInSeconds * 1000)`.
+
+Now, in this case, we want to let the stream _complete_ after so many attempts.  We don't want to hit the endpoint forever.  So here we are using the [`take`](https://www.learnrxjs.io/operators/filtering/take.html) operator to say "Do this _n_ times, then stop."  There are quite a few variations on `take` and many of them copy the semantics of looping constructs you might be familiar with, specifically flow control conditions prescribed by things like a `for` or a `do while` loop.
+
+We can actually look at the actions of a `timer` and `take` chain in isolation:
+
+```js
+const timerTest = (
+ timeInSeconds: number,
+ attempts: number
+) => new Promise<any>(
+ (resolve, reject) => timer(0, timeInSeconds * 1000).pipe(
+  take(attempts),
+  tap(x => console.log('Timer is firing', x)),
+ ).subscribe(resolve, reject)
+)
+```
+
+If we call the `timerTest` method as such:
+
+```js
+timerTest(
+ 10,
+ 3
+).then(
+ console.info
+)
+```
+
+We can see the logs from the `tap` call spit out:
+
+```bash
+"Timer is firing" 0
+"Timer is firing" 1
+"Timer is firing" 2
+```
+As you can see, the emission from a `timer` is just a monotonically increasing integer.  It doesn't _actually_ matter what it is.  This could just be `undefined`, but `rxjs` does give you a number, just in case you want to use it in some capacity.
+
+Now, if you take a look at the [code](https://codepen.io/ezweave/pen/LYPKabz) you can see that there is an additional log statement.  I've added some more verbiage by creating a new function so that it's clear what is coming out of the stream:
+
+```js
+timerTest(
+ 10,
+ 3
+).then(
+ x => console.info('From the stream', x)
+)
+```
+
+This outputs:
+
+```bash
+"Timer is firing" 0
+"From the stream" 0
+"Timer is firing" 1
+"Timer is firing" 2
+```
+
+You may be asking, or may not, why we only see one number returned in the `Promise` we wrapped our `rxjs` code with.  Well, let's step back a moment and remember that we only wrapped these calls in a `new Promise` to make them easy to test.  We're passing the subscribe method the `resolve` from the new `Promise` so it's just going to return the _first_ emission.  The stream only continues to emit because we didn't actually stop the stream, we just stopped ~caring~ listening.
+
+Now, if we go back to the weather API example, you can see that further down the chain, we _are_ using the `rxjs` `reduce` operator to build an array of our mapped `SimplifiedWeatherData` objects.  This means that we only `resolve` the `Promise` when we have our full set where "full" means we have used `take` to grab however many weather data points we want.
+
+What does this mean for our workflow?

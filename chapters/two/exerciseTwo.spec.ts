@@ -1,5 +1,5 @@
 import {
-  fizzBuzz
+  fizzBuzz, subscribeToWeather
 } from './exerciseTwo'
 
 describe('Exercise Two tests', () => {
@@ -25,6 +25,14 @@ describe('Exercise Two tests', () => {
           "FizzBuzz"
         ]
       )
+      done()
+    })
+  })
+  describe('subscribeToWeather', () => {
+    it.only('Should get the weather', async (done) => {
+      jest.setTimeout(60000)
+      const results = await subscribeToWeather(80204, 10)
+      console.log(results)
       done()
     })
   })

@@ -1,14 +1,21 @@
 import {
   Observable,
   range,
-  zip
+  zip,
+  timer
 } from 'rxjs'
 
 import {
   map,
-  reduce
+  reduce,
+  switchMap,
+  tap,
+  take
 } from 'rxjs/operators'
 
+import {
+ ajax
+} from 'rxjs/ajax'
 /**
  * Normally you would not mix Promises in with rxjs,
  * this is done to make it easier to test.
@@ -53,13 +60,116 @@ export const fizzBuzz = (
   )
 })
 
+interface WeatherOverview {
+ description: string
+ icon: string
+ id: number
+ main: string
+}
+
+interface Wind {
+ deg: number
+ speed:number
+}
+
+interface Sun {
+ country: string
+ id: number
+ message: number
+ sunrise: number
+ sunset: number
+ type: number
+}
+
+interface Main {
+ humidity: number
+ pressure: number
+ temp: number
+ temp_max: number
+ temp_min: number
+}
+
+interface Coordinates {
+ lat: number
+ lon: number
+}
+
+interface Clouds {
+ all: number
+}
+
+interface WeatherData {
+ base: string
+ clouds: Clouds
+ cod: number
+ coord: Coordinates
+ dt: number
+ id: number
+ main: Main
+ name: string
+ sys: Sun
+ timezone: number
+ visibility: number
+ weather: WeatherOverview[]
+ wind: Wind
+}
+
+interface SimplifiedWeatherData {
+ location: string
+ sunrise: string
+ sunset: string
+ temperature: string
+ time: string
+}
+
+const convertUTCSecondsToLocalTime = (
+ epochTimeInMS: number
+) => {
+ const date = new Date(0)
+ date.setUTCSeconds(epochTimeInMS)
+ return date.toString()
+}
+
+const kelvinToF = (
+ kelvin: number
+) => 9/5 * (kelvin - 273.5)  + 32
+
 export const subscribeToWeather = (
-  zipCode: number  
-): Promise<any> => new Promise((resolve, reject) => {
-  const apiKey = '1e30dc0a67e6c785dcc1cb8ee1cae0f5'
-  const url = 
-    `https://samples.openweathermap.org/data/2.5/weather?zip=${zipCode},us&appid=${apiKey}`
-
-  const weather$ = ajax(url)
-})
-
+  zipCode: number,
+  timeInSeconds: number,
+  attempts: number = 5,
+  apiKey: string = '' // insert your key here 
+ ): Promise<SimplifiedWeatherData[]> => new Promise<SimplifiedWeatherData[]>(
+  (resolve, reject) => timer(0, timeInSeconds * 1000).pipe(
+   take(attempts),
+   tap(x => console.log('Requesting weather data...', x)),
+   switchMap(
+     x => ajax.getJSON<WeatherData>(
+       `https://api.openweathermap.org/data/2.5/weather?zip=${zipCode},us&appid=${apiKey}`
+     )
+   ),
+   map(
+    ({
+     name: location,
+     sys: {
+       sunrise,
+       sunset
+     },
+     main: {
+      temp: degreesKelvin
+     }
+    }: WeatherData) => ({
+      location,
+      sunrise: convertUTCSecondsToLocalTime(sunrise),
+      sunset: convertUTCSecondsToLocalTime(sunset),
+      temperature: kelvinToF(degreesKelvin),
+      time: new Date().toString()
+    })
+  ),
+  reduce(
+    (results, curr) => results.concat(curr),
+    []
+   )
+  ).subscribe(resolve, reject)
+ )
+ 
