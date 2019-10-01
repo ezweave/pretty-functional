@@ -902,4 +902,32 @@ You may be asking, or may not, why we only see one number returned in the `Promi
 
 Now, if we go back to the weather API example, you can see that further down the chain, we _are_ using the `rxjs` `reduce` operator to build an array of our mapped `SimplifiedWeatherData` objects.  This means that we only `resolve` the `Promise` when we have our full set where "full" means we have used `take` to grab however many weather data points we want.
 
-What does this mean for our workflow?
+What does this mean for the data flow through our chain of operators?
+
+We can abstract some of the _actual_ logic as such:
+
+```
+ timer(0, timeInSeconds * 1000).pipe(
+  take
+  tap
+  switchMap
+  map
+  reduce
+```
+
+1. `timer` emits monotonically increasing integers every `timeInSeconds * 1000` milliseconds on a stream.
+1. `take` takes actions until we hit the specified limit.  `take(5)` would take 5 emissions, or in this case `0, 1, 2, 3, 4`.
+1. [`switchMap`](https://www.learnrxjs.io/operators/transformation/switchmap.html) is unique and not _wholly_ necessary for this solution.  There are differences between _special_ map operators in the `rxjs` world.  We will come back to this shortly.
+1. `map` is not a unique operator and operates like `map` does in `lodash` or ES6 or what have you.  We're literally just mapping the responses we get from our `ajax.getJSON` calls, which are just returning the body of our request. 
+1. `reduce` another familiar fellow.  We're just using this to _atomize_ our requests as an array of responses.  The smallest unit our code returns is an array of `SimplifiedWeatherData` in lieu of each response.  This is done to illustrate how we can "hide" the `rxjs` operations in a `Promise`.
+
+Again, the use of `Promise` in these examples is just to provide an easy way to understand the input and output of a stream.  In reality, you'd not wrap these calls in a `Promise` and instead end up using some _other_ data processor (like middleware in a `redux` based application) to hydrate a data source.  But, you can easily solve slightly convoluted problems with a stream that is "closed" to anyone else.
+
+Let's get back to the special "map operators" we talked about.
+
+I used `switchMap` here, though it is _wholly unnecessary_.  In fact, [`mergeMap`](https://www.learnrxjs.io/operators/transformation/mergemap.html) will yield the _exact same_ results, in _this case_.  What is important to understand is the difference between these "special" map operators and a regular `map`.
+
+To be clear, there are only a few "special" map operators in the `rxjs` world (though some have aliased names to preserve backwards compatability and to confuse you):
+* [`switchMap`](https://www.learnrxjs.io/operators/transformation/switchmap.html)
+* [`mergeMap` AKA `flatMap`](https://www.learnrxjs.io/operators/transformation/mergemap.html)
+* [`concatMap`](https://www.learnrxjs.io/operators/transformation/concatmap.html)
