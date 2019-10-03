@@ -66,7 +66,9 @@ We now just have an array of functions:
 
 And _if_ you happen to do this in a browser and pop open your dev tools... you will see that the JavaScript runtime attaches all of the _object_ [prototype](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Object_prototypes) behavior to them:
 
-![oh my](/static/images/lambda_dump.png)
+<p align="center">
+ <img src="/static/images/lambda_dump.png"/>
+</p>
 
 This means that JavaScript treats the _functions_ as it does an object.  It has all the scope information and everything else you would expect of what JavaScript considers an object. _[SOTTO VOCE](https://www.lexico.com/en/definition/sotto_voce): because it is an object._
 
