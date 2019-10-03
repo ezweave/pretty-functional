@@ -10,7 +10,7 @@ There's a few things to just get out of the way that I've _mostly_ left untouche
 
 But before we get into _any_ of this, let me be clear: this entire chapter is pretty heavy on the _caveat emptor_ "your author has strong opinions" nonsense.  So much so that the alternate title for this, borrows from Abe Simpson:
 <p align="center">
-![old man yells at cloud](/static/images/abe_simpson.png)
+ <img src="/static/images/abe_simpson.png"/>
 </p>
 
 - [Lambda Lambda Lambda](#lambda-lambda-lambda)
