@@ -82,6 +82,6 @@ There's a great deal that could be mined there, and largely for our purposes tha
 
 Now because this chapter is, first and foremost, about _style_ I'm going to abandon the discussion of lambda calculus (there's a whole chapter on it) to talk about that.
 
-I said it in [Chapter 1]() but I really, really try to avoid using the `function` keyword.  To me, it smacks too much of "the old way" of doing things.  I know that's a sort of "stick it up your ass grandpa!" attitude, but as we saw with the exercises in `lodash` the syntactic sugar afforded by fat arrow functions makes life a great deal easier.  Sadly, TypeScript isn't quite that hip and sometimes requires you to add typing that you really shouldn't need (it's not nearly as sophisticated of a static analyzer as something like [Clang](https://clang-analyzer.llvm.org/)).
+I said it in [Chapter 1](/chapters/one/one.md#L206) but I really, really try to avoid using the `function` keyword.  To me, it smacks too much of "the old way" of doing things.  I know that's a sort of "stick it up your ass grandpa!" attitude, but as we saw with the exercises in `lodash` the syntactic sugar afforded by fat arrow functions makes life a great deal easier.  Sadly, TypeScript isn't quite that hip and sometimes requires you to add typing that you really shouldn't need (it's not nearly as sophisticated of a static analyzer as something like [Clang](https://clang-analyzer.llvm.org/)).
 
 [Top](#introduction)
