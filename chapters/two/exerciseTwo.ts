@@ -2,7 +2,8 @@ import {
   Observable,
   range,
   zip,
-  timer
+  timer,
+  from
 } from 'rxjs'
 
 import {
@@ -24,7 +25,7 @@ import {
  */
 export const fizzBuzz = (
   n: number 
-): Promise<string[]> => new Promise((resolve, reject) => {
+): Promise<string[]> => new Promise(resolve => {
   const generateN = (
     n: number
   ): Observable<number> => range(1, n)
@@ -59,6 +60,27 @@ export const fizzBuzz = (
     resolve
   )
 })
+
+/**
+ * Take in a sentence and capitalize every nth word. just like you did in Chapter 1!
+ * 
+ * Only now you need to use an Observable to kick off this party
+ * 
+ * Remember that a sentence is just an array of
+ * words joined by spaces.
+ * 
+ * Extra hint: you can still use capitalize from lodash
+ */
+export const capitalizeEveryNthWord = (
+  n: number
+) => (
+  sentence: string
+) => new Promise<string>(resolve => from(sentence).pipe(
+    tap(x => console.log('DO SOMETHING WITH THIS', x))
+  ).subscribe(
+    resolve
+  )
+)
 
 interface WeatherOverview {
  description: string

@@ -10,6 +10,8 @@ This would, could, have been a place to introduce `monad`s.  _However_, before I
 
 To that end, we revisit our old friend, `FizzBuzz` and solve it using [`rxjs`](https://rxjs-dev.firebaseapp.com/).  While we will use the same concepts, to mechanically pull apart the logic, we will be introducing some ideas unique to `rxjs`.
 
+This chapter is _much_ longer than the first, so be forewarned and, as they say, "buckle up, Buttercup!"
+
 - [Reactive Programming](#reactive-programming)
 - [WTF Is A Stream?](#wtf-is-a-stream?)
 - [Observables](#observables)
@@ -1484,3 +1486,20 @@ The biggest caveat to this entire chapter: I've really only covered some basics.
 Really, in the grander scheme of "pretty functional" code, `rxjs` is largely plumbing.  There are certain problems where the notion of a stream is very useful, and others where it may just muddy the waters.  The important thing to grok is just what a stream is.
 
 At the heart of reactive programming, a stream is a _very_ simple thing.  What makes it interesting is all the ways that emissions from the stream can be created and processed in flight.  In fact, I'd like you to take a look at some of the older problems you solved in [Chapter 1]() using these new tools.
+
+Now, I'd be remiss if I didn't mention the "History of Reactive Programming" before we are done.  `rx`, in general, has grown quite popular since Netflix began employing the technology in 2012.  In fact, to [hear some of their developers tell it](https://medium.com/netflix-techblog/reactive-programming-at-netflix-b944d49874d2) it _enabled_ problem solving in large systems in ways that existing technologies didn't.  When I was first introduced to `rx`, as a concept, it was from a handful of popular Ted Talks and posts like [this one](https://medium.com/netflix-techblog/optimizing-the-netflix-api-5c9ac715cf19) from Ben Christensen.  The reason I haven't mentioned any of this until the end of this chapter is that much of what they are using `rx` for isn't for "in system" operations like you commonly will in many applications.  In fact, as a pure tool to facilitate "pretty functional" coding, the larger discussion of `rx` in various tech stacks would just confuse you. But if you have the time and you think you grok enough of reactive x concepts, [this is a good video](https://www.youtube.com/watch?v=AslncyG8whg) to watch.  It delves into many things outside of the scope of this book, but it will do a great deal for you in terms of explaining how and why Netflix is so interested in the future of `rxjs`.  
+
+That said, even if you're not feeling, uh... very... "pretty functional" yet, you've learned enough about `rxjs` to be rather dangerous.
+
+[Top](#introduction)
+
+# Exercises
+
+To run the tests (from the root of the repository) simply type:
+
+```bash
+jest chapters/two/exerciseTwo.spec.ts
+```
+
+[Top](#introduction)
+[Table of Contents](/README.md#table-of-contents)
