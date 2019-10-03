@@ -14,10 +14,12 @@ In terms of our relationship:
 We're sitting at one of my favorite bar tops in Denver ([Steuben's](https://www.steubens.com/) or [Cuba Cuba](http://www.cubacubacafe.com/)).  One of my friends is tending bar, the lights are low and I'm single (which is not the case, in reality).  You, gender or identity or age aside, are conversing with me and I'm raising my eyebrow with every poorly executed pun and/or joke.  It's ten PM and I or perhaps you, have had enough drinks that this is all going swimmingly.
 
 > Your author: So, what's a functional programmer's favorite animal?
+>
 > You: Oh I don't know.  What?
+>
 > Your author: A lamb, duh!
 
-Of course, I am also a "secret redneck" from Alberta and my family did, at one point, move from raising cattle to sheep and the market term for that is "lamb" so the joke... kind of works?  Or not.  Even if you don't eat meat, I will say that using the term "mutton" to refer to [sheep meat](https://en.wikipedia.org/wiki/Lamb_and_mutton) isn't normal.  Unless you're stuck in a Dickensian novel.
+Of course, I am also a "secret redneck" from Alberta and my family did, at one point, move from raising cattle to sheep and the market term for that is "lamb" so the joke... kind of works?  Or not.  Even if you don't eat meat, I will say that using the term "mutton" to refer to [sheep meat](https://en.wikipedia.org/wiki/Lamb_and_mutton) isn't normal.  Unless you're stuck in a Dickensian novel (or from the UK).
 
 [To be fair](https://www.youtube.com/watch?v=E55t0lnp_8M), we've barely scratched the surface of functional programming.  We've barely scratched the surface of even "pretty functional" programming.  ~We've looked at~ I've ranted about a few things with `lodash` and `rxjs` and hinted at things to come (ahem, monads), but this chapter is a bit of a breather to just discuss... style.
 
