@@ -15,6 +15,8 @@
 - [Who Are You?](#whoami)
 - [How To Use This Book](#this-is-how-we-do-it)
 - [Chapter 1](/chapters/one/one.md)
+- [Chapter 2](/chapters/two/two.md)
+- [Chapter 3](/chapters/three/three.md)
 - [Additional Resources](#additional-resources)
 
 ## To Opine
@@ -29,6 +31,8 @@ The last bullet point is a joke.  If you find that off-putting, I suggest you se
 All of that aside, I've tried to account for _heavily_ biased (to say nothing of the "less heavily biased, but biased none-the-less") portions of this book with the following blocks:
 
 > _Caveat emptor: the following section contains subjective content that you, the reader, may disagree with.  The author implores you to consider the proceeding statements and to ignore them at your peril.  Or just ignore them._
+
+Also, this document is a _work in progress_.  If you find an errors or find something confusing, please open an issue!
 
 [Table of Contents](#table-of-contents)
 
@@ -94,7 +98,7 @@ What JavaScript, on the other hand, does have going for it, is that you are real
 - Primitives
 - Arrays of the latter
 
-JSON is _ideal_ for functional programming.  Plain JSON is divorced from function implementation, it is just data.  Data, that we can operate over in _deterministic_ ways (mostly, you will learn how Reactive X, specifically [`rxjs`](https://rxjs-dev.firebaseapp.com/) is built to handle `asnyc` operations as we move along).
+JSON is _ideal_ for functional programming.  Plain JSON is divorced from function implementation, it is just data.  Data, that we can operate over in _deterministic_ ways (mostly, you will learn how Reactive X, specifically [`rxjs`](https://rxjs-dev.firebaseapp.com/) is built to handle `async` operations as we move along).
 
 I don't expect all of that to fully make sense, yet.  But I wrote this because while there are some quality guides not dissimilar to this one and quite a few libraries that provide you with the sorts of _monads_ and operators you will find yourself using, nothing fully ties them together in quite the same way as I'm attempting to.  I will wager that I won't say anything revolutionary and that, perhaps, you will loathe this book and my writing style.  But while I can't solve all of those issues, and no one really can, I can at least give you better insight into _why_ and _how_ one can solve problems in JavaScript in a functional way.
 
@@ -226,6 +230,7 @@ A few things to consider:
 * As Knuth has always pointed out (in his long running, yet to be complete series [_The Art of Computer Programming_](https://en.wikipedia.org/wiki/The_Art_of_Computer_Programming)), Computer Science is really equal parts science, art, and hackery (my term).  There will be some math in this volume.  There will be some art.  And there will be a lot of hackery.  
 * As a youth, I often felt that Computer Science was akin to some weird Alchemy.  Some mystical, though not fantastical, art that the lay person would never understand.  But darkness cannot live where light penetrates (I say that to myself in an Ian McCellan as Gandalf voice or maybe it's a Harry Potter thing), and I hope this book sheds some light on an oft bandied about topic that might seem inscrutable.
 * You will learn enough to be dangerous.  Do I consider myself an expert in _any_ discipline of Computer Science?  To be blunt, hell no.  Writing this has been a good refresher for your author and it should be good for you, but it is far from complete.  There is no such thing as "complete" in any remotely scientific discipline.  There is only the earnest need to improve and expand.
+* This is just a tool.  There are many ways to skin a cat (or [four](https://www.youtube.com/watch?v=cUcjn1CuRZI), RIP [Harris](https://en.wikipedia.org/wiki/Harris_Wittels)).  Getting familiar with something makes you more inclined to use it.
 
 [Table of Contents](#table-of-contents)
 
@@ -246,6 +251,8 @@ To work through this book, I would suggest:
 If you find any mistakes or want to make a correction, also feel free to submit a P.R.  I will handily ignore it, unless you can procure for me a bottle of Sazerac 18.  Then we can talk.
 
 [Chapter 1](/chapters/one/one.md)
+[Chapter 2](/chapters/two/two.md)
+[Chapter 3](/chapters/three/three.md)
 
 [Table of Contents](#table-of-contents)
 
@@ -254,7 +261,7 @@ If you find any mistakes or want to make a correction, also feel free to submit 
 I'm hardly the inventor of functional programming, or functional programming in JavaScript.  There are some additional resources that you might find valuable:
 
 * [Functional Light JS](https://github.com/getify/Functional-Light-JS): a similar book, though the theoretical focus is a _wee_ bit different.  This book (the one you're reading) focuses a bit more on practical exercises using a myriad of common frameworks and, paradoxically, on lambda calculus.  A good read, none the less.
-* [Functional Programming in JavaScript](https://www.manning.com/books/functional-programming-in-javascript): I won't give this book a firm endorsemsent, it appears to be riddled with bugs and a bit out of date.  But it's worth a gander.
+* [Functional Programming in JavaScript](https://www.manning.com/books/functional-programming-in-javascript): I won't give this book a firm endorsement, it appears to be riddled with bugs and a bit out of date.  But it's worth a gander.
 * [RxJS in Action](https://www.manning.com/books/rxjs-in-action): while the resources available on [_Learn RxJS_](https://www.learnrxjs.io/) are useful, it assumes some _a priori_ knowledge that you're unlikely to have (though hopefully that is less true after you finish this book).  The underlying concepts of rxjs are kind of glossed over in some of the online documentation and a few tools, like `redux-observable` operate so entirely on rxjs streams that if you _don't_ understand it well enough, you will hit roadblocks when attempting to solve real world problems almost immediately.
 
 [Table of Contents](#table-of-contents)

@@ -13,9 +13,9 @@ To that end, we revisit our old friend, `FizzBuzz` and solve it using [`rxjs`](h
 This chapter is _much_ longer than the first, so be forewarned and, as they say, "buckle up, Buttercup!"
 
 - [Reactive Programming](#reactive-programming)
-- [WTF Is A Stream?](#wtf-is-a-stream?)
+- [WTF Is A Stream](#wtf-is-a-stream)
 - [Observables](#observables)
-- [There Can Be Only One (Stream)](#there-can-be-only-one-(stream))
+- [There Can Be Only One (Stream)](#there-can-be-only-one-stream)
 - [FizzBuzz](#fizzbuzz)
 - [Async Operations](#async-operations)
 - [The Treasure of Maps](#the-treasure-of-maps)
@@ -207,6 +207,8 @@ __A stream is not I/O.__
 ![dead stream](/static/images/dead_horse.png)
 
 It _can_ be I/O, but it can be local (e.g in memory, within execution context) too.  This is a _higher order_ concept you need to fully grok!  When we talk about _streams_ in the reactive world, we are not talking about I/O or media or anything that you might assume given that term.
+
+Now, I harp on this because I've seen it somewhat abused.  At a prior job, a distributed system was creating [web sockets](https://en.wikipedia.org/wiki/WebSocket) for every new stream that was created.  Of course, I don't know that it was due to this misunderstanding and the concept of a stream as a bunch of data predates any notion of I/O.  This isn't a book on [POSIX](https://en.wikipedia.org/wiki/POSIX) programming, but if you're old enough the whole __a stream is not I/O__ is probably not news to you.  But I've seen that confusion crop up when people are thrown into `rxjs` systems and don't get this little lecture.  I think we've flogged [Mr Ed](https://en.wikipedia.org/wiki/Mister_Ed) enough, though.
 
 So let's talk about `rxjs` and what a stream is... with some easy to grok examples!
 
@@ -442,7 +444,7 @@ And will have _the same_ output.
 
 The _difference_ is that when we create the `Observable` ourselves, we can directly _control_ how and when the values are emitted.  That's it!  This will become _more_ powerful when we start _composing_ operators on the stream.  But, for now, remember that `from` will give you an `Observable`, but it will not let that `Observable` truly control when it emits a value.  That is why we can also create `Observable`s explicitly.
 
-For all intents and purposes when we say "stream" we are really talking about a "stream" that comes from an `Observable`.  Rarely do you end up creating streams in any other fashion and, for the purposes of what we are doing in this chapter, we can really just use `Observable` to mean anything pulled using the `from` operator.  In fact, _technically speaking_ (pushes up glasses), `from` creates an `Observable` as we have seen.  The difference is just that if you make one _explicitly_ you can better control when it emits on the resulting stream.  As long as that is _somewhat_ clear, just think of an `Observable` as a "streaming thing".  We will end up getting `Observable`s in a myriad of ways moving forward and you just have to remember that it's just gonna "chuck some shit in the stream" and you'll have to deal with it.  An `Observable` is a stream and most streams come from `Observable`s.
+For all intents and purposes when we say "stream" we are really talking about a "stream" that comes from an `Observable`, really it _starts_ with one `Observable`.  Rarely do you end up creating streams in any other fashion and, for the purposes of what we are doing in this chapter, we can really just use `Observable` to mean anything pulled using the `from` operator.  In fact, _technically speaking_ (pushes up glasses), `from` creates an `Observable` as we have seen.  The difference is just that if you make one _explicitly_ you can better control when it emits on the resulting stream.  As long as that is _somewhat_ clear, just think of an `Observable` as a "streaming thing".  We will end up getting `Observable`s in a myriad of ways moving forward and you just have to remember that it's just gonna "chuck some shit in the stream" and you'll have to deal with it.  An `Observable` is a stream or it is feeding a stream an "outer" `Observable` created and most streams come from `Observable`s.
 
 [Top](#introduction)
 
@@ -571,7 +573,7 @@ The first thing that happens, is it emits "bourbon" by itself.
 "Inner Observable point 1" 0 "bourbon"
 ```
 
-To reference the value in the "outer" stream, we hold onto it with the `outerEmission` variable.  We now have a new "sub" stream that is still contextually bound (in terms of run time) to the parent stream, but has its own emissions as well.  We see this when we start "decorating" with the `drink`:
+To reference the value in the "outer" `Observable`, we hold onto it with the `outerEmission` variable.  We now have a new "inner" `Observable` that is still part of the stream kicked off by the outer `Observable`, but has it injects new emissions.  We see this when we start "decorating" with the `drink`:
 
 ```bash
 "Inner Observable point 2" 0 "0 bourbon"
@@ -592,7 +594,7 @@ But here's where it's going to throw you for a bit of a loop: notice that it's _
 "Outer Observable point 2" "0 beer"
 ```
 
-What is happening, is that the new _emissions_ are still part of the outer stream.  They're just new values.
+What is happening, is that the new _emissions_ are still part of the same stream.  They're just new values.
 
 This gets a little clearer, if we delete some of the logging as such:
 
@@ -930,7 +932,7 @@ Feel free to [explore the solution](https://codepen.io/ezweave/pen/vYBzBvJ).
 
 We've looked at some _toy problems_ with `rxjs`, but it's time to tackle something a little meatier.  Really, we need to look at a more "real world" example.
 
-Now, before we begin, to actually run this code, you will need to get an API key from [Open Weather](https://home.openweathermap.org/).  I'll leave the key field blank in any CodePens but you will want to set that up, if you'd like to play with the API.  There are charges affiliated with load (there is a request per minute cap), but we won't be getting close to those limits.
+Now, before we begin, to actually run this code, you will need to get an API key from [Open Weather](https://home.openweathermap.org/).  I'll leave the key field blank in any interactive examples but you will want to set that up, if you'd like to play with the API.  There are charges affiliated with load (there is a request per minute cap), but we won't be getting close to those limits.
 
 The point of solving a _real problem_ is to better demonstrate how you'd actually compose a call with `rxjs` versus just throwing more _toy problems_ at you.  In fact, this is going to be the first _real problem_ of the book.
 
@@ -1290,7 +1292,7 @@ Obviously, there's some timeliness to this.  We're firing off actions pretty qui
 
 Honestly, the differences between map operators in `rxjs` is rather subtle.  Without actually playing around with them, it can be hard to fully grok what is going on.
 
-To that end, [here's the CodePen](https://codepen.io/ezweave/pen/QWLeZar) so you can play around with it yourself.  
+To that end, [here's the code](https://codepen.io/ezweave/pen/QWLeZar) so you can play around with it yourself.  
 
 Let's recap what we've talked about, with regards to map operators:
 * The special map operators in `rxjs` work just like `from`: they will unwrap a `Promise` for you or a collection of `Promise`s as new `Observable`s.  
@@ -1328,7 +1330,7 @@ If you look at the logs, you will see this:
 "Requesting weather data..." 0
 ```
 
-And... nothing.  No error messages.  In fact, pull up your CodePen and make a similar change yourself.  I'll wait.
+And... nothing.  No error messages.  In fact, pull up the code again and make a similar change yourself.  I'll wait.
 
 Now, we're not going to fix this, just yet.  And by "fix" I mean add some error handling.  This kind of error, simply mistyping a URL, is pretty easy to do and probably not too hard to figure out.  It might be the kind of thing that you need a "second set of eyes" for ("Hey Jasmine, I've been beating myself up over this code all day and can't see what I'm missing, mind taking a look?"), but it's a systematic kind of failure.  What isn't is an _inconsistent_ error.  By that, I mean, every single one of these API calls will fail because the URL is wrong.  But how would that change if only _some_ of your `Observable`s broke?
 
@@ -1481,11 +1483,11 @@ If you've never worked with `rxjs`, it can be a lot to take in at once.  Sadly, 
 
 Some of the larger trickery is in how `Observable`s unwrap things like `Promise`s and how there are tools that can be used to manipulate them.  
 
-The biggest caveat to this entire chapter: I've really only covered some basics.  There are many, many `rxjs` operators.  To explain them all would require a whole other book and, really, they change over time too... so it would be out of date after a year or so and you'd all be pestering me with "updates".  But you should have enough exposure to be dangerous.
+The biggest caveat to this entire chapter: I've really only covered some basics.  There are many, many `rxjs` operators.  To explain them all would require a whole other book and, really, they change over time too... so it would be out of date after a year or so and you'd all be pestering me with "updates".  But you should have enough exposure to be dangerous.  There's all sorts of ways to playback streams, jump into streams, break streams, `debounce` and all of that.  It's a brave new world, if you've never toyed with any of it before.
 
 Really, in the grander scheme of "pretty functional" code, `rxjs` is largely plumbing.  There are certain problems where the notion of a stream is very useful, and others where it may just muddy the waters.  The important thing to grok is just what a stream is.
 
-At the heart of reactive programming, a stream is a _very_ simple thing.  What makes it interesting is all the ways that emissions from the stream can be created and processed in flight.  In fact, I'd like you to take a look at some of the older problems you solved in [Chapter 1]() using these new tools.
+At the heart of reactive programming, a stream is a _very_ simple thing.  What makes it interesting is all the ways that emissions from the stream can be created and processed in flight.  In fact, I'd like you to take a look at some of the older problems you solved in [Chapter 1](/chapters/one/one.md) using these new tools.
 
 Now, I'd be remiss if I didn't mention the "History of Reactive Programming" before we are done.  `rx`, in general, has grown quite popular since Netflix began employing the technology in 2012.  In fact, to [hear some of their developers tell it](https://medium.com/netflix-techblog/reactive-programming-at-netflix-b944d49874d2) it _enabled_ problem solving in large systems in ways that existing technologies didn't.  When I was first introduced to `rx`, as a concept, it was from a handful of popular Ted Talks and posts like [this one](https://medium.com/netflix-techblog/optimizing-the-netflix-api-5c9ac715cf19) from Ben Christensen.  The reason I haven't mentioned any of this until the end of this chapter is that much of what they are using `rx` for isn't for "in system" operations like you commonly will in many applications.  In fact, as a pure tool to facilitate "pretty functional" coding, the larger discussion of `rx` in various tech stacks would just confuse you. But if you have the time and you think you grok enough of reactive x concepts, [this is a good video](https://www.youtube.com/watch?v=AslncyG8whg) to watch.  It delves into many things outside of the scope of this book, but it will do a great deal for you in terms of explaining how and why Netflix is so interested in the future of `rxjs`.  
 
@@ -1500,6 +1502,12 @@ To run the tests (from the root of the repository) simply type:
 ```bash
 jest chapters/two/exerciseTwo.spec.ts
 ```
+
+Now as for the exercises themselves... because this chapter is pretty full of examples you can play with the exercises here are a little simpler.  The hardest one is really playing with a new API (to you, maybe) to try to find some song information from geinus.com.
+
+I'll wax poetic about that one, a bit.  For the uninitiated, one of the greatest bands (_caveat emptor: the author has some strong opinions_) from the (sort of) Bay Area scene that spawned bands like Green Day, Screeching Weasel, and Operation Ivy (specifically the bands that came up playing shows at [924 Gilman Street](https://en.wikipedia.org/wiki/924_Gilman_Street)) is the band Jawbreaker (the excellent documentary on the band, ["Don't Break Down"](https://www.dontbreakdown.com/) is available on Amazon Prime for [$free.ninety-free](https://www.amazon.com/Dont-Break-Down-About-Jawbreaker/dp/B07V9NDDWC/ref=sr_1_1?keywords=don%27t+break+down&qid=1570075239&s=gateway&sr=8-1)).  That's neither here nor there, _but_ even casual students of late 80s/early 90s punk scene are usually familiar with one of their biggest songs off of their 1994 album [_24 Hour Revenge Therapy_](https://en.wikipedia.org/wiki/24_Hour_Revenge_Therapy), entitled "Boxcar".  I've included a little more fun in the, currently broken, test code, but using the [Genius API](https://docs.genius.com/) and `rxjs` I'm asking you to get some information about the song... what you get is kind of up to you, but explore the API and see what you find out.
+
+You will notice that the examples are wrapped in `Promise`s.  This is not really how you would use `rxjs` (though nothing can stop you) and is really done just to facilitate testing.  I've also included an `rxjs` based solution to `FizzBuzz`, which we've already covered.
 
 [Top](#introduction)
 [Table of Contents](/README.md#table-of-contents)
