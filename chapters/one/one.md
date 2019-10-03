@@ -203,6 +203,8 @@ the notion of writing _idiomatic_ code.  I would do silly things like put braces
 [_bike shedding_](https://en.wiktionary.org/wiki/bikeshedding)(aka "getting caught up in inconsequential details" also a prime example of [_Parkinson's Law of Triviality_](https://en.wikipedia.org/wiki/Law_of_triviality)).  While it is bad form to write things like class names and variables in Python style amidst Java code, I don't think you nor I would 
 do that intentionally.  What is not trivial is this:
 
+### This is important
+
 * Don't use the `function` keyword.
 
 > _Caveat emptor: the author has strong feelings about [fat arrows](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)!_
