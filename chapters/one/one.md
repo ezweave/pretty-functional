@@ -5,7 +5,7 @@
 ## Introduction
 
 - [Terminology](#terminology)
- - [What is a function?](#what-is-a-function?)
+ - [What is a function?](#what-is-a-function)
  - [Three key concepts](#three-key-concepts)
 - [Functional FizzBuzz](#functional-fizzbuzz)
   - [The Imperitive Approach](#the-imperitive-approach)
