@@ -13,12 +13,17 @@ To that end, we revisit our old friend, `FizzBuzz` and solve it using [`rxjs`](h
 - [Reactive Programming](#reactive-programming)
 - [WTF Is A Stream?](#wtf-is-a-stream?)
 - [Observables](#observables)
- - [FizzBuzz](#fizzbuzz)
+- [There Can Be Only One (Stream)](#there-can-be-only-one-(stream))
+- [FizzBuzz](#fizzbuzz)
 - [Async Operations](#async-operations)
+- [The Treasure of Maps](#the-treasure-of-maps)
+- [Error Handling](#error-handling)
+- [Summary](#summary)
+- [Exercises](#exercises)
 
 [Table of Contents](/README.md#table-of-contents)
 
-## Reactive Programming
+# Reactive Programming
 
 Let's put down our "functional" hats for a moment and talk about something _completely_ different (hyperbole aside).  
 
@@ -326,7 +331,7 @@ _NOTE: to aid in explaining the concepts we're describing, I am explicitly typin
 
 Now that you are somewhat familiar with a _stream_, let's talk about `Observable`s.
 
-We're kind of hinted at what an `Observable` does already, with some of our example code.  _However_, we haven't explicitly called out the construct that is `Observable`.  This is often how `redux` developers get exposed to `rxjs` as `redux-observable` pulls this concept into the `redux` world.
+We're kind of hinted at what an `Observable` does already, with some of our example code.  _However_, we haven't explicitly called out the construct that is `Observable`.  This is often how `redux` developers get exposed to `rxjs` as `redux-observable` pulls this concept into the `redux` world, but that's another book and I'm not going to teach you `redux` (it has almost nothing to do with being "pretty functional").
 
 First, let's just look at some code.  This is a _slight_ variation on the [very basic example](https://rxjs-dev.firebaseapp.com/guide/observable) you can find in the `rxjs` documentation.
 
@@ -384,7 +389,7 @@ You can see the two, together, [here](https://codepen.io/ezweave/pen/JjPZdqr).
 
 While they are similar, there is a fundamental difference you may have already picked up on.  With the `from` operator, we are asking for the contents of some data source, but the data source _itself_ exerts no control over that request.  When we `subscribe` to the stream, that uses the split sentence as a data source, it just emits its data.
 
-This is the _difference_ between a _pull_ and a _push_ in the `rxjs` world.  Even though our example is rather _ugly_, the `Observable` version controls when it is emitting data and what, exactly, it is emitting.  
+This is the _difference_ between a _pull_ and a _push_ in the `rxjs` world.  Even though our example is rather _ugly_, the _explicitly created_ `Observable` version controls when it is emitting data and what, exactly, it is emitting.  
 
 "Now hold on, just a damn minute.  What about that `ajax` call?"
 
@@ -392,7 +397,7 @@ Well there, partner, you are correct!  The `ajax` call was a _push_ and not a _p
 
 What, _indeed_?
 
-What we've done is exposed `Observable`.  The `from` operator, if you haven't noticed, actually creates an `Observable` for you (this _almost_ makes me a liar).  The difference is that it uses _three_ possible sources for input:
+What we've done is exposed the guts of the `Observable`.  The `from` operator, if you haven't noticed, actually creates an `Observable` for you (this _almost_ makes me a liar).  The difference is that it uses _three_ possible sources for input:
 
 - An array: any array of data.
 - An iterable: a collection (e.g. could be JSON key value pairs) that is iterable (e.g. "array like").
@@ -435,9 +440,244 @@ And will have _the same_ output.
 
 The _difference_ is that when we create the `Observable` ourselves, we can directly _control_ how and when the values are emitted.  That's it!  This will become _more_ powerful when we start _composing_ operators on the stream.  But, for now, remember that `from` will give you an `Observable`, but it will not let that `Observable` truly control when it emits a value.  That is why we can also create `Observable`s explicitly.
 
+For all intents and purposes when we say "stream" we are really talking about a "stream" that comes from an `Observable`.  Rarely do you end up creating streams in any other fashion and, for the purposes of what we are doing in this chapter, we can really just use `Observable` to mean anything pulled using the `from` operator.  In fact, _technically speaking_ (pushes up glasses), `from` creates an `Observable` as we have seen.  The difference is just that if you make one _explicitly_ you can better control when it emits on the resulting stream.  As long as that is _somewhat_ clear, just think of an `Observable` as a "streaming thing".  We will end up getting `Observable`s in a myriad of ways moving forward and you just have to remember that it's just gonna "chuck some shit in the stream" and you'll have to deal with it.  An `Observable` is a stream and most streams come from `Observable`s.
+
+[Top](#introduction)
+
+# There Can Be Only One (Stream)
+
+Now, this will become more clear later, but you're going to see some code as we move on that starts to build `Observable`s inside _other_ `Observable`s.  What _might_ not be clear is that it's always just _one_ stream.
+
+Let's look at some code!
+
+Here's a really basic `Observable` that will just emit some values from an array:
+
+```js
+from([0, 1, 2]).pipe(
+ tap(x => console.log('Stream point 1', x)),
+ map(x => `${x}-decorated`),
+ tap(x => console.log('Stream point 2', x)),
+ reduce(
+  (results, curr) => results.concat(curr),
+  []
+ )
+).subscribe(console.log)
+```
+As you might expect, the output is going to show something like this:
+
+```bash
+"Stream point 1" 0
+"Stream point 2" "0-decorated"
+"Stream point 1" 1
+"Stream point 2" "1-decorated"
+"Stream point 1" 2
+"Stream point 2" "2-decorated"
+```
+
+That _shouldn't_ be surprising.  The emissions in the stream are being changed by the `map` call, one at a time.  This can be a little confusing, as this `map` isn't operating on a collection _iteratively_ as `map` does in `lodash`, it is instead reacting to everything that is in the stream, atomically.  It's not going through _all_ the array because it doesn't "see" the whole array.  The `Observable` created by `from` is going to emit each value _one at a time_.
+
+But what happens if we do something weird, like create a _new_ `Observable` in the `map` call?  Let's add _even_ more logging while we're at it.
+
+```js
+from([0, 1, 2]).pipe(
+ tap(emission => console.log('Outer Observable point 1', emission)),
+ mergeMap(outerEmission => from(['bourbon', 'scotch', 'beer']).pipe(
+  tap(
+   partial(
+    console.log,
+    'Inner Observable point 1',
+    x
+   )
+  ),
+  map(
+   drink => `${outerEmission} ${drink}` 
+  ),
+  tap(
+   partial(
+    console.log,
+    'Inner Observable point 2',
+    x
+   )
+  ),
+ )),
+ tap(emission => console.log('Outer Observable point 2', emission)),
+ reduce(
+  (results, curr) => results.concat(curr),
+  []
+ )
+).subscribe(console.log)
+```
+
+Before we look at the log, ignore the `mergeMap` operator (we will get to that later), view it as something _akin_ to `map` (only not at all, but just be patient) and look at this block (sans logging):
+
+```js
+from([0, 1, 2]).pipe(
+ mergeMap(outerEmission => from(['bourbon', 'scotch', 'beer']).pipe(
+  map(
+   drink => `${outerEmission} ${drink}` 
+  )
+ ))
+).subscribe()
+```
+
+We start with emissions from the array `[0, 1, 2]` then we try to make a joke based on the oft covered John Lee Hooker song ["One Bourbon, One Scotch, One Beer"](https://www.youtube.com/watch?v=q-fSZRYeBWk) in a new `Observable` that is feeding itself with emissions from the outer `Observable`.
+
+The output, as you can see, can be a bit dizzying:
+
+```bash
+"Outer Observable point 1" 0
+"Inner Observable point 1" 0 "bourbon"
+"Inner Observable point 2" 0 "0 bourbon"
+"Outer Observable point 2" "0 bourbon"
+"Inner Observable point 1" 0 "scotch"
+"Inner Observable point 2" 0 "0 scotch"
+"Outer Observable point 2" "0 scotch"
+"Inner Observable point 1" 0 "beer"
+"Inner Observable point 2" 0 "0 beer"
+"Outer Observable point 2" "0 beer"
+"Outer Observable point 1" 1
+"Inner Observable point 1" 1 "bourbon"
+"Inner Observable point 2" 1 "1 bourbon"
+"Outer Observable point 2" "1 bourbon"
+"Inner Observable point 1" 1 "scotch"
+"Inner Observable point 2" 1 "1 scotch"
+"Outer Observable point 2" "1 scotch"
+"Inner Observable point 1" 1 "beer"
+"Inner Observable point 2" 1 "1 beer"
+"Outer Observable point 2" "1 beer"
+"Outer Observable point 1" 2
+"Inner Observable point 1" 2 "bourbon"
+"Inner Observable point 2" 2 "2 bourbon"
+"Outer Observable point 2" "2 bourbon"
+"Inner Observable point 1" 2 "scotch"
+"Inner Observable point 2" 2 "2 scotch"
+"Outer Observable point 2" "2 scotch"
+"Inner Observable point 1" 2 "beer"
+"Inner Observable point 2" 2 "2 beer"
+"Outer Observable point 2" "2 beer"
+```
+
+You're probably _really damn confused_, at this point.  Let's walk through this.
+
+For the first value emitted from the array, `0`, we hit our first logging point.  There is only the `0` on the stream now.
+
+But, we quickly run into our "inner `Observable`", that is going to make _new_ emissions!
+
+The first thing that happens, is it emits "bourbon" by itself.
+
+```bash
+"Inner Observable point 1" 0 "bourbon"
+```
+
+To reference the value in the "outer" stream, we hold onto it with the `outerEmission` variable.  We now have a new "sub" stream that is still contextually bound (in terms of run time) to the parent stream, but has its own emissions as well.  We see this when we start "decorating" with the `drink`:
+
+```bash
+"Inner Observable point 2" 0 "0 bourbon"
+```
+
+But here's where it's going to throw you for a bit of a loop: notice that it's _not_ emitting all the values from the inner `Observable` before it emits the next value from the outer `Observable`!
+
+```bash
+"Outer Observable point 1" 0
+"Inner Observable point 1" 0 "bourbon"
+"Inner Observable point 2" 0 "0 bourbon"
+"Outer Observable point 2" "0 bourbon"
+"Inner Observable point 1" 0 "scotch"
+"Inner Observable point 2" 0 "0 scotch"
+"Outer Observable point 2" "0 scotch"
+"Inner Observable point 1" 0 "beer"
+"Inner Observable point 2" 0 "0 beer"
+"Outer Observable point 2" "0 beer"
+```
+
+What is happening, is that the new _emissions_ are still part of the outer stream.  They're just new values.
+
+This gets a little clearer, if we delete some of the logging as such:
+
+```js
+ tap(emission => console.log('Outer Observable point 1', emission)),
+ mergeMap(outerEmission => from(['bourbon', 'scotch', 'beer']).pipe(
+  map(
+   drink => `${outerEmission} ${drink}` 
+  )
+ )),
+ tap(emission => console.log('Outer Observable point 2', emission)),
+```
+
+Then we just see what is going on with the stream as a whole:
+
+```bash
+"Outer Observable point 1" 0
+"Outer Observable point 2" "0 bourbon"
+"Outer Observable point 2" "0 scotch"
+"Outer Observable point 2" "0 beer"
+"Outer Observable point 1" 1
+"Outer Observable point 2" "1 bourbon"
+"Outer Observable point 2" "1 scotch"
+"Outer Observable point 2" "1 beer"
+"Outer Observable point 1" 2
+"Outer Observable point 2" "2 bourbon"
+"Outer Observable point 2" "2 scotch"
+"Outer Observable point 2" "2 beer"
+```
+
+The important thing to grok here is that the fellow that kicked it off, that first `Observable` from the array `[0, 1, 2]` created a stream and _all_ subsequent emissions will be "within" that stream.  What _is_ different, is that we're putting a bunch of new values in the stream with the inner `Observable`.  The _entire_ cycle is still going to fire through all of the _first set_ of emissions, one at a time.  It's effectively "growing" (really "injecting new") emissions in the stream:
+
+```bash
+"Outer Observable point 1" 0
+"Outer Observable point 2" "0 bourbon"
+"Outer Observable point 2" "0 scotch"
+"Outer Observable point 2" "0 beer"
+"Outer Observable point 1" 1
+```
+
+If that were not the case, we'd expect the stream to "block" and wait for the next number from the array before it starts hitting the second `tap` call.  It doesn't, though.  It just adds those new emissions.
+
+You can see that the first emission:
+
+```bash
+"Outer Observable point 1" 0
+```
+
+Is followed by _three_ new emissions that came from the inner `Observable`:
+
+```bash
+"Outer Observable point 2" "0 bourbon"
+"Outer Observable point 2" "0 scotch"
+"Outer Observable point 2" "0 beer"
+```
+
+This is obvious because we're at "point 2".
+
+And the _whole_ of the logging (including the output after `reduce`) is quite long, even with the changes:
+
+```bash
+"Outer Observable point 1" 0
+"Outer Observable point 2" "0 bourbon"
+"Outer Observable point 2" "0 scotch"
+"Outer Observable point 2" "0 beer"
+"Outer Observable point 1" 1
+"Outer Observable point 2" "1 bourbon"
+"Outer Observable point 2" "1 scotch"
+"Outer Observable point 2" "1 beer"
+"Outer Observable point 1" 2
+"Outer Observable point 2" "2 bourbon"
+"Outer Observable point 2" "2 scotch"
+"Outer Observable point 2" "2 beer"
+["0 bourbon", "0 scotch", "0 beer", "1 bourbon", "1 scotch", "1 beer", "2 bourbon", "2 scotch", "2 beer"]
+```
+
+The last line is output from the function we're passing to `subscribe`, meaning that it doesn't get _the last emission_ (which is the array we reduce to) until _all_ of the emissions are done.  It's _one stream_.
+
+Take a look [at the code](https://codepen.io/ezweave/pen/LYPwwPd) and add anything else you'd like to see logged.  We'll talk more about `mergeMap` later, but understand that from the first `pipe` to `subscribe` it's all just one stream, no matter how many `Observable`s we make in the interim.
+
+An alternate title for this section was going to be "many `Observable`s, one stream" but it wasn't very funny.
+
+[Top](#introduction)
+
 # Fizz Buzz
 
-Let's look at ways to approach the old `FizzBuzz` problem using `rxjs` and `Observable`s.  As a little refresher,
+Let's look at ways to approach the old `FizzBuzz` problem using `rxjs` and `Observable`s.  Let's see if we can make it "pretty functional" with our new `rxjs` tools.  As a little refresher,
 
 - Print the numbers from 1 to _n_. 
 - For multiples of three print "Fizz" instead of the number. 
@@ -684,7 +924,7 @@ Feel free to [explore the solution](https://codepen.io/ezweave/pen/vYBzBvJ).
 
 [Top](#introduction)
 
-# Now For Something Completely Different
+# Async Operations 
 
 We've looked at some _toy problems_ with `rxjs`, but it's time to tackle something a little meatier.  Really, we need to look at a more "real world" example.
 
@@ -805,7 +1045,7 @@ const getWeather = (
  (resolve, reject) => timer(0, timeInSeconds * 1000).pipe(
   take(attempts),
   tap(x => console.log('Requesting weather data...', x)),
-  switchMap(
+  concatMap(
     x => ajax.getJSON(
       `https://api.openweathermap.org/data/2.5/weather?zip=${zipCode},us&appid=${apiKey}`
     )
@@ -910,24 +1150,337 @@ We can abstract some of the _actual_ logic as such:
  timer(0, timeInSeconds * 1000).pipe(
   take
   tap
-  switchMap
+  concatMap 
   map
   reduce
 ```
 
 1. `timer` emits monotonically increasing integers every `timeInSeconds * 1000` milliseconds on a stream.
 1. `take` takes actions until we hit the specified limit.  `take(5)` would take 5 emissions, or in this case `0, 1, 2, 3, 4`.
-1. [`switchMap`](https://www.learnrxjs.io/operators/transformation/switchmap.html) is unique and not _wholly_ necessary for this solution.  There are differences between _special_ map operators in the `rxjs` world.  We will come back to this shortly.
+1. [`concatMap`]()
 1. `map` is not a unique operator and operates like `map` does in `lodash` or ES6 or what have you.  We're literally just mapping the responses we get from our `ajax.getJSON` calls, which are just returning the body of our request. 
 1. `reduce` another familiar fellow.  We're just using this to _atomize_ our requests as an array of responses.  The smallest unit our code returns is an array of `SimplifiedWeatherData` in lieu of each response.  This is done to illustrate how we can "hide" the `rxjs` operations in a `Promise`.
 
 Again, the use of `Promise` in these examples is just to provide an easy way to understand the input and output of a stream.  In reality, you'd not wrap these calls in a `Promise` and instead end up using some _other_ data processor (like middleware in a `redux` based application) to hydrate a data source.  But, you can easily solve slightly convoluted problems with a stream that is "closed" to anyone else.
 
-Let's get back to the special "map operators" we talked about.
+But let's talk about that in a bit.
 
-I used `switchMap` here, though it is _wholly unnecessary_.  In fact, [`mergeMap`](https://www.learnrxjs.io/operators/transformation/mergemap.html) will yield the _exact same_ results, in _this case_.  What is important to understand is the difference between these "special" map operators and a regular `map`.
+As far as [this solution](https://codepen.io/ezweave/pen/OJLBBVN) goes (and you will have to obtain your own api key to make it work) the _flow_ is important to understand.  I'm hand waving what _exactly_ we're doing with that `ajax.getJSON` call within the `switchMap`, but I think you can see that the _output_ is weather data, as you would expect.
 
-To be clear, there are only a few "special" map operators in the `rxjs` world (though some have aliased names to preserve backwards compatability and to confuse you):
+# The Treasure of Maps
+
+In the weather API example, we used the `concatMap` operator, but there are _three_ special map operators in the `rxjs` world:
 * [`switchMap`](https://www.learnrxjs.io/operators/transformation/switchmap.html)
 * [`mergeMap` AKA `flatMap`](https://www.learnrxjs.io/operators/transformation/mergemap.html)
 * [`concatMap`](https://www.learnrxjs.io/operators/transformation/concatmap.html)
+
+The first unique thing about all of these operators, over the `map` operator, is that they will operate much like `from`.  They will create inner `Observable`s from the same sources `from` will take.  This means you can use `Promise` based calls, arrays, arrays of `Promise`s and so on.  In the weather API example, we're using them to handle the `ajax.getJSON` calls since they are asynchronous.  But it's always a little unclear just _how_ those operators differ.
+
+So let's take a look at an example!
+
+To keep confusion to a minimum, we're going to use `lodash` to basically make a bunch of _asynchronous_ calls.  Think of these like some third party, `Promise` based call that you're just pulling into your project.  We could build these using `rxjs` operators, but the focus of this section is _not_ on anything other than the various map functions that deal with such things.
+
+So let's say we have two utility functions that will generate some number, _n_ of calls that will sleep for some random amount of time and then return a string indicating when they were called.
+
+Like so:
+
+```js
+ const someAsyncThing = async (
+ count: number
+): Promise<string> => new Promise<string>(
+  resolve => {
+    const delay = Math.floor(Math.random() * 10)
+    setTimeout(() => resolve(`Response #${count} delay ${delay} ms`), delay)
+ })
+
+const buildSet: (
+ total: number
+) => Promise<string>[] = flow(
+ range,
+ partialRight(
+  map,
+  someAsyncThing
+ )
+)
+```
+
+Again, we could reproduce this logic directly on a stream using things like `timer` and such, but we're not here to muck about.  This is just a straightforward way of looking at map operators.  As you can see, all we are doing is building a bunch of `Promise` based calls that will `resolve` at varying intervals.
+
+We set up this collection as such:
+
+```js
+const promises = buildSet(5)
+```
+
+Now, let's be sure that we can see what happens when we simply use `Promise.all`:
+
+```js
+Promise.all(
+ cloneDeep(promises)
+).then(results => {
+ console.warn('Using Promise.all', results)
+})
+```
+
+This is fairly straightforward and we will come back to the output shortly, but what we're interested in is what happens when you use:
+1. an `rxjs` stream from an `Observable` (or array of `Observable`s, as is the case here).
+1. the different map operators.
+
+Because I am rather lazy, I made a utility function that will take in an operator, execute on it and do some logging:
+
+```js
+const mapTester = (
+ mapperOperator: any,
+ mapperName: string
+) => from(cloneDeep(promises)).pipe(
+ mapperOperator(
+  x => x
+ ),
+ reduce(
+  (results, curr) => results.concat(curr),
+  []
+ )
+).subscribe(output => console.log(`Using ${mapperName} operator:`, output))
+```
+__NOTE: using `cloneDeep` is important as we want identical copies of the prebuilt functions being passed around... we want those delays to be the same.__
+
+We can then call this with various map operators like so:
+
+```js
+mapTester(mergeMap, 'mergeMap')
+mapTester(concatMap, 'concatMap')
+mapTester(switchMap, 'switchMap')
+```
+
+Now, the actual _interesting_ part, the output!
+
+```bash
+"Using switchMap operator:" ["Response #4 delay 4 ms"]
+"Using mergeMap operator:" ["Response #1 delay 1 ms", "Response #2 delay 2 ms", "Response #4 delay 4 ms", "Response #0 delay 5 ms", "Response #3 delay 5 ms"]
+"Using Promise.all" ["Response #0 delay 5 ms", "Response #1 delay 1 ms", "Response #2 delay 2 ms", "Response #3 delay 5 ms", "Response #4 delay 4 ms"]
+"Using concatMap operator:" ["Response #0 delay 5 ms", "Response #1 delay 1 ms", "Response #2 delay 2 ms", "Response #3 delay 5 ms", "Response #4 delay 4 ms"]
+```
+
+For grins, let's put this data into a table:
+
+| Operator | Responses in Order |
+| -- | -- |
+| `Promise.all` | `[0, 1, 2, 3, 4]` |
+| `concatMap` | `[0, 1, 2, 3, 4]` |
+| `mergeMap` | `[1, 2, 4, 0, 3]` |
+| `switchMap` | `[4]` |
+
+As you would expect, `Promise.all` is actually just mapping over the `Promise`s and waiting until each one resolves, in order.  This is per the contract of [`Promise.all`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all).  It's here _just_ to show you what that looks like.  Each operation happens in order, as you would expect.
+
+Next, we see that `concatMap` largely does _the same thing_.  It waits for each inner `Observable` to emit before going on to the next.  This is useful if _you care about order_ for some reason.  In practice, I rarely use `concatMap` with any sort of `async` operation.  It just doesn't make much sense, but it can be useful.
+
+Things start to get more interesting when we look at `mergeMap`.  This is also, as I mentioned earlier, known as `flatMap` and what it is doing, as you can see, is just letting the operations return in the order they execute.  From the raw logging, you can see that the fastest operation (in this case) is the second response, AKA "Response #1."  Then it goes down the line and emits responses as soon as they are available.  This is why `mergeMap` is often jokingly called "no rules map" or something like that.  It makes a great deal of sense for batch processes, that may involve, say different queries.  Perhaps it's a call to something like a database and while the SQL _looks_ equivalent, some queries take longer due to their position in a table or any other sort of thing (this is not a discussion about SQL or [RDBMS](https://en.wikipedia.org/wiki/Relational_database) efficiency).  You can expect `mergeMap` to emit to the stream _as soon as it gets a response_.  In this case, as soon as the first `Promise` resolves.
+
+Now, `switchMap` is the real outlier here.
+
+As you can see, it only returns _the last_ emission from the last `Observable` it handled.  It's called "switch" because it "switches out" the other `Observable`s.  The last request it saw was for "Response 4" and it _sequentially_ cancelled all the other `Observable` emissions.
+
+"Why would I want to do that?"
+
+Well, for many, many reasons.  With _real problems_ you might find that subsequent `Observable`s _should_ cancel prior ones.  Think about a case where you might use `rxjs` with some user input, like toggling a button off and on.  If this was updating something, say something in local storage or some UI piece, you might just want _the last_ action.  The others are moot, at this point.  Or, perhaps due to some design or API issue, it's possible to get _multiple_ responses from different `ajax` based calls and it is really just a matter of whichever one came last.  
+
+Obviously, there's some timeliness to this.  We're firing off actions pretty quickly (which is why I print those delays we generate), but it is possible that we don't use a `reduce` and just want to get or `take` actions until we have what we need.  This is all about how your stream is composed.  
+
+Honestly, the differences between map operators in `rxjs` is rather subtle.  Without actually playing around with them, it can be hard to fully grok what is going on.
+
+To that end, [here's the CodePen](https://codepen.io/ezweave/pen/QWLeZar) so you can play around with it yourself.  
+
+Let's recap what we've talked about, with regards to map operators:
+* The special map operators in `rxjs` work just like `from`: they will unwrap a `Promise` for you or a collection of `Promise`s as new `Observable`s.  
+* They behave differently and it's important to _use the right operator_ for the job.
+* Most problems end up with either a `mergeMap` or a `switchMap` solution.  Be sure you pick the best one for your application.
+
+[Top](#introduction)
+
+# Error Handling
+
+At this point, we've left one thing uncovered that you perhaps already occurred to you when looking at the weather API code.
+
+"What happens when we get an error?"
+
+It's a very good question.  All of those nice little operators like `from` and `mergeMap` handily unwrap your `Promise`s into `Observable`s, but they are all written, or have been thus far, in such a way that assumes that _only_ the `resolve` path would happen.  We have done nothing to look at a stream that might happen to "blow up" when something _doesn't_ work.
+
+If you've been writing code for any amount of time, even in a non-professional capacity, you've definitely encountered "borked" endpoints or bugs and handling errors is an important thing to do.  With the `lodash` examples, we were not dealing with anything `async`, which is where you really expect to have issues.  Even simple things like a malformed URL is going to cause problems.
+
+So what happens, if I just happened to "fat finger" the URL for the weather API, no other changes?
+
+Let's say, I _purposely_ break it to look like this:
+
+```js
+  tap(x => console.log('Requesting weather data...', x)),
+  concatMap(
+    x => ajax.getJSON<WeatherData>(
+      `https://api.openweathermap.org/foo/weather?zip=${zipCode},us&appid=${apiKey}`
+    )
+  ),
+```
+
+If you look at the logs, you will see this:
+
+```bash
+"Requesting weather data..." 0
+```
+
+And... nothing.  No error messages.  In fact, pull up your CodePen and make a similar change yourself.  I'll wait.
+
+Now, we're not going to fix this, just yet.  And by "fix" I mean add some error handling.  This kind of error, simply mistyping a URL, is pretty easy to do and probably not too hard to figure out.  It might be the kind of thing that you need a "second set of eyes" for ("Hey Jasmine, I've been beating myself up over this code all day and can't see what I'm missing, mind taking a look?"), but it's a systematic kind of failure.  What isn't is an _inconsistent_ error.  By that, I mean, every single one of these API calls will fail because the URL is wrong.  But how would that change if only _some_ of your `Observable`s broke?
+
+Let's mix this up with a new example.  
+
+Say I've got this function that _occasionally_ tries to divide by 0.  In some languages, this would throw an error, but in the JavaScript world, it's just going to return `NaN` or `Infinity` (this gets into a whole conversation about how to treat divide by 0 which you are free to have with yourself or bring up at your next dinner party, just leave me out of it).  But let's say we need to get an actual number out of this and not just some `NaN` or `Infinity` value.
+
+So we have this code:
+
+```js
+const somethingMightBreak = async (
+ count: number
+): Promise<number> => new Promise<number>(
+ (resolve, reject) => 
+  setTimeout(() => {
+   const divisor = Math.floor(Math.random() * Math.floor(count))
+   const value = count/divisor
+   isNaN(value) || !isFinite(value) ? reject(`Cannot divide by ${divisor}`) : resolve(value)
+  }, Math.floor(Math.random() * 10))
+)
+```
+
+It's not fancy, but it basically generates some random number, tries to divide by it and if the result is `NaN` or `Infinity`, then we reject it.
+
+Now, if we try to create a new `Observable` (in this case just an array `[0, 1, 2, 3, 4]`) inside of this stream as such:
+
+```js
+from([0, 1, 2, 3, 4]).pipe(
+ mergeMap(
+  x => somethingMightBreak(x)
+ ),
+ reduce(
+  (results, curr) => results.concat(curr),
+  []
+ )
+).subscribe(console.log)
+```
+
+The `Observable` that is automatically created from the `Promise` just breaks the whole thing.  We can see this more concretely if we try to add some before and after logging:
+
+```js
+from([0, 1, 2, 3, 4]).pipe(
+ tap(x => console.log('Emission before', x)),
+ mergeMap(
+  somethingMightBreak
+ ),
+ tap(x => console.log('Emission after', x)),
+ reduce(
+  (results, curr) => results.concat(curr),
+  []
+ )
+).subscribe(console.log)
+```
+
+Then we see this output (in one run):
+
+```bash
+"Emission before" 0
+"Emission before" 1
+"Emission before" 2
+"Emission before" 3
+"Emission before" 4
+"Object after" 2
+"Object after" 1.5
+```
+
+The third attempt to call `somethingMightBreak` does just that.  It _effectively_ breaks the whole stream.  Note that we don't even get to the `reduce` call, at this point.  It just gives up.  That's not so good.
+
+Now, let's say we add a _new_ stream to handle potentially bad calls:
+
+```js
+from([0, 1, 2, 3, 4]).pipe(
+ mergeMap(
+  x => from(somethingMightBreak(x)).pipe(
+   catchError(
+    error => of(error)
+   )
+  )
+ ),
+ reduce(
+  (results, curr) => results.concat(curr),
+  []
+ )
+).subscribe(console.warn)
+```
+
+Then our _new_ output looks like so:
+
+```bash
+["Cannot divide by 0", "Cannot divide by 0", 2, "Cannot divide by 0", 4]
+```
+
+It still _rejected_ but we now said, "okay we _know_ this can break, let's do something about it!"
+
+We do end up hitting the `reduce` call later, to pull all of our results together, but some of them are now error messages.  That's okay!
+
+Let's look at that code more closely:
+
+```js
+mergeMap(
+  x => from(somethingMightBreak(x)).pipe(
+   catchError(
+    error => of(error)
+   )
+  )
+ )
+```
+
+We're doing a few things here that _might_ not be obvious.  When we called `mergeMap` before, we were just letting it unwrap our `Promise` as a new `Observable`.  Now, we have to be more discrete and not only create an `Observable` explicitly (using `from`), but we also need to `pipe` this new, "sub stream" to the `rxjs` operator [`catchError`](https://www.learnrxjs.io/operators/error_handling/catch.html).  We then use [`of`](https://www.learnrxjs.io/operators/creation/of.html) in a similar fashion as `from`, only `of` isn't designed to deal with `Promise`s.  
+
+Now that might be _kind of, sort of_ clear, but there's one more piece to consider.  What do you think `from(somethingMightBreak(x)).pipe` is returning?
+
+I'll give you a hint: it's starts with `Ob` and ends with `servable`. This goes back to our earlier discussion in the [There Can Be Only One Stream](#there-can-be-only-one-(stream)) section. 
+
+It's just emitting new values in the same stream that started it all.  This is totally normal in `rxjs`.  It might look kind of odd, but remember _you can always cram more emissions in the stream_.  It's emissions, or `Observable`s as far as you want to go down, but still in one stream.  Granted, this can become spaghetti-like if you let it go too far, but there's nothing wrong with using `Observable`s inside of other `Observable`s.  Our special map operators (`concatMap`,`mergeMap`, and `switchMap`) can unpack deeply nested streams and "bring them up" to the parent.  This is often called "flattening".  We just threw some operators in to handle the bad actors.
+
+There's a very, very crucial point to handling errors and really _all_ of `rxjs`: you can nest `Observable`s as deep as you like, just now that all of those emissions have to be handled further on in the stream.
+
+Does that make sense?
+
+Feel free to [poke around the example](https://codepen.io/ezweave/pen/OJLKeVZ) and see what else you can come up with.
+
+Now, let's go back to our _broken_ weather API call, for completeness' sake.
+
+How do we deal with the error that is, undoubtedly, being hidden from us by our `ajax.fromJSON` call?
+
+I won't explore how you would handle that in the functions we pass to the `map` operator (obviously that code would need reworking), but we can at least _log_ the error as such:
+
+```js
+concatMap(
+    x => ajax.getJSON<WeatherData>(
+      `https://api.openweathermap.org/foo/weather?zip=${zipCode},us&appid=${apiKey}`
+    ).pipe(
+     catchError(
+      error => {
+       console.warn(error.message)
+      }
+     )
+    )
+  ),
+```
+
+In this case, we will just get repeated logs that say "ajax error" and not much else.  We aren't making a new `Observable` here, we're just eating the errors.  That may or may not be "bad for business" but it demonstrates that you _can_ handle those errors in the `Observable` created by `ajax.getJSON`.  If you fix the URL, this will just work.  We might _want_ to create a new stream and thus a new emission that wraps that error message (which means we have to handle it later in the `map`), but that should be _rather obvious_ at this point.  The important piece is that now, you can handle the error and the stream won't suddenly "die of mysterious circumstances".
+
+[Top](#introduction)
+
+# Summary
+
+If you've never worked with `rxjs`, it can be a lot to take in at once.  Sadly, as I mentioned earlier, there are quite a few developers that get exposed to streams via the use of `redux-observable` which doesn't really do a good job at explaining what is going on.  They start writing ["epics"](https://redux-observable.js.org/docs/basics/Epics.html), which just take in actions off of a stream (in `redux-observable` you have _one_ stream that feeds off of the `redux` state versus creating new ones _ad hoc_ as we've been doing) and quickly get bogged down when asked to do things like use a delay (as we have shown with `interval` and `timer`) because they don't understand that they can create a new stream internal to the epic.  As we've played around, you can see that we often make _lots_ of new emissions inside a given stream.  It's really ["turtles all the way down"](https://en.wikipedia.org/wiki/Turtles_all_the_way_down).  Those emissions become scoped to whatever stream you've started with and if you use one of the fancy map operators, it will handle subsequent `Observable`s without having to do anything (unless you need to use `catchError` but that just moves the logic a bit).  You can just keep going and going, but it will all be the same chain of events.
+
+Some of the larger trickery is in how `Observable`s unwrap things like `Promise`s and how there are tools that can be used to manipulate them.  
+
+The biggest caveat to this entire chapter: I've really only covered some basics.  There are many, many `rxjs` operators.  To explain them all would require a whole other book and, really, they change over time too... so it would be out of date after a year or so and you'd all be pestering me with "updates".  But you should have enough exposure to be dangerous.
+
+Really, in the grander scheme of "pretty functional" code, `rxjs` is largely plumbing.  There are certain problems where the notion of a stream is very useful, and others where it may just muddy the waters.  The important thing to grok is just what a stream is.
+
+At the heart of reactive programming, a stream is a _very_ simple thing.  What makes it interesting is all the ways that emissions from the stream can be created and processed in flight.  In fact, I'd like you to take a look at some of the older problems you solved in [Chapter 1]() using these new tools.

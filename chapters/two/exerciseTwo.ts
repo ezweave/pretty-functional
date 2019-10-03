@@ -8,9 +8,9 @@ import {
 import {
   map,
   reduce,
-  switchMap,
   tap,
-  take
+  take,
+  concatMap
 } from 'rxjs/operators'
 
 import {
@@ -143,7 +143,7 @@ export const subscribeToWeather = (
   (resolve, reject) => timer(0, timeInSeconds * 1000).pipe(
    take(attempts),
    tap(x => console.log('Requesting weather data...', x)),
-   switchMap(
+   concatMap(
      x => ajax.getJSON<WeatherData>(
        `https://api.openweathermap.org/data/2.5/weather?zip=${zipCode},us&appid=${apiKey}`
      )
