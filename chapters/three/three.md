@@ -4,6 +4,21 @@
 
 # Introduction
 
+- [Lambda Lambda Lambda](#lambda-lambda-lambda)
+- [Summary](#summary)
+
+Dear reader, I hope that at this point we've established something of a _rapport_.  You have gotten this far into my tome and have been fooled into thinking I am enough of an expert that it's worth venturing on.  This is the point in the evening where either I'm drunk enough to think that all of my jokes are landing.
+
+In terms of our relationship:
+
+We're sitting at one of my favorite bar tops in Denver ([Steuben's](https://www.steubens.com/) or [Cuba Cuba](http://www.cubacubacafe.com/)).  One of my friends is tending bar, the lights are low and I'm single (which is not the case, in reality).  You, gender or identity or age aside, are conversing with me and I'm raising my eyebrow with every poorly executed pun and/or joke.  It's ten PM and I or perhaps you, have had enough drinks that this is all going swimmingly.
+
+> Your author: So, what's a functional programmer's favorite animal?
+> You: Oh I don't know.  What?
+> Your author: A lamb, duh!
+
+Of course, I am also a "secret redneck" from Alberta and my family did, at one point, move from raising cattle to sheep and the market term for that is "lamb" so the joke... kind of works?  Or not.  Even if you don't eat meat, I will say that using the term "mutton" to refer to [sheep meat](https://en.wikipedia.org/wiki/Lamb_and_mutton) isn't normal.  Unless you're stuck in a Dickensian novel.
+
 [To be fair](https://www.youtube.com/watch?v=E55t0lnp_8M), we've barely scratched the surface of functional programming.  We've barely scratched the surface of even "pretty functional" programming.  ~We've looked at~ I've ranted about a few things with `lodash` and `rxjs` and hinted at things to come (ahem, monads), but this chapter is a bit of a breather to just discuss... style.
 
 There's a few things to just get out of the way that I've _mostly_ left untouched, by design, because I wanted to get a little further into our relationship.  (_Yes, I can see you, please put your pants back on._)  Some of that is some controversy around nomenclature, some slick things I've introduced with TypeScript that I've not really expounded upon, and the whole emphasis on testing that I think is fundamental to good "pretty functional" programming.
@@ -13,8 +28,6 @@ But before we get into _any_ of this, let me be clear: this entire chapter is pr
  <img src="/static/images/abe_simpson.png"/>
 </p>
 
-- [Lambda Lambda Lambda](#lambda-lambda-lambda)
-- [Summary](#summary)
 
 [Table of Contents](/README.md#table-of-contents)
 

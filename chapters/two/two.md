@@ -4,14 +4,6 @@
 
 # Introduction
 
-If you've been _functional curious_ for any amount of time and you've poked around, you are probably most curious to know about the `ramda` library.  Originally, this chapter was going to introduce `ramda` using the same problem set, but... it quickly became apparent that without introducing you to `monads`, the code would look _nearly identical_ to the `lodash` solutions we already covered in the previous chapter.  This illustrates both how useful `lodash` can be (when curried and composed properly) and how powerful the `monad` concept is.
-
-This would, could, have been a place to introduce `monad`s.  _However_, before I take you, dear reader, down that rabbit hole, I realize that we've left wholly untouched (thus far) the concept of _reactive programming_.  You will encounter this, and _reactive frameworks_ exist in a myriad of languages, which is to say: before we get further into _functional programming_, it's probably a good idea to introduce _reactive programming_.
-
-To that end, we revisit our old friend, `FizzBuzz` and solve it using [`rxjs`](https://rxjs-dev.firebaseapp.com/).  While we will use the same concepts, to mechanically pull apart the logic, we will be introducing some ideas unique to `rxjs`.
-
-This chapter is _much_ longer than the first, so be forewarned and, as they say, "buckle up, Buttercup!"
-
 - [Reactive Programming](#reactive-programming)
 - [WTF Is A Stream](#wtf-is-a-stream)
 - [Observables](#observables)
@@ -22,6 +14,14 @@ This chapter is _much_ longer than the first, so be forewarned and, as they say,
 - [Error Handling](#error-handling)
 - [Summary](#summary)
 - [Exercises](#exercises)
+
+If you've been _functional curious_ for any amount of time and you've poked around, you are probably most curious to know about the `ramda` library.  Originally, this chapter was going to introduce `ramda` using the same problem set, but... it quickly became apparent that without introducing you to `monads`, the code would look _nearly identical_ to the `lodash` solutions we already covered in the previous chapter.  This illustrates both how useful `lodash` can be (when curried and composed properly) and how powerful the `monad` concept is.
+
+This would, could, have been a place to introduce `monad`s.  _However_, before I take you, dear reader, down that rabbit hole, I realize that we've left wholly untouched (thus far) the concept of _reactive programming_.  You will encounter this, and _reactive frameworks_ exist in a myriad of languages, which is to say: before we get further into _functional programming_, it's probably a good idea to introduce _reactive programming_.
+
+To that end, we revisit our old friend, `FizzBuzz` and solve it using [`rxjs`](https://rxjs-dev.firebaseapp.com/).  While we will use the same concepts, to mechanically pull apart the logic, we will be introducing some ideas unique to `rxjs`.
+
+This chapter is _much_ longer than the first if not so in text it certainly is in terms of examples, so be forewarned and, as they say, "buckle up, Buttercup!"
 
 [Table of Contents](/README.md#table-of-contents)
 
