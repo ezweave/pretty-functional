@@ -1,4 +1,4 @@
-# Chapter 3: Style
+# Chapter 3: An Introduction to Lambda Calculus 
 
 ![lambda](/static/images/lambda_graf.png)
 
@@ -21,7 +21,6 @@ We're sitting at one of my favorite bar tops in Denver ([Steuben's](https://www.
 >
 > Your author: A lamb, duh!
 
-Of course, I am also a "secret redneck" from Alberta and my family did, at one point, move from raising cattle to sheep and the market term for that is "lamb" so the joke... kind of works?  Or not.  Even if you don't eat meat, I will say that using the term "mutton" to refer to [sheep meat](https://en.wikipedia.org/wiki/Lamb_and_mutton) isn't normal.  Unless you're stuck in a Dickensian novel (or from the UK).
 
 [To be fair](https://www.youtube.com/watch?v=E55t0lnp_8M), we've barely scratched the surface of functional programming.  We've barely scratched the surface of even "pretty functional" programming.  ~We've looked at~ I've ranted about a few things with `lodash` and `rxjs` and hinted at things to come (ahem, monads), but this chapter is a bit of a breather to just discuss... style.
 
@@ -97,7 +96,57 @@ Truth be told, despite my experiences in languages like LISP and Haskell, what _
 
 There's a great deal that could be mined there, and largely for our purposes that's best left as an abstract exercise (or something for you to do without my guidance).
 
-Now because this chapter is, first and foremost, about _style_ I'm going to abandon the discussion of lambda calculus (there's a whole chapter on it) to talk about that.
+While we've touched, basically, on _what_ a &lambda; is, we've eschewed formal definitions... until now.
+
+[Top](#introduction)
+
+# Defining a Lambda
+
+More concretely, _lambda calculus_ is a formal, mathematical system for expressing computation.  It won't surprise you to know that in lambda calculus we are trying to express functions and then recomposing those functions to do useful things.
+
+The simpler answer is: "how do we define functions mathematically?"  The goal, goes back to a paper written by the American mathematician [Alonzo Church](https://en.wikipedia.org/wiki/Alonzo_Church) in 1936.  It stems back to an attempt to solve [Alan Turing](https://en.wikipedia.org/wiki/Alan_Turing)'s ["halting problem"](https://en.wikipedia.org/wiki/Halting_problem).  This resulted in what is now known as the "Church-Turing thesis" and can be described as follows:
+
+>The Church-Turing thesis concerns the concept of an effective or systematic or mechanical method in logic, mathematics and computer science. ‘Effective’ and its synonyms ‘systematic’ and ‘mechanical’ are terms of art in these disciplines: they do not carry their everyday meaning. A method, or procedure, _M_, for achieving some desired result is called ‘effective’ (or ‘systematic’ or ‘mechanical’) just in case:
+>
+>_M_ is set out in terms of a finite number of exact instructions (each instruction being expressed by means of a finite number of symbols);
+>_M_ will, if carried out without error, produce the desired result in a finite number of steps;
+>_M_ can (in practice or in principle) be carried out by a human being unaided by any machinery except paper and pencil;
+>_M_ demands no insight, intuition, or ingenuity, on the part of the human being carrying out the method.
+<sup>[1](#church-turing-thesis)</sup>
+
+The _larger_ concern at play is encapsulated in Alan Turing's quest to solve the halting problem (to put it shortly: whether or not a given sequence of instructions _can be proven_ to stop or halt).  Now, we can go into this further, but for trivial pieces of code one can easily do this by observation.  However, for anything significant, it is computationally impossible to ensure that a program stops.  Obviously, you can look at a given function and say "of course it stops" but if we try to build that function as a [Turing machine]() we can't easily guarantee that it will stop.  In fact, we can't guarantee that it will.  While JavaScript (and TypeScript as a decorator language) is [Turing complete]() remember that a Turing Machine is a _simple_ construct.
+
+In fact, in a very _ouroboros_ way, people have written [Turing machines in JavaScript](https://gist.github.com/azproduction/1400509).
+
+<p align="center">
+ <img src="/static/images/ouroboros.png"/>
+</p>
+
+Within this milieu we can say this:
+
+* An __expression__ is either a variable, an abstraction, or a function application.
+
+Of course, we should define these things more concretely.  Examine the following table:
+
+| Concept | &lambda; | TypeScript |
+| --- | ---| --- |
+| __variable__ | x | `const x` |
+| __abstraction__ | &lambda;x.x |  `const identity = x => x` |
+| __function application__ | &lambda;x.x 100 | `identity(5) * 100` |
+
+You're probably familiar with these constructs, as we've been doing this frequently in the previous chapters.  The __identity function__ is an important concept in &lambda; calculus but it's trivial to write in TypeScript:
+
+```js
+const identityFunction = x => x
+```
+
+Nothing radical going on there.  In _mathematics_ the identity function just returns itself.
+
+> Are you 5?
+>
+> Yes, I am 5.
+
+Now, one differentiation 
 
 [Top](#introduction)
 
@@ -247,3 +296,5 @@ This, of course, is a _toy problem_ to the utmost, but I hope you can see what I
 # Too Personal
 
 [Top](#introduction)
+
+<a name="church-turing-thesis">1</a>: https://plato.stanford.edu/entries/church-turing/#ThesHist
