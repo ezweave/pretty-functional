@@ -9,8 +9,9 @@
 There's a few things to just get out of the way that I've _mostly_ left untouched, by design, because I wanted to get a little further into our relationship.  (_Yes, I can see you, please put your pants back on._)  Some of that is some controversy around nomenclature, some slick things I've introduced with TypeScript that I've not really expounded upon, and the whole emphasis on testing that I think is fundamental to good "pretty functional" programming.
 
 But before we get into _any_ of this, let me be clear: this entire chapter is pretty heavy on the _caveat emptor_ "your author has strong opinions" nonsense.  So much so that the alternate title for this, borrows from Abe Simpson:
-
+<p align="center">
 ![old man yells at cloud](/static/images/abe_simpson.png)
+</p>
 
 - [Lambda Lambda Lambda](#lambda-lambda-lambda)
 - [Summary](#summary)
@@ -79,6 +80,6 @@ There's a great deal that could be mined there, and largely for our purposes tha
 
 Now because this chapter is, first and foremost, about _style_ I'm going to abandon the discussion of lambda calculus (there's a whole chapter on it) to talk about that.
 
-I said it in [Chapter 1]() but I really, really try to avoid using the `function` keyword.  To me, it smacks too much of "the old way" of doing things.  I know that's a sort of "stick it up your ass grandpa!" attitude, but as we saw with the exercises in `lodash` the syntactic sugar afforded by fat arrow functions makes life a great deal easier.  Sadly, TypeScript isn't quite that hip and sometimes requires you to add typing that you really shouldn't need (it's not nearly as sophisticated of a static analyzer as something like [Clang](https://clang-analyzer.llvm.org/))
+I said it in [Chapter 1]() but I really, really try to avoid using the `function` keyword.  To me, it smacks too much of "the old way" of doing things.  I know that's a sort of "stick it up your ass grandpa!" attitude, but as we saw with the exercises in `lodash` the syntactic sugar afforded by fat arrow functions makes life a great deal easier.  Sadly, TypeScript isn't quite that hip and sometimes requires you to add typing that you really shouldn't need (it's not nearly as sophisticated of a static analyzer as something like [Clang](https://clang-analyzer.llvm.org/)).
 
 [Top](#introduction)
