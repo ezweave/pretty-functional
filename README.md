@@ -232,6 +232,16 @@ A few things to consider:
 * You will learn enough to be dangerous.  Do I consider myself an expert in _any_ discipline of Computer Science?  To be blunt, hell no.  Writing this has been a good refresher for your author and it should be good for you, but it is far from complete.  There is no such thing as "complete" in any remotely scientific discipline.  There is only the earnest need to improve and expand.
 * This is just a tool.  There are many ways to skin a cat (or [four](https://www.youtube.com/watch?v=cUcjn1CuRZI), RIP [Harris](https://en.wikipedia.org/wiki/Harris_Wittels)).  Getting familiar with something makes you more inclined to use it.
 
+That last point is _very_ important.  Something that can be as _inscrutable_ (or even worse, something you "think" you understand but really don't) leads to __fear__ and that leads to poor implementation and practice.
+
+To put it another way, let me quote from the IDLES' song ["Danny Nedelko"](https://www.youtube.com/watch?v=QkF_G-RF66M):
+
+![stream](/static/images/idles.png)
+
+While that's about _much larger problems with the world_ it applies to something like _functional programming_ as well.
+
+_And not that you'd ask, because they're "most amateur", but yes, I did all the illustrations for this book._
+
 [Table of Contents](#table-of-contents)
 
 # This Is How We Do It
