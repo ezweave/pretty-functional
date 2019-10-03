@@ -2,21 +2,22 @@ import {
   Observable,
   range,
   zip,
-  timer,
   from
 } from 'rxjs'
 
 import {
   map,
   reduce,
-  tap,
-  take,
-  concatMap
+  tap
 } from 'rxjs/operators'
 
 import {
- ajax
+ ajax, 
+ AjaxResponse
 } from 'rxjs/ajax'
+
+import { buildGetRequest } from '../../util/jestableAjax'
+
 /**
  * Normally you would not mix Promises in with rxjs,
  * this is done to make it easier to test.
@@ -75,123 +76,48 @@ export const capitalizeEveryNthWord = (
   n: number
 ) => (
   sentence: string
-) => new Promise<string>(resolve => from(sentence).pipe(
+) => new Promise<string>(resolve => from(
+    sentence.split(' ')
+  ).pipe(
     tap(x => console.log('DO SOMETHING WITH THIS', x))
   ).subscribe(
     resolve
   )
 )
 
-interface WeatherOverview {
- description: string
- icon: string
- id: number
- main: string
-}
-
-interface Wind {
- deg: number
- speed:number
-}
-
-interface Sun {
- country: string
- id: number
- message: number
- sunrise: number
- sunset: number
- type: number
-}
-
-interface Main {
- humidity: number
- pressure: number
- temp: number
- temp_max: number
- temp_min: number
-}
-
-interface Coordinates {
- lat: number
- lon: number
-}
-
-interface Clouds {
- all: number
-}
-
-interface WeatherData {
- base: string
- clouds: Clouds
- cod: number
- coord: Coordinates
- dt: number
- id: number
- main: Main
- name: string
- sys: Sun
- timezone: number
- visibility: number
- weather: WeatherOverview[]
- wind: Wind
-}
-
-interface SimplifiedWeatherData {
- location: string
- sunrise: string
- sunset: string
- temperature: string
- time: string
-}
-
-const convertUTCSecondsToLocalTime = (
- epochTimeInMS: number
-) => {
- const date = new Date(0)
- date.setUTCSeconds(epochTimeInMS)
- return date.toString()
-}
-
-const kelvinToF = (
- kelvin: number
-) => 9/5 * (kelvin - 273.5)  + 32
-
-export const subscribeToWeather = (
-  zipCode: number,
-  timeInSeconds: number,
-  attempts: number = 5,
-  apiKey: string = '' // insert your key here 
- ): Promise<SimplifiedWeatherData[]> => new Promise<SimplifiedWeatherData[]>(
-  (resolve, reject) => timer(0, timeInSeconds * 1000).pipe(
-   take(attempts),
-   tap(x => console.log('Requesting weather data...', x)),
-   concatMap(
-     x => ajax.getJSON<WeatherData>(
-       `https://api.openweathermap.org/data/2.5/weather?zip=${zipCode},us&appid=${apiKey}`
-     )
-   ),
-   map(
-    ({
-     name: location,
-     sys: {
-       sunrise,
-       sunset
-     },
-     main: {
-      temp: degreesKelvin
+/**
+ * This is a very easy problem, but I'm leaving less of it filled in.
+ * 
+ * Similar to one of our examples, I want you to do some clever inner Observable
+ * things to generate the chorus to the classic Jawbreaker song "Boxcar"
+ * 
+ * You will need to setup an account with the genius api and you
+ * will need to obtain an access token. https://docs.genius.com/
+ * 
+ * For extra credit, you can _request_ a token programmatically (see
+ * https://docs.genius.com/#/authentication-h1), but the tokens live for a while, so
+ * you shouldn't need to for the purposes of this exercise.
+ * 
+ * NOTE: we're using a utility function I wrote to handle the token and prevent
+ * CORS issues when running through jest.  Under the hood it is just the ajax
+ * operator with some header love.  It also puts the token in the right spot,
+ * but feel free to look at the source.
+ */
+export const boxcar = () => new Promise<string>(
+  (resolve, reject) => ajax(
+    buildGetRequest(
+      'https://api.genius.com/songs/551669',
+      '//put your token here' 
+    )
+  ).pipe(
+   map(({
+     response: {
+       response: {
+         song: {
+           media
+         }
+       }
      }
-    }: WeatherData) => ({
-      location,
-      sunrise: convertUTCSecondsToLocalTime(sunrise),
-      sunset: convertUTCSecondsToLocalTime(sunset),
-      temperature: kelvinToF(degreesKelvin),
-      time: new Date().toString()
-    })
-  ),
-  reduce(
-    (results, curr) => results.concat(curr),
-    []
-   )
+   }: AjaxResponse) => media[0].url)
   ).subscribe(resolve, reject)
- )
- 
+)

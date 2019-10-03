@@ -1,5 +1,5 @@
 import {
-  fizzBuzz, subscribeToWeather, capitalizeEveryNthWord
+  fizzBuzz, capitalizeEveryNthWord, boxcar
 } from './exerciseTwo'
 
 describe('Exercise Two tests', () => {
@@ -45,13 +45,19 @@ describe('Exercise Two tests', () => {
       })
     })
   })
-  describe('subscribeToWeather', () => {
-    it('Should get the weather', async (done) => {
-      expect.assertions(1)
-      jest.setTimeout(60000)
-      const results = await subscribeToWeather(80204, 10)
-      console.log(results)
-      done()
+  describe('Boxcar tests', () => {
+    describe('boxcar', () => {
+      it('Get me some data about this song!', async (done) => {
+        expect.assertions(1)
+        boxcar().then(songData => {
+          console.log(songData)
+          expect(songData).not.toEqual('http://www.youtube.com/watch?v=37dBq_4TsZI')
+          done()
+        }).catch(error => {
+          console.error(error)
+          done()
+        })
+      })
     })
   })
 })
