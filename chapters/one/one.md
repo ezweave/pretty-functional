@@ -17,11 +17,9 @@
 
 [Table of Contents](/chapters/table_of_contents.md)
 
-I won't lie to you, dear reader.  I love a good academic tome.  I love theory and abstract concepts.  Learning a few basic things about limits and building up to integrals, that sort of thing.  _However_, time has taught me that while this is fun within the confines of academia, it's a bit hard for some folks to _grok_.  
+There _is_ a whole way of viewing functional programming through the lens of [_lambda calculus_](https://en.wikipedia.org/wiki/Lambda_calculus), but we aren't there yet.  While your author certainly loves to talk about math (or pretend he knows anything about the subject), this book aims to be a bit more practical and start by _building confidence_ in a few basic ideas and a very different way of looking at data.  You've probably surmised as much already, given the quite "casual" tone of the text thus far.
 
-There _is_ a whole way of viewing functional programming through the lens of [_lambda calculus_](https://en.wikipedia.org/wiki/Lambda_calculus), but we aren't there yet.  While your author certainly loves to talk about math (or pretend he knows anything about the subject), this book aims to be a bit more practical and start by _building confidence_ in a few basic ideas and a very different way of looking at data.
-
-This, of course, has benefits for you.  So the focus of the first chapter won't be to delve into more esoteric operators, which you find in `ramda` and `lodash/fp` or introduce you to the most digestible _monads_ from `monet` (there is a joke about writing blog posts on monads as a rite of passage for functional programmers).  We won't even jump into the _streaming_ concept you would get with `rxjs`.
+This, of course, has benefits for you.  Because the focus of the first chapter won't be to delve into more esoteric operators, which you find in `ramda` and `lodash/fp` or introduce you to the most digestible _monads_ from `monet` (there is a joke about writing blog posts on monads as a rite of passage for functional programmers).  We won't even jump into the _streaming_ concept you would get with `rxjs`.
 
 This will be pure and concrete demonstration of functional ideas using the humble `lodash` library.  You can write functional code with `lodash`?  Absolutely.
 
@@ -36,6 +34,7 @@ On with the show!
 For now, let's just call _everything_ a function.  Beyond that, there are some other terms bandied about: _higher order functions_, _anonymous functions_, and many more.  These terms are useful to know, but I don't want to delve too deeply into the nuances between all of those terms.  I'm just going to talk about functions.
 
 [Top](#introduction)
+
 [Table of Contents](/chapters/table_of_contents.md)
 
 # What Is A Function?
@@ -179,6 +178,7 @@ Let's write some code that introduces these concepts.  In fact, let's start with
 There's a [few ways to skin this cat.](https://youtu.be/cUcjn1CuRZI?t=45)
 
 [Top](#introduction)
+
 [Table of Contents](/chapters/table_of_contents.md)
 
 ## The Imperative Approach
@@ -669,6 +669,7 @@ You're already starting "the dance."  This P.R. is from someone _thinking_ about
 But those ternary operators...
 
 [Top](#introduction)
+
 [Table of Contents](/chapters/table_of_contents.md)
 
 ## Another Functionalish Approach
@@ -783,6 +784,7 @@ This is an important concept as in the third chapter, when we start looking at _
 For the purposes of introducing some of these concepts, the "Mark 2" solution is really best and what I would rather see.  The last solution is really just to demonstrate just how differently you can approach this problem.
 
 [Top](#introduction)
+
 [Table of Contents](/chapters/table_of_contents.md)
 
 # Functional Recursion
@@ -1081,6 +1083,7 @@ __I've really only touched on recursion__, as that's not the focus of this book.
 It's a damn shame that PTCs aren't widely supported.
 
 [Top](#introduction)
+
 [Table of Contents](/chapters/table_of_contents.md)
 
 # Summary
@@ -1128,4 +1131,5 @@ Of course, you can _read_ the tests.  I just don't want you to [Kobayashi Maru](
 Then, when you feel you are ready... [Chapter 2: Events in the Stream](/chapters/two/two.md) awaits.
 
 [Top](#introduction)
+
 [Table of Contents](/chapters/table_of_contents.md)
