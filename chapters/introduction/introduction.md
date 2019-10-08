@@ -174,7 +174,9 @@ In common English usage, "pretty" is used to describe beauty.  Quite literally i
 
 You might say of a Jaguar Series I E-Type: "That's a rather pretty car."
 
-![E-Type](static/images/pretty_functional_etype.png)
+<p align="center">
+ <img src="/static/images/pretty_functional_etype.png"/>
+</p>
 
 You might read a [poem by Rainier Maria Rilke](https://poets.org/poem/i-am-much-too-alone-world-yet-not-alone) and say "That's a pretty poem." Or perhaps listen to the entirety of [Jeff Mangum's opus](https://open.spotify.com/album/5COXoP5kj2DWfCDg0vxi4F?si=EmAiAqvQTke2rpwIgXVlOA) and remark "What a pretty concept."
 
@@ -192,7 +194,9 @@ I hope the concepts and exercises herein inspire the same sort of desire within 
 
 # Lego All Over the Floor
 
-![Lego](/static/images/lego.png)
+<p align="center">
+ <img src="/static/images/lego.png"/>
+</p>
 
 As a child of the Western world I'm sure that you are at least familiar with Lego brand building blocks.  If you've any experience with said blocks you know that despite attempts at organization a child's Lego collection quickly becomes relegated to giant bins that, while they may have some loose ordering ("Space" in here), they will inevitably be dumped upon the floor and pieces will be picked through to find "that one part they swear they had" for whatever project they are undertaking.  For your author, attempts were made to keep parts sorted in a giant, olive drab Plano fishing tackle box that quickly became inadequate for the sheer volume of Lego I acquired.  If you play with Lego, especially if you're a child, you will dump it all over the floor and spend hours scrounging about for, say, a red 1x1.  It happens.
 
@@ -282,7 +286,9 @@ That last point is _very_ important.  Something that can be as _inscrutable_ (or
 
 To put it another way, let me quote from the IDLES' song ["Danny Nedelko"](https://www.youtube.com/watch?v=QkF_G-RF66M):
 
-![stream](/static/images/idles.png)
+<p align="center">
+ <img src="/static/images/idles.png"/>
+</p>
 
 While that's about _much larger problems with the world_ it applies to something like _functional programming_ as well.
 
