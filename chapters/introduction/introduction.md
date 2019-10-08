@@ -58,7 +58,8 @@ Lots of flipping back to earlier sections, lots of trying to understand what you
  <img src="/static/images/scared.png"/>
 </p>
 
-So my approach is different.  (Maybe.)  I wanted to assume that you _are_ some kind of programmer and you already understand a bit of JavaScript or TypeScript (the language I'm using, though it isn't really a "language" but that's another discussion).  I will elaborate on this, but I want to introduce _enough_ of the basics of "functional programming" with some concrete examples, before I try to get into the math (or "maths" for the UK folks).  
+So my approach is different.  (Maybe.)  I wanted to assume that you _are_ some kind of programmer and you already understand a bit of JavaScript or TypeScript (the language I'm using, though it isn't really a "language" but that's another discussion).  I will elaborate on this, but I want to introduce _enough_ of the basics of "functional programming" with some concrete examples, before I try to get into the math (or "maths" for the UK folks). 
+
 You'll find that after this introduction, we jump right into some code and we keep writing code and only after you're got some exposure to the style of functional programming I will explain shortly, do we start getting to the "mathy" bits.  At least we can be on the same, perhaps "wrong", page.
 
 At worst, you will find my text both tedious and amateurish and you'll laugh at the author's naiveity.  At best, we will be somewhat on the same page when I try to explain what:
