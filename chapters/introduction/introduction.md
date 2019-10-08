@@ -292,7 +292,7 @@ To put it another way, let me quote from the IDLES' song ["Danny Nedelko"](https
 
 While that's about _much larger problems with the world_ it applies to something like _functional programming_ as well.
 
-_And not that you'd ask, because they're "most amateur", but yes, I did all the illustrations for this book._
+__And not that you'd ask, because they're "most amateur", but yes, I did all the illustrations for this book save for the xkcd one about parens and LISP.__
 
 [Top](#introduction)
 
