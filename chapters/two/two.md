@@ -23,7 +23,8 @@ To that end, we revisit our old friend, `FizzBuzz` and solve it using [`rxjs`](h
 
 This chapter is _much_ longer than the first if not so in text it certainly is in terms of examples, so be forewarned and, as they say, "buckle up, Buttercup!"
 
-[Table of Contents](/README.md#table-of-contents)
+[Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
 
 # Reactive Programming
 
@@ -197,6 +198,7 @@ This is one of the main concerns with __reactive programming__.  You can't just 
 But to understand why this is important, you're going to have to understand what we mean by "stream".  And for that... we must dive in!
 
 [Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
 
 # WTF Is a Stream?
 
@@ -330,6 +332,7 @@ My trivial example in the last section?  It's not that _far_ from the truth.  Th
 _NOTE: to aid in explaining the concepts we're describing, I am explicitly typing the `const` values as `Observable<T>`.  In practice, you should be able to infer this, or your IDE will._
 
 [Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
 
 # Observables
 
@@ -447,6 +450,7 @@ The _difference_ is that when we create the `Observable` ourselves, we can direc
 For all intents and purposes when we say "stream" we are really talking about a "stream" that comes from an `Observable`, really it _starts_ with one `Observable`.  Rarely do you end up creating streams in any other fashion and, for the purposes of what we are doing in this chapter, we can really just use `Observable` to mean anything pulled using the `from` operator.  In fact, _technically speaking_ (pushes up glasses), `from` creates an `Observable` as we have seen.  The difference is just that if you make one _explicitly_ you can better control when it emits on the resulting stream.  As long as that is _somewhat_ clear, just think of an `Observable` as a "streaming thing".  We will end up getting `Observable`s in a myriad of ways moving forward and you just have to remember that it's just gonna "chuck some shit in the stream" and you'll have to deal with it.  An `Observable` is a stream or it is feeding a stream an "outer" `Observable` created and most streams come from `Observable`s.
 
 [Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
 
 # There Can Be Only One (Stream)
 
@@ -678,6 +682,7 @@ Take a look [at the code](https://codepen.io/ezweave/pen/LYPwwPd) and add anythi
 An alternate title for this section was going to be "many `Observable`s, one stream" but it wasn't very funny.
 
 [Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
 
 # Fizz Buzz
 
@@ -927,6 +932,7 @@ I hope that the notion of what a `stream` is and the _push_ behavior of an `Obse
 Feel free to [explore the solution](https://codepen.io/ezweave/pen/vYBzBvJ).
 
 [Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
 
 # Async Operations 
 
@@ -1171,6 +1177,9 @@ But let's talk about that in a bit.
 
 As far as [this solution](https://codepen.io/ezweave/pen/OJLBBVN) goes (and you will have to obtain your own api key to make it work) the _flow_ is important to understand.  I'm hand waving what _exactly_ we're doing with that `ajax.getJSON` call within the `switchMap`, but I think you can see that the _output_ is weather data, as you would expect.
 
+[Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
+
 # The Treasure of Maps
 
 In the weather API example, we used the `concatMap` operator, but there are _three_ special map operators in the `rxjs` world:
@@ -1300,6 +1309,7 @@ Let's recap what we've talked about, with regards to map operators:
 * Most problems end up with either a `mergeMap` or a `switchMap` solution.  Be sure you pick the best one for your application.
 
 [Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
 
 # Error Handling
 
@@ -1476,6 +1486,7 @@ concatMap(
 In this case, we will just get repeated logs that say "ajax error" and not much else.  We aren't making a new `Observable` here, we're just eating the errors.  That may or may not be "bad for business" but it demonstrates that you _can_ handle those errors in the `Observable` created by `ajax.getJSON`.  If you fix the URL, this will just work.  We might _want_ to create a new stream and thus a new emission that wraps that error message (which means we have to handle it later in the `map`), but that should be _rather obvious_ at this point.  The important piece is that now, you can handle the error and the stream won't suddenly "die of mysterious circumstances".
 
 [Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
 
 # Summary
 
@@ -1494,6 +1505,7 @@ Now, I'd be remiss if I didn't mention the "History of Reactive Programming" bef
 That said, even if you're not feeling, uh... very... "pretty functional" yet, you've learned enough about `rxjs` to be rather dangerous.
 
 [Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
 
 # Exercises
 
@@ -1509,5 +1521,7 @@ I'll wax poetic about that one, a bit.  For the uninitiated, one of the greatest
 
 You will notice that the examples are wrapped in `Promise`s.  This is not really how you would use `rxjs` (though nothing can stop you) and is really done just to facilitate testing.  I've also included an `rxjs` based solution to `FizzBuzz`, which we've already covered.
 
+Now, if you've managed all of the exercises, perhaps it's time for a [double helping of Chapter 2](/chapters/two/two.md)
+
 [Top](#introduction)
-[Table of Contents](/README.md#table-of-contents)
+[Table of Contents](/chapters/table_of_contents.md)

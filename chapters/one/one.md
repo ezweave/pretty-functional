@@ -1,4 +1,4 @@
-# Chapter 1: Pretty Fizzy
+# Chapter 1: Pretty Fizzy With Lodash
 
 ![lodash](/static/images/lodash.png)
 
@@ -15,7 +15,7 @@
 - [Summary](#summary)
 - [Exercises](#exercises)
 
-[Table of Contents](/README.md#table-of-contents)
+[Table of Contents](/chapters/table_of_contents.md)
 
 I won't lie to you, dear reader.  I love a good academic tome.  I love theory and abstract concepts.  Learning a few basic things about limits and building up to integrals, that sort of thing.  _However_, time has taught me that while this is fun within the confines of academia, it's a bit hard for some folks to _grok_.  
 
@@ -36,6 +36,7 @@ On with the show!
 For now, let's just call _everything_ a function.  Beyond that, there are some other terms bandied about: _higher order functions_, _anonymous functions_, and many more.  These terms are useful to know, but I don't want to delve too deeply into the nuances between all of those terms.  I'm just going to talk about functions.
 
 [Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
 
 # What Is A Function?
 
@@ -146,6 +147,7 @@ const decorator = (
 You will really see how handy this is, very, very soon.
 
 [Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
 
 # Three Key Concepts
 
@@ -166,6 +168,7 @@ A __pure function__ is one that doesn't modify any values outside of its scope. 
 Lastly, __currying__, I talked about _closures_ and _currying_ is really utilizing the JavaScript notion of a closure to capture variables at different stages.  This is also called _capturing lexical state_.  This is a very powerful, very useful tool in functional programming.
 
 [Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
 
 # Functional FizzBuzz
 
@@ -176,6 +179,7 @@ Let's write some code that introduces these concepts.  In fact, let's start with
 There's a [few ways to skin this cat.](https://youtu.be/cUcjn1CuRZI?t=45)
 
 [Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
 
 ## The Imperative Approach
 
@@ -255,6 +259,7 @@ So how would we change this?
 
 
 [Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
 
 ## Functionalish Approach
 
@@ -584,10 +589,11 @@ const foo: (x: number) => void = console.log
 
 I _prefer_ the last iteration because it's more true to the _functional_ paradigm and it gets you to think of functions as first class constructs.  I know I'm dealing with a function and don't need to _capture_ the `x` for any reason.  At the end of the day, programmers are not writing data directly to a computer.  You're not inserting carefully curated, artisanal integers into registers or anything like that.  We're _kind of_ just glorified typists.  It's a fun way to introduce yourself at parties.
 
-> Friend of a Friend (FOF): So what do you do for work?
-You: I type all day.  Sometimes I swear.
-FOF: Oh... okay... 
-_walks away slowly, doesn't bother you with their brilliant idea for a mobile application_
+>>Friend of a Friend (FOF): So what do you do for work?
+>>
+>>You: I type all day.  Sometimes I swear.
+>>
+>> FOF: Oh... okay... _walks away slowly, doesn't bother you with their brilliant idea for a mobile application_
 
 Now, before we talk about how we might _ditch_ the ternary operator, let's look at the whole shebang again:
 
@@ -663,6 +669,7 @@ You're already starting "the dance."  This P.R. is from someone _thinking_ about
 But those ternary operators...
 
 [Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
 
 ## Another Functionalish Approach
 
@@ -776,6 +783,7 @@ This is an important concept as in the third chapter, when we start looking at _
 For the purposes of introducing some of these concepts, the "Mark 2" solution is really best and what I would rather see.  The last solution is really just to demonstrate just how differently you can approach this problem.
 
 [Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
 
 # Functional Recursion
 
@@ -1073,6 +1081,7 @@ __I've really only touched on recursion__, as that's not the focus of this book.
 It's a damn shame that PTCs aren't widely supported.
 
 [Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
 
 # Summary
 
@@ -1116,5 +1125,7 @@ jest chapters/one/exerciseOne.spec.ts
 
 Of course, you can _read_ the tests.  I just don't want you to [Kobayashi Maru](https://en.wikipedia.org/wiki/Kobayashi_Maru) them, because then you learn nothing and Gene Wilder as Willy Wonka won't let you take over the factory.  Stretch that brain, do it differently.  Play around.
 
+Then, when you feel you are ready... [Chapter 2: Events in the Stream](/chapters/two/two.md) awaits.
+
 [Top](#introduction)
-[Table of Contents](/README.md#table-of-contents)
+[Table of Contents](/chapters/table_of_contents.md)
