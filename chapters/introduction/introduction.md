@@ -182,9 +182,9 @@ You might read a [poem by Rainier Maria Rilke](https://poets.org/poem/i-am-much-
 
 There is this longing, perhaps in you, but certainly in me, to make something _beautiful_.  It's not unlike Plato's concept of [the Forms](https://study.com/academy/lesson/the-theory-of-forms-by-plato-definition-lesson-quiz.html).  Even in a very small, tactical and practical way, I know that for any given problem I face as a programmer, there is a _better_ way to solve it.  There is a solution that is, in some almost indescribable way, more elegant.  Almost, but not quite, beautiful.
 
-As I grow older and spend more time with various frameworks, languages, and paradigms, my skills are ever evolving.  Code I've written even as little as a week ago, often looks somehow uglier than I remember.  I know that _I can always do better_.
+As I grow older and spend more time with various frameworks, languages, and paradigms, my skills are ever evolving.  Code I've written even as little as a week ago, often looks somehow uglier than I remember.  I know that __I can always do better__.
 
-So in this very real, yet hardly quantifiable way, _pretty functional_ is appropriate with regards to both my level of mastery (enough to be dangerous) and my endless yearning to write that perfect function... one day, one day.
+So in this very real, yet hardly quantifiable way, __pretty functional__ is appropriate with regards to both my level of mastery (enough to be dangerous) and my endless yearning to write that perfect function... one day, one day.
 
 I hope the concepts and exercises herein inspire the same sort of desire within you.
 
@@ -208,7 +208,7 @@ You can plan around it, try to break it up into stories, but you will, _inevitab
 
 As you get _pretty functional_, you will probably get Lego all over the place.  Only now, you can better organize those piles, as you will see and now, when your author uses that phrase, you will understand, on some level, what I mean.  And like your author as a frustrated twenty year old, trying to learn Scheme, this might just be the best way for you to understand what _exactly_ is going on.
 
-Now, you can extend this metaphor because, if you've been in a room where Lego has been "dumped all over the floor" you probably have also stepped on a piece of it barefooted and know that there is a special pain, an immediate sensation of anger and frustration, accompanying brick based _impetum pede_.  
+Now, you can extend this metaphor because, if you've been in a room where Lego has been "dumped all over the floor" you probably have also stepped on a piece of it barefooted and know that there is a special pain, an immediate sensation of anger and frustration, accompanying brick based __impetum pede__.  
 
 Like many things in life, functional programming can be "easy to say, hard to do."
 
@@ -282,7 +282,7 @@ A few things to consider:
 * You will learn enough to be dangerous.  Do I consider myself an expert in _any_ discipline of Computer Science?  To be blunt, hell no.  Writing this has been a good refresher for your author and it should be good for you, but it is far from complete.  There is no such thing as "complete" in any remotely scientific discipline.  There is only the earnest need to improve and expand.
 * This is just a tool.  There are many ways to skin a cat (or [four](https://www.youtube.com/watch?v=cUcjn1CuRZI), RIP [Harris](https://en.wikipedia.org/wiki/Harris_Wittels)).  Getting familiar with something makes you more inclined to use it.
 
-That last point is _very_ important.  Something that can be as _inscrutable_ (or even worse, something you "think" you understand but really don't) leads to __fear__ and that leads to poor implementation and practice.
+That last point is _very_ important.  Something that seems _inscrutable_ (or even worse, something you "think" you understand but really don't) leads to __fear__ and that leads to poor implementation and practice.
 
 To put it another way, let me quote from the IDLES' song ["Danny Nedelko"](https://www.youtube.com/watch?v=QkF_G-RF66M):
 
