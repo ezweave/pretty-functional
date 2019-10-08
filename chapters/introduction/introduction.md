@@ -26,7 +26,7 @@ All of that aside, I've tried to account for _heavily_ biased (to say nothing of
 </p>
 
 [Top](#introduction)
-[Table of Contents](#table_of_contents.md)
+[Table of Contents](/chapters/table_of_contents.md)
 
 # Why Write a Book?
 
@@ -70,7 +70,8 @@ Means.
 Or not.  There is a _great deal_ of content on the Internet.  This is probably the _least_ entertaining bit.
 
 [Top](#introduction)
-[Table of Contents](#table_of_contents.md)
+
+[Table of Contents](/chapters/table_of_contents.md)
 
 # Background
 
@@ -143,7 +144,8 @@ It's really about "breaking your brain" and re-learning how to solve a problem a
 Break your brain.  
 
 [Top](#introduction)
-[Table of Contents](#table_of_contents.md)
+
+[Table of Contents](/chapters/table_of_contents.md)
 
 # Pretty Functional
 
@@ -185,7 +187,8 @@ So in this very real, yet hardly quantifiable way, _pretty functional_ is approp
 I hope the concepts and exercises herein inspire the same sort of desire within you.
 
 [Top](#introduction)
-[Table of Contents](#table_of_contents.md)
+
+[Table of Contents](/chapters/table_of_contents.md)
 
 # Lego All Over the Floor
 
@@ -206,7 +209,8 @@ Now, you can extend this metaphor because, if you've been in a room where Lego h
 Like many things in life, functional programming can be "easy to say, hard to do."
 
 [Top](#introduction)
-[Table of Contents](#table_of_contents.md)
+
+[Table of Contents](/chapters/table_of_contents.md)
 
 # Panacea 
 
@@ -224,7 +228,7 @@ In some ways, the approach I have found to be most practical for Functional Prog
 And, lastly, if nothing else, learning a new paradigm like FP will open new pathways in your brain and change how you approach problem solving.  In some very real ways, it has the potential to "expand your mind."
 
 [Top](#introduction)
-[Table of Contents](#table_of_contents.md)
+[Table of Contents](/chapters/table_of_contents.md)
 
 # Toy Problems Versus Real Problems
 
@@ -249,7 +253,8 @@ The most rewarding thing in _attempting_ to teach anyone, is to:
 We start with the toys, because they are actually kind of fun (in my opinion) and move onto some hairy, real world situations.  I have often found that the jump from _toy_ to _day job_ problems highlight some deficiency in my own knowledge and... it can often be hard to bridge the two.  Nothing is worse than having someone say "good book, but I can't use any of this bollocks at work."  Together, we can ~save humanity~ try to avoid that mess.
 
 [Top](#introduction)
-[Table of Contents](#table_of_contents.md)
+
+[Table of Contents](/chapters/table_of_contents.md)
 
 # whoami 
 
@@ -284,7 +289,8 @@ While that's about _much larger problems with the world_ it applies to something
 _And not that you'd ask, because they're "most amateur", but yes, I did all the illustrations for this book._
 
 [Top](#introduction)
-[Table of Contents](#table_of_contents.md)
+
+[Table of Contents](/chapters/table_of_contents.md)
 
 # This Is How We Do It
 
@@ -305,7 +311,8 @@ If you find any mistakes or want to make a correction, also feel free to submit 
 But to get started, I would suggest moving on to [Chapter 1: Pretty Fizzy with Lodash](/chapters/one/one.md)
 
 [Top](#introduction)
-[Table of Contents](#table_of_contents.md)
+
+[Table of Contents](/chapters/table_of_contents.md)
 
 # Additional Resources
 
@@ -316,4 +323,5 @@ I'm hardly the inventor of functional programming, or functional programming in 
 * [RxJS in Action](https://www.manning.com/books/rxjs-in-action): while the resources available on [_Learn RxJS_](https://www.learnrxjs.io/) are useful, it assumes some _a priori_ knowledge that you're unlikely to have (though hopefully that is less true after you finish this book).  The underlying concepts of rxjs are kind of glossed over in some of the online documentation and a few tools, like `redux-observable` operate so entirely on rxjs streams that if you _don't_ understand it well enough, you will hit roadblocks when attempting to solve real world problems almost immediately.
 
 [Top](#introduction)
+
 [Table of Contents](/chapters/table_of_contents.md)
