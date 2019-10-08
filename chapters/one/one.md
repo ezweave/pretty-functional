@@ -1,7 +1,11 @@
-# Chapter 1: Pretty Fizzy
+# Chapter 1: Pretty Fizzy With Lodash
+
+![lodash](/static/images/lodash.png)
+
+## Introduction
 
 - [Terminology](#terminology)
- - [What is a function?](#what-is-a-function?)
+ - [What is a function?](#what-is-a-function)
  - [Three key concepts](#three-key-concepts)
 - [Functional FizzBuzz](#functional-fizzbuzz)
   - [The Imperitive Approach](#the-imperitive-approach)
@@ -11,6 +15,8 @@
 - [Summary](#summary)
 - [Exercises](#exercises)
 
+[Table of Contents](/chapters/table_of_contents.md)
+
 I won't lie to you, dear reader.  I love a good academic tome.  I love theory and abstract concepts.  Learning a few basic things about limits and building up to integrals, that sort of thing.  _However_, time has taught me that while this is fun within the confines of academia, it's a bit hard for some folks to _grok_.  
 
 There _is_ a whole way of viewing functional programming through the lens of [_lambda calculus_](https://en.wikipedia.org/wiki/Lambda_calculus), but we aren't there yet.  While your author certainly loves to talk about math (or pretend he knows anything about the subject), this book aims to be a bit more practical and start by _building confidence_ in a few basic ideas and a very different way of looking at data.
@@ -19,9 +25,18 @@ This, of course, has benefits for you.  So the focus of the first chapter won't 
 
 This will be pure and concrete demonstration of functional ideas using the humble `lodash` library.  You can write functional code with `lodash`?  Absolutely.
 
+There will be those of you who read the last statement and close this book forever.  Life is too short for such banalities.  Yes, there are more fully featured libraries, and for many `lodash` is unsexy and unappealing.  I, obviously, disagree.  It is but a tool and you will learn to use many, in your career.  It's akin to asking if you can write Object Oriented code in Java?  Of course you can, but... you can also write very iterative, very non OO code.  Conversely, you can write very non-functional code using `lodash`.  It wasn't built as a functional library, _per se_, though the `lodash/fp` library is literally just a wrapper that does what we will do with `partialRight` and such out of the box.
+
+`lodash` should be given _more_ credit for pushing functional programming concepts (`map` operations in particular) into common use in the JavaScript world, which ultimately led to things like `Array.map` and such being a part of the SDK.  We will address this and, _caveat emptor_, the author does _not_ really like the built in `map` function... but we will get to that.
+
+On with the show!
+
 # Terminology
 
 For now, let's just call _everything_ a function.  Beyond that, there are some other terms bandied about: _higher order functions_, _anonymous functions_, and many more.  These terms are useful to know, but I don't want to delve too deeply into the nuances between all of those terms.  I'm just going to talk about functions.
+
+[Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
 
 # What Is A Function?
 
@@ -131,6 +146,9 @@ const decorator = (
 
 You will really see how handy this is, very, very soon.
 
+[Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
+
 # Three Key Concepts
 
 There are three concepts in functional programming that we need to have some knowledge of before we really start writing code, I've introduced some of these already, but let's be explicit:
@@ -149,6 +167,9 @@ A __pure function__ is one that doesn't modify any values outside of its scope. 
 
 Lastly, __currying__, I talked about _closures_ and _currying_ is really utilizing the JavaScript notion of a closure to capture variables at different stages.  This is also called _capturing lexical state_.  This is a very powerful, very useful tool in functional programming.
 
+[Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
+
 # Functional FizzBuzz
 
 Let's write some code that introduces these concepts.  In fact, let's start with some _bad_ code (from a functional programming standpoint).  Let's say we want to write good old [`FizzBuzz`](https://www.tomdalling.com/blog/software-design/fizzbuzz-in-too-much-detail/).  This is, of course, a __toy problem__.
@@ -156,6 +177,9 @@ Let's write some code that introduces these concepts.  In fact, let's start with
 > Write a function that prints the numbers from 1 to n. But for multiples of three print "Fizz" instead of the number and for the multiples of five print "Buzz". For numbers which are multiples of both three and five print "FizzBuzz".
 
 There's a [few ways to skin this cat.](https://youtu.be/cUcjn1CuRZI?t=45)
+
+[Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
 
 ## The Imperative Approach
 
@@ -182,6 +206,8 @@ This is the _most_ basic implementation, really.  Before we go any further, let'
 the notion of writing _idiomatic_ code.  I would do silly things like put braces on _the same line_ in C#, because I was really a Java guy.  That sort of thing can be described as
 [_bike shedding_](https://en.wiktionary.org/wiki/bikeshedding)(aka "getting caught up in inconsequential details" also a prime example of [_Parkinson's Law of Triviality_](https://en.wikipedia.org/wiki/Law_of_triviality)).  While it is bad form to write things like class names and variables in Python style amidst Java code, I don't think you nor I would 
 do that intentionally.  What is not trivial is this:
+
+### This is important
 
 * Don't use the `function` keyword.
 
@@ -230,6 +256,10 @@ it's a _local_ variable."  Nyet.  A _pretty functional_ version would _omit_ loc
 1. Technically, writing to the console is... an external side effect.
 
 So how would we change this?
+
+
+[Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
 
 ## Functionalish Approach
 
@@ -559,10 +589,11 @@ const foo: (x: number) => void = console.log
 
 I _prefer_ the last iteration because it's more true to the _functional_ paradigm and it gets you to think of functions as first class constructs.  I know I'm dealing with a function and don't need to _capture_ the `x` for any reason.  At the end of the day, programmers are not writing data directly to a computer.  You're not inserting carefully curated, artisanal integers into registers or anything like that.  We're _kind of_ just glorified typists.  It's a fun way to introduce yourself at parties.
 
-> Friend of a Friend (FOF): So what do you do for work?
-You: I type all day.  Sometimes I swear.
-FOF: Oh... okay... 
-_walks away slowly, doesn't bother you with their brilliant idea for a mobile application_
+>>Friend of a Friend (FOF): So what do you do for work?
+>>
+>>You: I type all day.  Sometimes I swear.
+>>
+>> FOF: Oh... okay... _walks away slowly, doesn't bother you with their brilliant idea for a mobile application_
 
 Now, before we talk about how we might _ditch_ the ternary operator, let's look at the whole shebang again:
 
@@ -636,6 +667,9 @@ Now, this code, our first _better_ solution is _pretty functional_.  I don't lov
 You're already starting "the dance."  This P.R. is from someone _thinking_ about functions.  They're thinking about how they can do things _functionally_.  It's _pretty damn functional_.
 
 But those ternary operators...
+
+[Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
 
 ## Another Functionalish Approach
 
@@ -747,6 +781,9 @@ Now, [this solution](https://codepen.io/ezweave/pen/qzoaYp) is a bit of a mess. 
 This is an important concept as in the third chapter, when we start looking at _monads_, we will be doing the same thing only without any flow control.  Monads will provide the control for us, but this is to give you an inkling into what we will be doing when we start talking about left and right values and the like.
 
 For the purposes of introducing some of these concepts, the "Mark 2" solution is really best and what I would rather see.  The last solution is really just to demonstrate just how differently you can approach this problem.
+
+[Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
 
 # Functional Recursion
 
@@ -1043,11 +1080,14 @@ __I've really only touched on recursion__, as that's not the focus of this book.
 
 It's a damn shame that PTCs aren't widely supported.
 
+[Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
+
 # Summary
 
 So we've started to get _more_ functional.  We're eschewing the use of ES6 classes and operators (`Array.map`, for example) and using `lodash`s `flow` with functions that are not connected to any particular data type.  We're also starting to think about operating on collections, vs objects. Oh wait, are we?
 
-Remember that JSON is just a `map`.  It's really just another collection type, which is why many `lodash` operators work on arrays or maps.  Keep that in mind going forward.  When we start using `rxjs` and introduce the concept of a _stream_, this is an important thing to understand.  But we're limping before we're sprinting.  For our purposes, ES6 classes are _not_ particularly useful.  There is a difference, of course between JSON and an ES6 class.  I prefer the former, as it lends to a _more_ functional style.
+Remember that JSON is just a `Map` (in terms of data structure).  It's really just another collection type, which is why many `lodash` operators work on arrays or maps.  Keep that in mind going forward.  When we start using `rxjs` and introduce the concept of a _stream_, this is an important thing to understand.  But we're limping before we're sprinting.  For our purposes, ES6 classes are _not_ particularly useful.  There is a difference, of course between JSON and an ES6 class.  I prefer the former, as it lends to a _more_ functional style.
 
 Some basic takeaways:
 * Fat arrows are your friend.
@@ -1055,6 +1095,7 @@ Some basic takeaways:
 * Write tests around your functions.
 * Use `tap` to inspect data without manipulating it.
 * `partialRight` is _very_ handy in currying functions to expect the _data_ last.
+* Despite what some may tell you, `lodash` is a perfectly viable toolset to use for Functional Programming.
 
 Things we _haven't_ dealt with yet:
 * WTF is a _monad_?
@@ -1062,7 +1103,7 @@ Things we _haven't_ dealt with yet:
 * Alternative approaches using other libraries.
 * Performance (especially since we don't have PTCs).
 
-I hope you aren't sick of `FizzBuzz` quite yet... it's a stupidly simple problem (a __toy problem__), that we will be revisiting when we start talking about _monads_ in Chapter 3.
+I hope you aren't sick of `FizzBuzz` quite yet... it's a stupidly simple problem (a __toy problem__), that we will be revisiting in the next two chapters.
 
 # Exercises
 
@@ -1084,4 +1125,7 @@ jest chapters/one/exerciseOne.spec.ts
 
 Of course, you can _read_ the tests.  I just don't want you to [Kobayashi Maru](https://en.wikipedia.org/wiki/Kobayashi_Maru) them, because then you learn nothing and Gene Wilder as Willy Wonka won't let you take over the factory.  Stretch that brain, do it differently.  Play around.
 
-[Table of Contents](../../README.md#table-of-contents)
+Then, when you feel you are ready... [Chapter 2: Events in the Stream](/chapters/two/two.md) awaits.
+
+[Top](#introduction)
+[Table of Contents](/chapters/table_of_contents.md)
