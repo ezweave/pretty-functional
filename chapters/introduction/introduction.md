@@ -124,9 +124,9 @@ Truthfully, OOP, as we know it, really just enforces [_imperative programming pr
 
 All of the big, popularly-understood-as-OO languages (Java, C#, and C++) are rife with [anti-patterns](https://en.wikipedia.org/wiki/Anti-pattern) which are one of many sources of ["code smell"](https://en.wikipedia.org/wiki/Code_smell).
 
-Ignoring all of this naval gazing, let's jump nearly twenty years into 2019.  JavaScript, thanks largely in part to Node.js, has become a _very_ powerful programming language, but it also suffers from a sort of "programming multiple personality disorder."  You can write very OO looking JS or you can write more functional JS.
+Ignoring all of this naval gazing, let's jump nearly twenty years into 2019.  JavaScript, thanks largely in part to Node.js, has become a _very_ powerful programming language, but it also suffers from a sort of "programming multiple personality disorder."  You can write very OO looking JS or you can write more functional JS.  Or you can write code that is very imperitive and largely neither.  Choose your own adventure!
 
-The truth is that many of the popular functional frameworks and programming languages are as purely functional as they would have you think.  Even [Scala](https://en.wikipedia.org/wiki/Scala_(programming_language))(which runs on the Java Virtual Machine and can utilize Java's SDK) has to bastardize itself a little because there are things you just can't fully control:
+The truth is that many of the popular functional frameworks and programming languages are __not__ as purely functional as they would have you think.  Even [Scala](https://en.wikipedia.org/wiki/Scala_(programming_language))(which runs on the Java Virtual Machine and can utilize Java's SDK) has to bastardize itself a little because there are things you just can't fully control:
 - REST calls to an external API
 - Anything that introduces some level of randomness into your data
 - and so on... as you will see
