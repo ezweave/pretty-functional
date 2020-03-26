@@ -12,7 +12,7 @@
 
 Dear reader, before you delve into the body of this, er, _tome_, be forewarned: when we're done discussing facts, your author (me), often resorts to opinion.  There are multiple reasons for this:
 
-* Trying to establish _idiomatic_ code withing the world of Functional JavaScript.
+* Trying to establish _idiomatic_ code within the world of Functional JavaScript.
 * I have an opinion and I'll be damned if it isn't _right_.
 
 The last bullet point is a joke.  If you find that off-putting, I suggest you seek other sources.
