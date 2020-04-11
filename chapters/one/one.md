@@ -664,7 +664,7 @@ In your code, you will use `import`.  I hope that's not confusing... it shouldn'
 
 Now, this code, our first _better_ solution is _pretty functional_.  I don't love the ternary operators, but they are what they are.  Sometimes they _are_ the best solution, but they often get harry (when you start having long chains of them).  I'd gladly accept a pull request or merge request (that's the GitLab version) of it, especially if you wrote a _shit ton_ of tests.  I'd say to myself "this isn't perfect, but it's pretty, pretty good." (Channeling Larry David, of course.)
 
-You're already starting "the dance."  This P.R. is from someone _thinking_ about functions.  They're thinking about how they can do things _functionally_.  It's _pretty damn functional_.
+You're already starting "the dance."  This P.R. is from someone _thinking_ about functions.  They're thinking about how they can do things _functionally_.  It's _pretty darn functional_.
 
 But those ternary operators...
 
@@ -1080,7 +1080,7 @@ Basically, almost any problem you would do _imperatively_ with calls to the func
 
 __I've really only touched on recursion__, as that's not the focus of this book.  I'm just giving you enough to be dangerous.  For a more in depth look at various recursive approaches, I'd refer you to [Functional Light JS](https://github.com/getify/Functional-Light-JS/blob/master/manuscript/ch8.md/#chapter-8-recursion) wherein the author, Kyle Simpson goes a bit further with explaining the state of the stack and various styles of recursion.
 
-It's a damn shame that PTCs aren't widely supported.
+It's a darn shame that PTCs aren't widely supported.
 
 [Top](#introduction)
 

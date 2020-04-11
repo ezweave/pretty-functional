@@ -374,7 +374,7 @@ observable.subscribe(
 console.log('After subscribe')
 ```
 
-Now, I did pull in a little `lodash` love for our `subscribe`, but you can get the gist of what is happening here.  The `Observable`, when subscribed to, emits the classic [_The quick brown fox jumps over the lazy dog_](https://en.wikipedia.org/wiki/The_quick_brown_fox_jumps_over_the_lazy_dog) test sentence. It waits one second to emit the "lazy dog" part, but other than that this looks _pretty damn similar_ to what we've seen already.
+Now, I did pull in a little `lodash` love for our `subscribe`, but you can get the gist of what is happening here.  The `Observable`, when subscribed to, emits the classic [_The quick brown fox jumps over the lazy dog_](https://en.wikipedia.org/wiki/The_quick_brown_fox_jumps_over_the_lazy_dog) test sentence. It waits one second to emit the "lazy dog" part, but other than that this looks _pretty darn similar_ to what we've seen already.
 
 You can see the [code here](https://codepen.io/ezweave/pen/MWgXwVY).
 
@@ -401,7 +401,7 @@ While they are similar, there is a fundamental difference you may have already p
 
 This is the _difference_ between a _pull_ and a _push_ in the `rxjs` world.  Even though our example is rather _ugly_, the _explicitly created_ `Observable` version controls when it is emitting data and what, exactly, it is emitting.  
 
-"Now hold on, just a damn minute.  What about that `ajax` call?"
+"Now hold on, just a darn minute.  What about that `ajax` call?"
 
 Well there, partner, you are correct!  The `ajax` call was a _push_ and not a _pull_.  _However_, `Promise` based calls by themselves, in the `rxjs` world, only emit _one_ value and then they are done.  What if you need to _react_ to a series of values?  What if you need some _agent_ to intercept or compose data from external calls and emit computed data?  
 
@@ -450,7 +450,7 @@ And will have _the same_ output.
 
 The _difference_ is that when we create the `Observable` ourselves, we can directly _control_ how and when the values are emitted.  That's it!  This will become _more_ powerful when we start _composing_ operators on the stream.  But, for now, remember that `from` will give you an `Observable`, but it will not let that `Observable` truly control when it emits a value.  That is why we can also create `Observable`s explicitly.
 
-For all intents and purposes when we say "stream" we are really talking about a "stream" that comes from an `Observable`, really it _starts_ with one `Observable`.  Rarely do you end up creating streams in any other fashion and, for the purposes of what we are doing in this chapter, we can really just use `Observable` to mean anything pulled using the `from` operator.  In fact, _technically speaking_ (pushes up glasses), `from` creates an `Observable` as we have seen.  The difference is just that if you make one _explicitly_ you can better control when it emits on the resulting stream.  As long as that is _somewhat_ clear, just think of an `Observable` as a "streaming thing".  We will end up getting `Observable`s in a myriad of ways moving forward and you just have to remember that it's just gonna "chuck some shit in the stream" and you'll have to deal with it.  An `Observable` is a stream or it is feeding a stream an "outer" `Observable` created and most streams come from `Observable`s.
+For all intents and purposes when we say "stream" we are really talking about a "stream" that comes from an `Observable`, really it _starts_ with one `Observable`.  Rarely do you end up creating streams in any other fashion and, for the purposes of what we are doing in this chapter, we can really just use `Observable` to mean anything pulled using the `from` operator.  In fact, _technically speaking_ (pushes up glasses), `from` creates an `Observable` as we have seen.  The difference is just that if you make one _explicitly_ you can better control when it emits on the resulting stream.  As long as that is _somewhat_ clear, just think of an `Observable` as a "streaming thing".  We will end up getting `Observable`s in a myriad of ways moving forward and you just have to remember that it's just gonna "chuck some garbage in the stream" and you'll have to deal with it.  An `Observable` is a stream or it is feeding a stream an "outer" `Observable` created and most streams come from `Observable`s.
 
 [Top](#introduction)
 
@@ -569,7 +569,7 @@ The output, as you can see, can be a bit dizzying:
 "Outer Observable point 2" "2 beer"
 ```
 
-You're probably _really damn confused_, at this point.  Let's walk through this.
+You're probably _really darn confused_, at this point.  Let's walk through this.
 
 For the first value emitted from the array, `0`, we hit our first logging point.  There is only the `0` on the stream now.
 
