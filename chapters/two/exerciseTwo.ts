@@ -122,13 +122,3 @@ export const boxcar = () => new Promise<string>(
   ).subscribe(resolve, reject)
 )
 
-const fTrue = x => y => x
-const fFalse = x => y => y
-
-const fIf = fCondition => fThen => fElse => fCondition(fThen)(fElse)
-
-const fDivisibleByTwo = x => x % 2 === 0
-
-const x = 10
-
-fIf(fDivisibleByTwo(x))(fTrue)(fFalse)
