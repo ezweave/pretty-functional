@@ -1,5 +1,5 @@
 # Table of Contents
-- [Introduction](/introduction/introduction.md)
+- [Introduction](/chapters/introduction/introduction.md)
 - [Chapter 1: Pretty Fizzy with Lodash](/chapters/one/one.md)
 - [Chapter 2: Events in the Stream](/chapters/two/two.md)
 - Chapter 3: Lambda Lambda Lambda
